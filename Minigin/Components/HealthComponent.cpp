@@ -1,9 +1,9 @@
-#include "MiniginPCH.h"
+#include "../MiniginPCH.h"
 #include "HealthComponent.h"
 #include "../AliEngine/SceneManager.h"
 #include "../AliEngine/Scene.h"
-#include "Locator.h"
-#include "AudioService.h"
+#include "../AliEngine/AudioAndLocator/Locator.h"
+#include "../AliEngine/AudioAndLocator/AudioService.h"
 
 HealthComponent::HealthComponent(const unsigned int& health)
 	: m_Lives{ health }
