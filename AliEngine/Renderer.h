@@ -1,5 +1,5 @@
 #pragma once
-#include "../AliEngine/Singleton.h"
+#include "Singleton.h"
 
 struct SDL_Window;
 struct SDL_Renderer;

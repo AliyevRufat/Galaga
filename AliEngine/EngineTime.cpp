@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../AliEngine/EngineTime.h"
+#include "EngineTime.h"
 
 float EngineTime::GetDeltaTime()
 {

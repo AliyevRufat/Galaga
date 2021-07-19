@@ -1,5 +1,5 @@
 #pragma once
-#include "../AliEngine/Singleton.h"
+#include "Singleton.h"
 #include <string>
 #include <memory>
 #include <vector>

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include <SDL_ttf.h>
-#include "../AliEngine/Font.h"
+#include "Font.h"
 #include <iostream>
 
 TTF_Font* dae::Font::GetFont() const {

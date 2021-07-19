@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "../AliEngine/SceneManager.h"
-#include "../AliEngine/Scene.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 void dae::SceneManager::Update()
 {

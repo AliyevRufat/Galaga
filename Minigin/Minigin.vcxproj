@@ -205,20 +205,20 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Components\AnimationComponent.h" />
-    <ClInclude Include="Commands\Commands.h" />
-    <ClInclude Include="Components\HealthComponent.h" />
-    <ClInclude Include="Components\ComponentIncludes.h" />
-    <ClInclude Include="Observers\LivesObserver.h" />
+    <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="Commands.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="ComponentIncludes.h" />
+    <ClInclude Include="LivesObserver.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
-    <ClInclude Include="Components\ScoreComponent.h" />
-    <ClInclude Include="Observers\ScoreObserver.h" />
+    <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="ScoreObserver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Components\AnimationComponent.cpp" />
-    <ClCompile Include="Components\HealthComponent.cpp" />
-    <ClCompile Include="Observers\LivesObserver.cpp" />
+    <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="LivesObserver.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
@@ -228,8 +228,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MiniginPCH.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Components\ScoreComponent.cpp" />
-    <ClCompile Include="Observers\ScoreObserver.cpp" />
+    <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="ScoreObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AliEngine\AliEngine.vcxproj">

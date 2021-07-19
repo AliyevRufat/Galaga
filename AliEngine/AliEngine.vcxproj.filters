@@ -1,174 +1,124 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BaseCommand.h" />
+    <ClInclude Include="EngineTime.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Structs.h" />
+    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="AnalogStickCommand.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AnalogTriggerCommand.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="SceneObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AudioService.h">
+      <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ConsoleAudioService.h">
+      <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Structs.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FPSTextComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BaseCommand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BaseComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Texture2DComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="TextComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="InputManager.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="NullAudio.h">
+      <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SoundEffect.h">
+      <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SoundStream.h">
+      <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Subject.h">
+      <Filter>Subject</Filter>
     </ClInclude>
-    <ClInclude Include="EngineTime.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Observer.h">
+      <Filter>Subject</Filter>
     </ClInclude>
-    <ClInclude Include="Input\AnalogStickCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\AnalogTriggerCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\FPSTextComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Texture2DComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\TextComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\TransformComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioAndLocator\AudioService.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioAndLocator\ConsoleAudioService.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioAndLocator\NullAudio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioAndLocator\SoundEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioAndLocator\SoundStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioAndLocator\Locator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject\Subject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject\Observer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\BaseComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Locator.h">
+      <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EngineTime.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="ConsoleAudioService.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="FPSTextComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Texture2DComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SoundStream.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SoundEffect.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Subject</Filter>
     </ClCompile>
-    <ClCompile Include="EngineTime.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Locator.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Input\InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\FPSTextComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\Texture2DComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\TextComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\TransformComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioAndLocator\ConsoleAudioService.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioAndLocator\SoundEffect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioAndLocator\SoundStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioAndLocator\Locator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject\Subject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{148ddd04-37c5-4533-8e53-d6da37d73e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{af738993-f4c9-4ff2-b431-2ebb807c65fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Subject">
+      <UniqueIdentifier>{8b845644-90bc-4984-b6d5-3010772f819e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{3c24952a-4f71-43a1-a832-d12e8f41f086}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

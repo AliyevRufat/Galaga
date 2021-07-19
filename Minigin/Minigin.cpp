@@ -3,14 +3,14 @@
 #include "SDL.h"
 #include <chrono>
 #include <thread>
-#include "Commands/Commands.h"
-#include "../AliEngine/Subject/Observer.h"
-#include "../AliEngine/AudioAndLocator/ConsoleAudioService.h"
-#include "../AliEngine/AudioAndLocator/Locator.h"
-#include "../AliEngine/Renderer.h"
-#include "../AliEngine/ResourceManager.h"
-#include "../AliEngine/Input/InputManager.h"
-#include "../AliEngine/EngineTime.h"
+#include "Commands.h"
+#include "Observer.h"
+#include "ConsoleAudioService.h"
+#include "Locator.h"
+#include "Renderer.h"
+#include "ResourceManager.h"
+#include "InputManager.h"
+#include "EngineTime.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -48,7 +48,7 @@ void dae::Minigin::Initialize()
 	}
 	Renderer::GetInstance().Init(m_Window);
 
-	Locator::Provide(new ConsoleAudioService());
+	//Locator::Provide(new ConsoleAudioService());
 	//Locator::GetAudio().AddSound(AudioService::SoundIds::FallEffect, "../Data/Sounds/.wav", true); // TODO : get correct sound/music names
 	//Locator::GetAudio().AddSound(AudioService::SoundIds::JumpEffect, "../Data//Sounds/.wav", true);
 	//Locator::GetAudio().AddSound(AudioService::SoundIds::LiftEffect, "../Data//Sounds/.wav", true);

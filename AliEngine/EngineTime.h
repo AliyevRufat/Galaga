@@ -1,5 +1,5 @@
 #pragma once
-#include "../AliEngine/Singleton.h"
+#include "Singleton.h"
 
 class EngineTime final : public dae::Singleton<EngineTime>
 {

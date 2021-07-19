@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "../AliEngine/BaseComponent.h"
-#include "../AliEngine/GameObject.h"
-#include "../AliEngine/ResourceManager.h"
-#include "../AliEngine/Renderer.h"
-#include "../AliEngine/EngineTime.h"
+#include "BaseComponent.h"
+#include "GameObject.h"
+#include "ResourceManager.h"
+#include "Renderer.h"
+#include "EngineTime.h"
 #include "Subject.h"
 
 GameObject::GameObject(const std::string& name)
