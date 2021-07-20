@@ -20,7 +20,7 @@ Scene::Scene(const std::string& name)
 {
 }
 
-void Scene::Add(const std::shared_ptr<SceneObject>& spObject)
+void Scene::Add(const std::shared_ptr<GameObject>& spObject)
 {
 	m_SpObjects.push_back(spObject);
 }
@@ -46,7 +46,7 @@ const std::string& Scene::GetName() const
 	return m_Name;
 }
 
-std::shared_ptr<SceneObject> Scene::GetObjectByName(const std::string& name) const
+std::shared_ptr<GameObject> Scene::GetObjectByName(const std::string& name) const
 {
 	for (const auto& object : m_SpObjects)
 	{

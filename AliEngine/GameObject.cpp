@@ -7,7 +7,10 @@
 #include "Subject.h"
 
 GameObject::GameObject(const std::string& name)
-	:SceneObject(name), m_pActorChanged{ new Subject() }
+	:m_Name{ name }
+	, m_pActorChanged{ new Subject() }
+	, m_IsActive{ true }
+	, m_MarkForDelete{ false }
 {
 }
 

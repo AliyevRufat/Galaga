@@ -5,13 +5,9 @@
     <ClInclude Include="EngineTime.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="Texture2D.h" />
@@ -64,16 +60,22 @@
     <ClInclude Include="Locator.h">
       <Filter>Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineTime.cpp" />
     <ClCompile Include="Font.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="ConsoleAudioService.cpp">
@@ -106,6 +108,15 @@
     <ClCompile Include="Locator.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Audio">
@@ -119,6 +130,12 @@
     </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{3c24952a-4f71-43a1-a832-d12e8f41f086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{3cbd1b40-40f7-4d50-81e8-1b28b69aa95c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{8a16da94-4af7-4690-b1bd-50936f567bee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

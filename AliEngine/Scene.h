@@ -4,7 +4,6 @@
 
 namespace dae
 {
-	class SceneObject;
 	class Scene
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
@@ -25,7 +24,7 @@ namespace dae
 			Finished = 3
 		};
 
-		void Add(const std::shared_ptr<SceneObject>& spObject);
+		void Add(const std::shared_ptr<GameObject>& spObject);
 
 		~Scene() = default;
 		Scene(const Scene& other) = delete;
@@ -37,7 +36,7 @@ namespace dae
 		void Update();
 		void Render() const;
 
-		std::shared_ptr<SceneObject> GetObjectByName(const std::string& name) const;
+		std::shared_ptr<GameObject> GetObjectByName(const std::string& name) const;
 		void AddPlayer(const std::shared_ptr<GameObject>& spPlayer);
 		std::shared_ptr<GameObject> GetPlayer(int index);
 		//
@@ -62,7 +61,7 @@ namespace dae
 		explicit Scene(const std::string& name);
 
 		std::string m_Name;
-		std::vector<std::shared_ptr<SceneObject>> m_SpObjects;
+		std::vector<std::shared_ptr<GameObject>> m_SpObjects;
 		std::vector<std::shared_ptr<GameObject>> m_SpPlayers;
 		std::vector< std::shared_ptr<GameObject>> m_SpLevels;
 		std::shared_ptr<GameObject> m_SpCurrentLevel;
