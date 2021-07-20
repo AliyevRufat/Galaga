@@ -50,7 +50,7 @@ void GameObject::AddWatcher(Observer* pObserver)
 	m_pActorChanged->AddObserver(pObserver);
 }
 
-void GameObject::Notify(Event event)
+void GameObject::Notify(const std::string& event)
 {
 	m_pActorChanged->Notify(this, event);
 }

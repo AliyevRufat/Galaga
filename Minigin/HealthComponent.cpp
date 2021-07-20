@@ -45,7 +45,7 @@ void HealthComponent::Die()
 	}
 
 	m_Lives--;
-	m_pGameObject->Notify(Event::PlayerDied);
+	m_pGameObject->Notify("PlayerDied");
 }
 
 const unsigned int& HealthComponent::GetLives() const

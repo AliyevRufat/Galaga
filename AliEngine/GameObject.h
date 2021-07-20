@@ -3,16 +3,6 @@
 #include <vector>
 #include <memory>
 
-enum class Event
-{
-	PlayerDied,
-	ScoreGained,
-	//ColorChanged = 25,
-	//CoilyBaitededWithFlyingDisc = 500,
-	//DiscLeftAtEndOfTheStage = 50,
-	//CatchSlickOrSam = 300
-};
-
 class BaseComponent;
 class Observer;
 class Subject;
@@ -39,7 +29,7 @@ public:
 	void Update() override;
 	void Render() const override;
 
-	void Notify(Event event);
+	void Notify(const std::string& event);
 
 	void AddComponent(BaseComponent* pComponent);
 	void AddWatcher(Observer* pObserver);

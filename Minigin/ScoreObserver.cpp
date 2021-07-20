@@ -10,9 +10,9 @@
 #include "Texture2DComponent.h"
 #include "TransformComponent.h"
 
-void ScoreObserver::OnNotify(const GameObject* actor, Event event)
+void ScoreObserver::OnNotify(const GameObject* actor, const std::string& event)
 {
-	if (event == Event::ScoreGained)
+	if (event == "ScoreGained")
 	{
 		ChangeScore(actor);
 	}

@@ -34,7 +34,7 @@ void Subject::RemoveObserver(Observer* observer)
 	}
 }
 
-void Subject::Notify(const GameObject* actor, Event event)
+void Subject::Notify(const GameObject* actor, const std::string& event)
 {
-	std::for_each(m_pObservers.begin(), m_pObservers.end(), [&](auto observer) {observer->OnNotify(actor, event)});
+	std::for_each(m_pObservers.begin(), m_pObservers.end(), [&](auto observer) {observer->OnNotify(actor, event); });
 }

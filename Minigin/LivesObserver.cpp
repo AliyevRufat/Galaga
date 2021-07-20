@@ -10,9 +10,9 @@
 #include "Texture2DComponent.h"
 #include "TransformComponent.h"
 
-void LivesObserver::OnNotify(const GameObject* actor, Event event)
+void LivesObserver::OnNotify(const GameObject* actor, const std::string& event)
 {
-	if (event == Event::PlayerDied)
+	if (event == "PlayerDied")
 	{
 		ChangeLives(actor);
 	}

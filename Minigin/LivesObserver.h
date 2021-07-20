@@ -5,7 +5,7 @@
 class LivesObserver final : public Observer
 {
 public:
-	void OnNotify(const GameObject* actor, Event event) override;
+	void OnNotify(const GameObject* actor, const std::string& event) override;
 
 private:
 	void ChangeLives(const GameObject* actor);
