@@ -29,7 +29,12 @@ TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae:
 		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 	}
 	SDL_FreeSurface(surf);
-	m_SpTexture = std::make_shared<dae::Texture2D>(texture);
+	m_pRender->SetTexture2D(std::make_shared<dae::Texture2D>(texture));
+}
+
+TextComponent::~TextComponent()
+{
+	delete m_pRender;
 }
 
 void TextComponent::SetIsVisible(bool isVisible, float setVisibleFalseTimer)
@@ -73,12 +78,12 @@ void TextComponent::Render()
 		position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	}
 	//
-	if (m_SpTexture && m_IsVisible)
+	if (m_pRender->GetTexture2D() && m_IsVisible)
 	{
 		const auto surf = TTF_RenderText_Blended(m_SpFont->GetFont(), m_Text.c_str(), m_Color);
 		auto texture = SDL_CreateTextureFromSurface(dae::Renderer::GetInstance().GetSDLRenderer(), surf);
 		SDL_FreeSurface(surf);
-		m_SpTexture = std::make_shared<dae::Texture2D>(texture);
-		dae::Renderer::GetInstance().RenderTexture(*m_SpTexture, position.x, position.y);
+		m_pRender->SetTexture2D(std::make_shared<dae::Texture2D>(texture));
+		m_pRender->RenderTexture(glm::vec2{ position.x, position.y });
 	}
 };
