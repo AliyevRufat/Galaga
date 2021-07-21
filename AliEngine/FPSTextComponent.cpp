@@ -23,9 +23,8 @@ void FPSTextComponent::Update()
 	if (!m_IsInitialized && m_pGameObject->GetComponent<TransformComponent>()) // doonce
 	{
 		m_IsInitialized = true;
-		//m_pText->SetPosition(m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition());
 	}
-	//
+
 	m_FPS = "FPS: " + std::to_string(int(1.f / EngineTime::GetInstance().GetDeltaTime()));
 	m_pText->UpdateText(m_FPS);
 };

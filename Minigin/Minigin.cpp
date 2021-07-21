@@ -11,6 +11,9 @@
 #include "ResourceManager.h"
 #include "InputManager.h"
 #include "EngineTime.h"
+#include "LivesObserver.h"
+#include "ScoreObserver.h"
+#include "GyaragaMovementComponent.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -35,11 +38,11 @@ void dae::Minigin::Initialize()
 		throw std::runtime_error(std::string("SDL_Audio Error: ") + Mix_GetError());
 
 	m_Window = SDL_CreateWindow(
-		"Programming 4 assignment",
+		"GALAGA",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		1280,
-		720,
+		700,
+		850,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_Window == nullptr)
@@ -58,6 +61,52 @@ void dae::Minigin::Initialize()
 	//where second parameter = volume
 }
 
+void dae::Minigin::InitGame()
+{
+	//window size
+	const auto window = SDL_GetWindowSurface(m_Window);
+	//create and get scene
+	SceneManager::GetInstance().CreateScene("Galaga");
+	auto scene = SceneManager::GetInstance().GetCurrentScene();
+
+	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
+	//fps counter
+	auto go = std::make_shared<GameObject>("FPSCounter");
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
+	go->AddComponent(new FPSTextComponent(font));
+	scene->Add(go);
+	//---------------------------------------------------------------------SCORE DISPLAY--------------------------------------------------
+	auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
+	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(150, 50)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+	scoreDisplay->AddComponent(scoreCounter);
+	scene->Add(scoreDisplay);
+	//---------------------------------------------------------------------LIVES DISPLAY--------------------------------------------------
+	auto livesDisplay = std::make_shared<GameObject>("LivesDisplay");
+	livesDisplay->AddComponent(new TransformComponent(glm::vec2(350, 50)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	auto livesCounter = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,255,255 });
+	livesDisplay->AddComponent(livesCounter);
+	scene->Add(livesDisplay);
+	//---------------------------------------------------------------------PLAYER--------------------------------------------------
+	const int playerScale = 1;
+	const int playerWidth = 45 * playerScale;
+	const int playerHeight = 43 * playerScale;
+	auto gyaraga = std::make_shared<GameObject>("Gyaraga");
+	gyaraga->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - playerWidth / 2, window->h - window->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
+	gyaraga->AddComponent(new HealthComponent(3));
+	gyaraga->AddComponent(new ScoreComponent(0));
+	gyaraga->AddWatcher(new LivesObserver());
+	gyaraga->AddWatcher(new ScoreObserver());
+	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
+	gyaraga->AddComponent(new GyaragaMovementComponent(window));
+	gyaraga->AddComponent(new AnimationComponent(8));
+	scene->Add(gyaraga);
+	scene->AddPlayer(gyaraga);
+	//CollisionDetectionManager::GetInstance().AddCollisionObject(gyaraga); //ADD COLLISION
+}
+
 void dae::Minigin::BindCommands()
 {
 	auto& inputManager = InputManager::GetInstance();
@@ -65,32 +114,23 @@ void dae::Minigin::BindCommands()
 	for (int i = 0; i < XUSER_MAX_COUNT; i++)
 	{
 		//assign buttons
-		inputManager.AssignKey<ChooseCoOpGameMode>(ControllerButton::ButtonA, i);
-		inputManager.AssignKey<ChooseVersusGameMode>(ControllerButton::ButtonB, i);
-		inputManager.AssignKey<ChooseSinglePlayerGameMode>(ControllerButton::ButtonX, i);
-		inputManager.AssignKey<GoToMenu>(ControllerButton::ButtonY, i);
+		//inputManager.AssignKey<ChooseCoOpGameMode>(ControllerButton::ButtonA, i);
+		//inputManager.AssignKey<ChooseVersusGameMode>(ControllerButton::ButtonB, i);
+		//inputManager.AssignKey<ChooseSinglePlayerGameMode>(ControllerButton::ButtonX, i);
+		//inputManager.AssignKey<GoToMenu>(ControllerButton::ButtonY, i);
 		inputManager.AssignKey<ExitCommand>(ControllerButton::ButtonSelect, i);
 		//move
-		inputManager.AssignKey<JumpUp>(ControllerButton::ButtonUp, i);
-		inputManager.AssignKey<JumpDown>(ControllerButton::ButtonDown, i);
-		inputManager.AssignKey<JumpLeft>(ControllerButton::ButtonLeft, i);
-		inputManager.AssignKey<JumpRight>(ControllerButton::ButtonRight, i);
+		inputManager.AssignKey<SteerLeft>(ControllerButton::ButtonLeft, i);
+		inputManager.AssignKey<SteerRight>(ControllerButton::ButtonRight, i);
 	}
 	//keyboard
-	inputManager.AssignKey<JumpUp>(KeyboardButton::W, 0);
-	inputManager.AssignKey<JumpDown>(KeyboardButton::S, 0);
-	inputManager.AssignKey<JumpLeft>(KeyboardButton::A, 0);
-	inputManager.AssignKey<JumpRight>(KeyboardButton::D, 0);
+	inputManager.AssignKey<SteerLeft>(KeyboardButton::ArrowLeft, 0);
+	inputManager.AssignKey<SteerRight>(KeyboardButton::ArrowRight, 0);
 
-	inputManager.AssignKey<JumpUp>(KeyboardButton::ArrowUp, 1);
-	inputManager.AssignKey<JumpDown>(KeyboardButton::ArrowDown, 1);
-	inputManager.AssignKey<JumpLeft>(KeyboardButton::ArrowLeft, 1);
-	inputManager.AssignKey<JumpRight>(KeyboardButton::ArrowRight, 1);
-
-	inputManager.AssignKey<ChooseCoOpGameMode>(KeyboardButton::O, 0);
-	inputManager.AssignKey<ChooseVersusGameMode>(KeyboardButton::P, 0);
-	inputManager.AssignKey<ChooseSinglePlayerGameMode>(KeyboardButton::I, 0);
-	inputManager.AssignKey<GoToMenu>(KeyboardButton::U, 0);
+	//inputManager.AssignKey<ChooseCoOpGameMode>(KeyboardButton::O, 0);
+	//inputManager.AssignKey<ChooseVersusGameMode>(KeyboardButton::P, 0);
+	//inputManager.AssignKey<ChooseSinglePlayerGameMode>(KeyboardButton::I, 0);
+	//inputManager.AssignKey<GoToMenu>(KeyboardButton::U, 0);
 	inputManager.AssignKey<ExitCommand>(KeyboardButton::ESCAPE, 0);
 }
 
@@ -121,6 +161,7 @@ void dae::Minigin::Run()
 	std::thread soundThread(&AudioService::Update, &Locator::GetAudio());
 
 	BindCommands();
+	InitGame();
 
 	while (doContinue)
 	{
@@ -134,6 +175,8 @@ void dae::Minigin::Run()
 		doContinue = input.KeyboardInput();
 		EngineTime::GetInstance().SetDeltaTime(deltaTime);
 
+		//collision check
+		//enemy etc. update
 		sceneManager.Update();
 		renderer.Render();
 	}

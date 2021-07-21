@@ -24,6 +24,9 @@
     <ClInclude Include="Commands.h">
       <Filter>Command</Filter>
     </ClInclude>
+    <ClInclude Include="GyaragaMovementComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -43,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="LivesObserver.cpp">
       <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="GyaragaMovementComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

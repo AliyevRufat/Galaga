@@ -29,6 +29,7 @@ TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae:
 		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 	}
 	SDL_FreeSurface(surf);
+	m_pRender = new RenderComponent();
 	m_pRender->SetTexture2D(std::make_shared<dae::Texture2D>(texture));
 }
 
@@ -71,10 +72,8 @@ void TextComponent::Update()
 void TextComponent::Render()
 {
 	glm::vec2 position = {};
-
-	if (!m_IsInitialized && m_pGameObject && m_pGameObject->GetComponent<TransformComponent>()) // doonce
+	if (m_pGameObject && m_pGameObject->GetComponent<TransformComponent>())
 	{
-		m_IsInitialized = true;
 		position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	}
 	//
