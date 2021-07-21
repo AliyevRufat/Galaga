@@ -27,6 +27,12 @@
     <ClInclude Include="GyaragaMovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerWeaponComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletMovementComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -48,6 +54,12 @@
       <Filter>Observers</Filter>
     </ClCompile>
     <ClCompile Include="GyaragaMovementComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerWeaponComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletMovementComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>

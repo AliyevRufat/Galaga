@@ -206,6 +206,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="BulletMovementComponent.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="GyaragaMovementComponent.h" />
     <ClInclude Include="HealthComponent.h" />
@@ -215,9 +216,11 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="ScoreObserver.h" />
+    <ClInclude Include="PlayerWeaponComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="BulletMovementComponent.cpp" />
     <ClCompile Include="GyaragaMovementComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LivesObserver.cpp" />
@@ -232,6 +235,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="ScoreObserver.cpp" />
+    <ClCompile Include="PlayerWeaponComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AliEngine\AliEngine.vcxproj">

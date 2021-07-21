@@ -8,10 +8,11 @@
 #include "Texture2DComponent.h"
 #include "TransformComponent.h"
 #include "AnimationComponent.h"
-#include "GyaragaMovementComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "InputManager.h"
+#include "GyaragaMovementComponent.h"
+#include "PlayerWeaponComponent.h"
 
 class ExitCommand final : public Command
 {
@@ -74,6 +75,26 @@ public:
 	};
 	void Undo() override {};
 };
+
+class Fire final : public Command
+{
+public:
+	Fire(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		if (pPlayerActor)
+		{
+			pPlayerActor->GetComponent<PlayerWeaponComponent>()->Shoot();
+		}
+	}
+
+	void Release() const override {};
+
+	void Undo() override {};
+};
+
 //
 //class ChooseSinglePlayerGameMode final : public Command
 //{

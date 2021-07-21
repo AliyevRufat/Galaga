@@ -14,6 +14,7 @@
 #include "LivesObserver.h"
 #include "ScoreObserver.h"
 #include "GyaragaMovementComponent.h"
+#include "PlayerWeaponComponent.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -94,14 +95,17 @@ void dae::Minigin::InitGame()
 	const int playerWidth = 45 * playerScale;
 	const int playerHeight = 43 * playerScale;
 	auto gyaraga = std::make_shared<GameObject>("Gyaraga");
+	//Components
 	gyaraga->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - playerWidth / 2, window->h - window->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
 	gyaraga->AddComponent(new HealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
-	gyaraga->AddWatcher(new LivesObserver());
-	gyaraga->AddWatcher(new ScoreObserver());
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
 	gyaraga->AddComponent(new GyaragaMovementComponent(window));
-	gyaraga->AddComponent(new AnimationComponent(8));
+	gyaraga->AddComponent(new PlayerWeaponComponent(window, playerWidth));
+	//watchers
+	gyaraga->AddWatcher(new ScoreObserver());
+	gyaraga->AddWatcher(new LivesObserver());
+	//add
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
 	//CollisionDetectionManager::GetInstance().AddCollisionObject(gyaraga); //ADD COLLISION
@@ -126,6 +130,7 @@ void dae::Minigin::BindCommands()
 	//keyboard
 	inputManager.AssignKey<SteerLeft>(KeyboardButton::ArrowLeft, 0);
 	inputManager.AssignKey<SteerRight>(KeyboardButton::ArrowRight, 0);
+	inputManager.AssignKey<Fire>(KeyboardButton::SPACE, 0);
 
 	//inputManager.AssignKey<ChooseCoOpGameMode>(KeyboardButton::O, 0);
 	//inputManager.AssignKey<ChooseVersusGameMode>(KeyboardButton::P, 0);
