@@ -1,10 +1,16 @@
 #pragma once
 #include <iostream>
-#include "Structs.h"
+#include "InputManager.h"
 
 class AnalogStickCommand abstract
 {
 public:
+
+	struct AnalogStickInput
+	{
+		float x, y;
+	};
+
 	AnalogStickCommand(int index) :m_ControllerIndex{ index } {};
 
 	virtual ~AnalogStickCommand() = default;

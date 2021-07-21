@@ -21,7 +21,7 @@ void HealthComponent::Die()
 
 	if ((int)m_Lives - 1 < 0)
 	{
-		if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Coop)
+		//if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Coop)
 		{
 			if (m_pGameObject->GetName() == "") //TODO : insert the name of the player1
 			{
@@ -38,7 +38,7 @@ void HealthComponent::Die()
 				}
 			}
 		}
-		else
+		//else
 		{
 		}
 		return;

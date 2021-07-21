@@ -58,7 +58,7 @@ namespace dae
 	using ControllerTrigger = std::pair<std::string, float>;
 	using ControllerTriggerCommandMap = std::map<std::string, std::pair<std::unique_ptr<AnalogTriggerCommand>, int>>;
 	//for sticks
-	using ControllerStick = std::pair<std::string, AnalogStickInput>;
+	using ControllerStick = std::pair<std::string, AnalogStickCommand::AnalogStickInput>;
 	using ControllerStickCommandMap = std::map<std::string, std::pair<std::unique_ptr<AnalogStickCommand>, int>>;
 	//for keyboard
 	using KeyboardKey = std::pair<unsigned, KeyboardButton>;
@@ -80,6 +80,7 @@ namespace dae
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
+
 		InputManager();
 		//Functions
 		void ProcessInput();
@@ -141,7 +142,7 @@ namespace dae
 		ControllerTrigger m_Triggers[amountOfTriggers] = { std::make_pair("LeftTrigger" , 0.f),std::make_pair("RightTrigger" , 0.f) };
 		//for sticks
 		static const int amountOfAnalogSticks = 2;
-		ControllerStick m_Sticks[amountOfAnalogSticks] = { std::make_pair("LeftStick" , AnalogStickInput{0.f,0.f}),std::make_pair("RightStick" , AnalogStickInput{0.f,0.f}) };
+		ControllerStick m_Sticks[amountOfAnalogSticks] = { std::make_pair("LeftStick" , AnalogStickCommand::AnalogStickInput{0.f,0.f}),std::make_pair("RightStick" , AnalogStickCommand::AnalogStickInput{0.f,0.f}) };
 		//controllers
 		std::vector<std::unique_ptr<Controller>> m_Controllers;
 

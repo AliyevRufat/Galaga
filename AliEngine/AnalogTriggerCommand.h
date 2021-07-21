@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include "Structs.h"
 
 class AnalogTriggerCommand abstract
 {

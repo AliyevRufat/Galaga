@@ -25,8 +25,8 @@ void dae::InputManager::ProcessInput()
 	m_Triggers[0].second = m_CurrentState.Gamepad.bLeftTrigger;
 	m_Triggers[1].second = m_CurrentState.Gamepad.bRightTrigger;
 	//updating sticks
-	m_Sticks[0].second = AnalogStickInput{ (float)m_CurrentState.Gamepad.sThumbLX,(float)m_CurrentState.Gamepad.sThumbLY };
-	m_Sticks[1].second = AnalogStickInput{ (float)m_CurrentState.Gamepad.sThumbRX, (float)m_CurrentState.Gamepad.sThumbRY };
+	m_Sticks[0].second = AnalogStickCommand::AnalogStickInput{ (float)m_CurrentState.Gamepad.sThumbLX,(float)m_CurrentState.Gamepad.sThumbLY };
+	m_Sticks[1].second = AnalogStickCommand::AnalogStickInput{ (float)m_CurrentState.Gamepad.sThumbRX, (float)m_CurrentState.Gamepad.sThumbRY };
 }
 
 bool dae::InputManager::IsPressed(ControllerButton button, const  std::unique_ptr<Controller>& controller) const

@@ -14,8 +14,6 @@ Scene::Scene(const std::string& name)
 	, m_SpLevels{}
 	, m_SpObjects{}
 	, m_SpPlayers{}
-	, m_CurrentGameMode{}
-	, m_CurrentLevel{ Level::FirstLevel }
 	, m_AreAllObjectsActive{ true }
 {
 }
@@ -140,5 +138,4 @@ void dae::Scene::ClearScene()
 	m_SpPlayers.clear();
 	m_SpLevels.clear();
 	m_SpCurrentLevel = nullptr;
-	m_CurrentLevel = Level::FirstLevel;
 }
