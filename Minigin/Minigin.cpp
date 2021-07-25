@@ -15,6 +15,7 @@
 #include "ScoreObserver.h"
 #include "GyaragaMovementComponent.h"
 #include "PlayerWeaponComponent.h"
+#include "Bee.h"
 
 using namespace std;
 using namespace std::chrono;

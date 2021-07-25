@@ -33,6 +33,18 @@
     <ClInclude Include="BulletMovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="BeeState.h">
+      <Filter>Enemies\EnemyStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Bee.h">
+      <Filter>Enemies\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="BeeDivingState.h">
+      <Filter>Enemies\EnemyStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BeeFormationState.h">
+      <Filter>Enemies\EnemyStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -62,6 +74,15 @@
     <ClCompile Include="BulletMovementComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Bee.cpp">
+      <Filter>Enemies\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="BeeDivingState.cpp">
+      <Filter>Enemies\EnemyStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BeeFormationState.cpp">
+      <Filter>Enemies\EnemyStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -72,6 +93,15 @@
     </Filter>
     <Filter Include="Command">
       <UniqueIdentifier>{627f1b4f-5b77-4376-b66b-ae3c8747e6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies">
+      <UniqueIdentifier>{a8add019-ab56-4b42-b121-50664937feae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\EnemyStates">
+      <UniqueIdentifier>{7617bafa-1e97-4c9a-ae7c-421df51409cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\Types">
+      <UniqueIdentifier>{7c756f52-b4ce-4b00-82f8-b55bd7e0fe38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
