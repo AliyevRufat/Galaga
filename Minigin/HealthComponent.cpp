@@ -23,20 +23,20 @@ void HealthComponent::Die()
 	{
 		//if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Coop)
 		{
-			if (m_pGameObject->GetName() == "") //TODO : insert the name of the player1
-			{
-				if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0) // or m_Lives?
-				{
-					// reset level
-				}
-			}
-			else
-			{
-				if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0) // or m_Lives?
-				{
-					// reset level
-				}
-			}
+			//if (m_pGameObject->GetName() == "Gyaraga")
+			//{
+			//	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0) // or m_Lives?
+			//	{
+			//		// reset level
+			//	}
+			//}
+			//else
+			//{
+			//	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0) // or m_Lives?
+			//	{
+			//		// reset level
+			//	}
+			//}
 		}
 		//else
 		{

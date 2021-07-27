@@ -6,7 +6,7 @@ class BeeDivingState final : public BeeState
 public:
 	BeeDivingState();
 
-	void Update(Bee& bee) override;
+	void Update(BeeStateManager& bee) override;
 	virtual BeeState* StateSwitch();
-	void Enter(Bee& bee);
+	void Enter(BeeStateManager& bee);
 };

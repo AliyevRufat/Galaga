@@ -1,15 +1,12 @@
 #pragma once
 #include "BeeState.h"
-class BeeFormationState final : public BeeState
+
+class BeeTurnAroundState final : public BeeState
 {
 public:
-	BeeFormationState();
+	BeeTurnAroundState();
 
 	void Update(BeeStateManager& bee) override;
 	virtual BeeState* StateSwitch();
 	void Enter(BeeStateManager& bee);
-private:
-
-	const int m_TimerBeforeDiving;
-	float m_TimeBeforeDiving;
 };

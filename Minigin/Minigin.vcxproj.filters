@@ -34,16 +34,25 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="BeeState.h">
-      <Filter>Enemies\EnemyStates</Filter>
-    </ClInclude>
-    <ClInclude Include="Bee.h">
-      <Filter>Enemies\Types</Filter>
+      <Filter>Enemies\BeeStates</Filter>
     </ClInclude>
     <ClInclude Include="BeeDivingState.h">
-      <Filter>Enemies\EnemyStates</Filter>
+      <Filter>Enemies\BeeStates</Filter>
     </ClInclude>
     <ClInclude Include="BeeFormationState.h">
-      <Filter>Enemies\EnemyStates</Filter>
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BeeTurnAroundState.h">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BeeStateManager.h">
+      <Filter>Enemies\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetectionManager.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="FormationManager.h">
+      <Filter>Enemies\FormationManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,14 +83,24 @@
     <ClCompile Include="BulletMovementComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Bee.cpp">
-      <Filter>Enemies\Types</Filter>
-    </ClCompile>
     <ClCompile Include="BeeDivingState.cpp">
-      <Filter>Enemies\EnemyStates</Filter>
+      <Filter>Enemies\BeeStates</Filter>
     </ClCompile>
     <ClCompile Include="BeeFormationState.cpp">
-      <Filter>Enemies\EnemyStates</Filter>
+      <Filter>Enemies\BeeStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BeeTurnAroundState.cpp">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BeeState.cpp" />
+    <ClCompile Include="BeeStateManager.cpp">
+      <Filter>Enemies\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionDetectionManager.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="FormationManager.cpp">
+      <Filter>Enemies\FormationManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,11 +116,17 @@
     <Filter Include="Enemies">
       <UniqueIdentifier>{a8add019-ab56-4b42-b121-50664937feae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Enemies\EnemyStates">
-      <UniqueIdentifier>{7617bafa-1e97-4c9a-ae7c-421df51409cc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Enemies\Types">
       <UniqueIdentifier>{7c756f52-b4ce-4b00-82f8-b55bd7e0fe38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\BeeStates">
+      <UniqueIdentifier>{7617bafa-1e97-4c9a-ae7c-421df51409cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{bbb726ed-f992-41d6-8add-e1948f065c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\FormationManager">
+      <UniqueIdentifier>{ef6f5994-cf07-4eb9-b10b-10f12e1234d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

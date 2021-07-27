@@ -15,7 +15,9 @@
 #include "ScoreObserver.h"
 #include "GyaragaMovementComponent.h"
 #include "PlayerWeaponComponent.h"
-#include "Bee.h"
+#include "BeeStateManager.h"
+#include "CollisionDetectionManager.h"
+#include "FormationManager.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -109,7 +111,17 @@ void dae::Minigin::InitGame()
 	//add
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
-	//CollisionDetectionManager::GetInstance().AddCollisionObject(gyaraga); //ADD COLLISION
+	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
+	//---------------------------------------------------------------------ENEMIES--------------------------------------------------
+	const int beeWidth = 35;
+	const int beeHeight = 41;
+	auto beeEnemy = std::make_shared<GameObject>("Bee");
+	beeEnemy->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - beeWidth / 2, 50), glm::vec2(beeWidth, beeHeight)));
+	beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
+	beeEnemy->AddComponent(new BeeStateManager());
+	scene->Add(beeEnemy);
+	CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
+	FormationManager::GetInstance().AddBeeToFormation(beeEnemy);
 }
 
 void dae::Minigin::BindCommands()
@@ -175,6 +187,8 @@ void dae::Minigin::Run()
 		const float deltaTime{ duration<float>(currentTime - lastTime).count() };
 		lastTime = currentTime;
 
+		CollisionDetectionManager::GetInstance().Update();
+		FormationManager::GetInstance().Update();
 		input.ProcessInput();
 		input.ControllerAnalogs();
 		input.InputHandler();
