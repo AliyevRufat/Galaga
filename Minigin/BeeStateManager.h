@@ -1,5 +1,6 @@
 #pragma once
 #include "ComponentIncludes.h"
+#include "BezierPath.h"
 
 class GameObject;
 class BeeState;

@@ -21,7 +21,7 @@ void ScoreObserver::OnNotify(const GameObject* actor, const std::string& event)
 void ScoreObserver::ChangeScore(const GameObject* actor)
 {
 	std::shared_ptr<GameObject> spPointsDisplay = nullptr;
-	if (actor->GetName() == "") //TODO : insert the name of the player
+	if (actor->GetName() == "Gyaraga")
 	{
 		spPointsDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("ScoreDisplay");
 	}

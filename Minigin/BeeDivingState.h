@@ -7,6 +7,7 @@ public:
 	BeeDivingState();
 
 	void Update(BeeStateManager& bee) override;
-	virtual BeeState* StateSwitch();
-	void Enter(BeeStateManager& bee);
+	void Enter(BeeStateManager& bee) override;
+	virtual BeeState* StateSwitch() override;
+	void CreatePaths() override;
 };

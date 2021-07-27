@@ -112,16 +112,24 @@ void dae::Minigin::InitGame()
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
+	//player died text
+	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
+	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
+	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255,255,255 }, false));
+	scene->Add(playerDied);
+
 	//---------------------------------------------------------------------ENEMIES--------------------------------------------------
 	const int beeWidth = 35;
 	const int beeHeight = 41;
-	auto beeEnemy = std::make_shared<GameObject>("Bee");
-	beeEnemy->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - beeWidth / 2, 50), glm::vec2(beeWidth, beeHeight)));
-	beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
-	beeEnemy->AddComponent(new BeeStateManager());
-	scene->Add(beeEnemy);
-	CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
-	FormationManager::GetInstance().AddBeeToFormation(beeEnemy);
+	for (size_t i = 0; i < 10; i++)
+	{
+		auto beeEnemy = std::make_shared<GameObject>("Bee");
+		beeEnemy->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - beeWidth / 2, 50), glm::vec2(beeWidth, beeHeight)));
+		beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
+		beeEnemy->AddComponent(new BeeStateManager());
+		scene->Add(beeEnemy);
+		CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
+	}
 }
 
 void dae::Minigin::BindCommands()
@@ -179,6 +187,7 @@ void dae::Minigin::Run()
 	std::thread soundThread(&AudioService::Update, &Locator::GetAudio());
 
 	BindCommands();
+	FormationManager::GetInstance().Init();
 	InitGame();
 
 	while (doContinue)
@@ -187,13 +196,13 @@ void dae::Minigin::Run()
 		const float deltaTime{ duration<float>(currentTime - lastTime).count() };
 		lastTime = currentTime;
 
-		CollisionDetectionManager::GetInstance().Update();
-		FormationManager::GetInstance().Update();
 		input.ProcessInput();
 		input.ControllerAnalogs();
 		input.InputHandler();
 		doContinue = input.KeyboardInput();
 		EngineTime::GetInstance().SetDeltaTime(deltaTime);
+		FormationManager::GetInstance().Update();
+		CollisionDetectionManager::GetInstance().Update();
 
 		//collision check
 		//enemy etc. update

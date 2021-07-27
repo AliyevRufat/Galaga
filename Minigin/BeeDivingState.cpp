@@ -29,3 +29,7 @@ BeeState* BeeDivingState::StateSwitch()
 void BeeDivingState::Enter(BeeStateManager&)
 {
 }
+
+void BeeDivingState::CreatePaths()
+{
+}

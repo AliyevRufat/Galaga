@@ -206,6 +206,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="BeeSpawnState.h" />
     <ClInclude Include="BeeStateManager.h" />
     <ClInclude Include="BeeDivingState.h" />
     <ClInclude Include="BeeFormationState.h" />
@@ -224,13 +225,14 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="ScoreObserver.h" />
     <ClInclude Include="PlayerWeaponComponent.h" />
+    <ClInclude Include="BezierPath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="BeeSpawnState.cpp" />
     <ClCompile Include="BeeStateManager.cpp" />
     <ClCompile Include="BeeDivingState.cpp" />
     <ClCompile Include="BeeFormationState.cpp" />
-    <ClCompile Include="BeeState.cpp" />
     <ClCompile Include="BeeTurnAroundState.cpp" />
     <ClCompile Include="BulletMovementComponent.cpp" />
     <ClCompile Include="CollisionDetectionManager.cpp" />

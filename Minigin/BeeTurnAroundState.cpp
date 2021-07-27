@@ -19,3 +19,7 @@ BeeState* BeeTurnAroundState::StateSwitch()
 void BeeTurnAroundState::Enter(BeeStateManager&)
 {
 }
+
+void BeeTurnAroundState::CreatePaths()
+{
+}

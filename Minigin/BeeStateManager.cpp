@@ -1,11 +1,12 @@
 #include "MiniginPCH.h"
 #include "BeeStateManager.h"
 #include "BeeFormationState.h"
+#include "BeeSpawnState.h"
 #include "EngineTime.h"
 
 BeeStateManager::BeeStateManager()
 {
-	m_pBeeState = new BeeFormationState();
+	m_pBeeState = new BeeSpawnState();
 	m_pBeeState->Enter(*this);
 }
 

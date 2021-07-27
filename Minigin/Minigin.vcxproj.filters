@@ -54,6 +54,10 @@
     <ClInclude Include="FormationManager.h">
       <Filter>Enemies\FormationManager</Filter>
     </ClInclude>
+    <ClInclude Include="BeeSpawnState.h">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierPath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -92,7 +96,6 @@
     <ClCompile Include="BeeTurnAroundState.cpp">
       <Filter>Enemies\BeeStates</Filter>
     </ClCompile>
-    <ClCompile Include="BeeState.cpp" />
     <ClCompile Include="BeeStateManager.cpp">
       <Filter>Enemies\Types</Filter>
     </ClCompile>
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="FormationManager.cpp">
       <Filter>Enemies\FormationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="BeeSpawnState.cpp">
+      <Filter>Enemies\BeeStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

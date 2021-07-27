@@ -8,15 +8,19 @@ class TransformComponent;
 class FormationManager final : public dae::Singleton<FormationManager>
 {
 public:
+	void Init();
 	void Update();
-	void AddBeeToFormation(const std::shared_ptr<GameObject>& bee);
+	int GetAvailablePosInFormation();
+	glm::vec2 GetPosWithIndex(int index);
+	void ClearFormation();
 private:
 	friend class dae::Singleton<FormationManager>;
 
 	FormationManager() = default;
 
-	std::vector<std::shared_ptr<GameObject>> m_pBees;
+	std::vector<std::pair<glm::vec2, bool>> m_BeePositions;
+
 	const int m_TimerBeforeMovingToOtherSide = 3;
 	float m_TimeBeforeMovingToOtherSide = 0.0f;
-	int m_Speed = 50;
+	int m_Speed = 15;
 };

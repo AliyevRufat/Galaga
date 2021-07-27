@@ -1,10 +1,10 @@
 #pragma once
 #include "BeeState.h"
 
-class BeeTurnAroundState final : public BeeState
+class BeeSpawnState final : public BeeState
 {
 public:
-	BeeTurnAroundState();
+	BeeSpawnState();
 
 	void Update(BeeStateManager& bee) override;
 	void Enter(BeeStateManager& bee) override;

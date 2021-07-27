@@ -21,7 +21,7 @@ void LivesObserver::OnNotify(const GameObject* actor, const std::string& event)
 void LivesObserver::ChangeLives(const GameObject* actor)
 {
 	std::shared_ptr<GameObject> spLivesDisplay = nullptr;
-	if (actor->GetName() == "") //TODO : insert the name of the player
+	if (actor->GetName() == "Gyaraga")
 	{
 		spLivesDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("LivesDisplay");
 	}
@@ -50,7 +50,7 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 	textComp->UpdateText("Remaining lives: " + std::to_string(healthComp->GetLives()));
 	//player died text
 	std::shared_ptr<GameObject> spPlayerDiedGO = nullptr;
-	if (actor->GetName() == "") //TODO : insert the name of the player
+	if (actor->GetName() == "Gyaraga")
 	{
 		spPlayerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("Player 1 Died!");
 	}

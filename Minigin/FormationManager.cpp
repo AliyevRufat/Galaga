@@ -1,24 +1,23 @@
 #include "MiniginPCH.h"
 #include "FormationManager.h"
 #include "TransformComponent.h"
+#include "BeeStateManager.h"
+
+void FormationManager::Init()
+{
+	const int posY = 300;
+
+	for (size_t i = 0; i < 10; i++)
+	{
+		m_BeePositions.push_back(std::make_pair(glm::vec2{ 100 + i * 50 ,posY }, false));
+	}
+}
 
 void FormationManager::Update()
 {
-	for (size_t i = 0; i < m_pBees.size(); i++)
+	for (size_t i = 0; i < m_BeePositions.size(); i++)
 	{
-		auto transformComp = m_pBees[i]->GetComponent<TransformComponent>();
-		const int posY = 100;
-		int posX = 350; //TODO : change to the actual window height
-		int offset = 20;
-		if (i % 2)
-		{
-			//odd
-			offset *= -1;
-		}
-		posX += offset;
-		//extra movement
-
-		transformComp->SetPosition(glm::vec2{ posX + m_Speed * EngineTime::GetInstance().GetDeltaTime(),posY });
+		m_BeePositions[i].first.x = m_BeePositions[i].first.x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 	}
 
 	if (m_TimeBeforeMovingToOtherSide >= m_TimerBeforeMovingToOtherSide)
@@ -29,7 +28,28 @@ void FormationManager::Update()
 	m_TimeBeforeMovingToOtherSide += EngineTime::GetInstance().GetDeltaTime();
 }
 
-void FormationManager::AddBeeToFormation(const std::shared_ptr<GameObject>& bee)
+int FormationManager::GetAvailablePosInFormation()
 {
-	m_pBees.push_back(bee);
+	for (int i = 0; i < m_BeePositions.size(); i++)
+	{
+		if (!m_BeePositions[i].second)
+		{
+			m_BeePositions[i].second = true;
+			return i;
+		}
+	}
+	return 0;
+}
+
+glm::vec2 FormationManager::GetPosWithIndex(int index)
+{
+	return m_BeePositions[index].first;
+}
+
+void FormationManager::ClearFormation()
+{
+	for (size_t i = 0; i < m_BeePositions.size(); i++)
+	{
+		m_BeePositions[i].second = false;
+	}
 }

@@ -10,13 +10,26 @@ void CollisionDetectionManager::Update()
 {
 	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
+		for (size_t j = 0; j < m_pOtherEntities.size(); j++)
+		{
+			if (m_pOtherEntities[i]->GetName() == "Bee" && m_pOtherEntities[j]->GetName() == "Bullet")
+			{
+				if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
+				{
+					m_pOtherEntities[i]->SetMarkForDelete(true);
+					m_pOtherEntities[j]->SetMarkForDelete(true);
+					DeleteCollisionGameObject(m_pOtherEntities[i]);
+					DeleteCollisionGameObject(m_pOtherEntities[j - 1]);
+				}
+			}
+		}
 		if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 		{
-			if (m_pOtherEntities[i]->GetName() == "Bee" || m_pOtherEntities[i]->GetName() == "Butterfly" || m_pOtherEntities[i]->GetName() == "Boss" || m_pOtherEntities[i]->GetName() == "Bullet")
+			if (m_pOtherEntities[i]->GetName() == "Bee" || m_pOtherEntities[i]->GetName() == "Butterfly" || m_pOtherEntities[i]->GetName() == "Boss" || m_pOtherEntities[i]->GetName() == "EnemyBullet")
 			{
-				std::cout << "Collision" << '\n';
 				m_pGyaraga->GetComponent<HealthComponent>()->Die();
 				m_pOtherEntities[i]->SetMarkForDelete(true);
+				DeleteCollisionGameObject(m_pOtherEntities[i]);
 			}
 			else if (m_pOtherEntities[i]->GetName() == "Beam")
 			{
