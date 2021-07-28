@@ -24,6 +24,10 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
+	if (m_MarkForDelete)
+	{
+		return;
+	}
 	if (!m_IsActive)
 	{
 		return;

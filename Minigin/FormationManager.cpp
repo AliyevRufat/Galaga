@@ -2,6 +2,7 @@
 #include "FormationManager.h"
 #include "TransformComponent.h"
 #include "BeeStateManager.h"
+#include <algorithm>
 
 void FormationManager::Init()
 {
@@ -9,7 +10,7 @@ void FormationManager::Init()
 
 	for (size_t i = 0; i < 10; i++)
 	{
-		m_BeePositions.push_back(std::make_pair(glm::vec2{ 100 + i * 50 ,posY }, false));
+		m_BeePositions.push_back(std::make_pair(glm::vec2{ 100 + i * 50 ,posY }, nullptr));
 	}
 }
 
@@ -28,28 +29,35 @@ void FormationManager::Update()
 	m_TimeBeforeMovingToOtherSide += EngineTime::GetInstance().GetDeltaTime();
 }
 
-int FormationManager::GetAvailablePosInFormation()
+glm::vec2 FormationManager::SaveAvailablePosInFormation(GameObject* gameObject)
 {
 	for (int i = 0; i < m_BeePositions.size(); i++)
 	{
-		if (!m_BeePositions[i].second)
+		if (m_BeePositions[i].second == nullptr)
 		{
-			m_BeePositions[i].second = true;
-			return i;
+			m_BeePositions[i].second = gameObject;
+			return m_BeePositions[i].first;
 		}
 	}
-	return 0;
+	return glm::vec2{ 0,0 };
 }
 
-glm::vec2 FormationManager::GetPosWithIndex(int index)
+glm::vec2 FormationManager::GetSpecificPos(GameObject* gameObject)
 {
-	return m_BeePositions[index].first;
+	for (size_t i = 0; i < m_BeePositions.size(); i++)
+	{
+		if (m_BeePositions[i].second == gameObject)
+		{
+			return m_BeePositions[i].first;
+		}
+	}
+	return glm::vec2{ 0,0 };
 }
 
 void FormationManager::ClearFormation()
 {
 	for (size_t i = 0; i < m_BeePositions.size(); i++)
 	{
-		m_BeePositions[i].second = false;
+		m_BeePositions[i].second = nullptr;
 	}
 }

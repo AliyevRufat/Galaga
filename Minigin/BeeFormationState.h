@@ -8,12 +8,9 @@ public:
 	void Update(BeeStateManager& bee) override;
 	void Enter(BeeStateManager& bee) override;
 	virtual BeeState* StateSwitch() override;
-	void CreatePaths() override;
+	void CreatePaths(BeeStateManager& bee) override;
 private:
 
 	const int m_TimerBeforeDiving;
 	float m_TimeBeforeDiving;
-
-	int m_Index;
-	bool m_IsInit;
 };

@@ -7,8 +7,6 @@
 BeeFormationState::BeeFormationState()
 	:m_TimerBeforeDiving{ rand() % 12 + 3 }
 	, m_TimeBeforeDiving{ 0.0f }
-	, m_Index{ 0 }
-	, m_IsInit{ false }
 {
 	m_SwitchState = { false };
 }
@@ -24,12 +22,12 @@ void BeeFormationState::Update(BeeStateManager& bee)
 		m_SwitchState = true;
 	}
 	//staying in formation
-	if (!m_IsInit)
-	{
-		m_Index = FormationManager::GetInstance().GetAvailablePosInFormation();
-		m_IsInit = true;
-	}
-	bee.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetPosWithIndex(m_Index));
+	//if (!m_IsInit)
+	//{
+	//	FormationManager::GetInstance().SaveAvailablePosInFormation(bee.GetGameObject());
+	//	m_IsInit = true;
+	//}
+	bee.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetSpecificPos(bee.GetGameObject()));
 }
 
 BeeState* BeeFormationState::StateSwitch()
@@ -41,6 +39,6 @@ void BeeFormationState::Enter(BeeStateManager&)
 {
 }
 
-void BeeFormationState::CreatePaths()
+void BeeFormationState::CreatePaths(BeeStateManager&)
 {
 }

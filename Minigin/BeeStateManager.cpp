@@ -5,8 +5,9 @@
 #include "EngineTime.h"
 
 BeeStateManager::BeeStateManager()
+	:m_IsInit{ false }
 {
-	m_pBeeState = new BeeSpawnState();
+	m_pBeeState = new BeeSpawnState(0);
 	m_pBeeState->Enter(*this);
 }
 
@@ -17,6 +18,11 @@ BeeStateManager::~BeeStateManager()
 
 void BeeStateManager::Update()
 {
+	if (!m_IsInit)
+	{
+		m_pBeeState->CreatePaths(*this);
+		m_IsInit = true;
+	}
 	m_pBeeState->Update(*this);
 	//timer for switching the state of the bee
 	if (m_pBeeState->GetSwitchState())
@@ -33,8 +39,8 @@ void BeeStateManager::StateSwitch()
 	{
 		delete m_pBeeState;
 		m_pBeeState = state;
-
 		m_pBeeState->Enter(*this);
+		m_pBeeState->CreatePaths(*this);
 	}
 }
 

@@ -117,19 +117,6 @@ void dae::Minigin::InitGame()
 	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
 	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255,255,255 }, false));
 	scene->Add(playerDied);
-
-	//---------------------------------------------------------------------ENEMIES--------------------------------------------------
-	const int beeWidth = 35;
-	const int beeHeight = 41;
-	for (size_t i = 0; i < 10; i++)
-	{
-		auto beeEnemy = std::make_shared<GameObject>("Bee");
-		beeEnemy->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - beeWidth / 2, 50), glm::vec2(beeWidth, beeHeight)));
-		beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
-		beeEnemy->AddComponent(new BeeStateManager());
-		scene->Add(beeEnemy);
-		CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
-	}
 }
 
 void dae::Minigin::BindCommands()
@@ -195,6 +182,22 @@ void dae::Minigin::Run()
 		const auto currentTime{ high_resolution_clock::now() };
 		const float deltaTime{ duration<float>(currentTime - lastTime).count() };
 		lastTime = currentTime;
+
+		//---------------------------------------------------------------------ENEMIES--------------------------------------------------
+		const int beeWidth = 35;
+		const int beeHeight = 41;
+		timer += EngineTime::GetInstance().GetDeltaTime();
+		if (timer >= 0.2f && size < 10)
+		{
+			size++;
+			timer = 0;
+			auto beeEnemy = std::make_shared<GameObject>("Bee");
+			beeEnemy->AddComponent(new TransformComponent(glm::vec2(350 + 50, -10), glm::vec2(beeWidth, beeHeight)));
+			beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
+			beeEnemy->AddComponent(new BeeStateManager());
+			SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
+			CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
+		}
 
 		input.ProcessInput();
 		input.ControllerAnalogs();

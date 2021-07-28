@@ -15,6 +15,7 @@ public:
 private:
 
 	void StateSwitch();
+	bool m_IsInit;
 
 	BeeState* m_pBeeState;
 };

@@ -20,6 +20,6 @@ void BeeTurnAroundState::Enter(BeeStateManager&)
 {
 }
 
-void BeeTurnAroundState::CreatePaths()
+void BeeTurnAroundState::CreatePaths(BeeStateManager&)
 {
 }

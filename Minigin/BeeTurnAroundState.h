@@ -9,5 +9,5 @@ public:
 	void Update(BeeStateManager& bee) override;
 	void Enter(BeeStateManager& bee) override;
 	virtual BeeState* StateSwitch() override;
-	void CreatePaths() override;
+	void CreatePaths(BeeStateManager& bee) override;
 };

@@ -18,11 +18,15 @@ void CollisionDetectionManager::Update()
 				{
 					m_pOtherEntities[i]->SetMarkForDelete(true);
 					m_pOtherEntities[j]->SetMarkForDelete(true);
-					DeleteCollisionGameObject(m_pOtherEntities[i]);
-					DeleteCollisionGameObject(m_pOtherEntities[j - 1]);
+					//DeleteCollisionGameObject(m_pOtherEntities[i]);
+					//DeleteCollisionGameObject(m_pOtherEntities[j]);
 				}
 			}
 		}
+	}
+
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	{
 		if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 		{
 			if (m_pOtherEntities[i]->GetName() == "Bee" || m_pOtherEntities[i]->GetName() == "Butterfly" || m_pOtherEntities[i]->GetName() == "Boss" || m_pOtherEntities[i]->GetName() == "EnemyBullet")

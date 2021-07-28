@@ -30,6 +30,6 @@ void BeeDivingState::Enter(BeeStateManager&)
 {
 }
 
-void BeeDivingState::CreatePaths()
+void BeeDivingState::CreatePaths(BeeStateManager&)
 {
 }
