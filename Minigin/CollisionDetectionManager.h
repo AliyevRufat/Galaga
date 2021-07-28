@@ -10,7 +10,7 @@ class CollisionDetectionManager final : public dae::Singleton<CollisionDetection
 public:
 	void Update();
 	void AddCollisionGameObject(const std::shared_ptr<GameObject>& gameObject);
-	void DeleteCollisionGameObject(const std::shared_ptr<GameObject>& gameObject);
+	void DeleteCollidedObjects();
 	void ClearCollisions();
 private:
 	friend class dae::Singleton<CollisionDetectionManager>;
@@ -21,6 +21,6 @@ private:
 	std::vector<TransformComponent*> m_pOtherEntityTransforms;
 	TransformComponent* m_pGyaragaTransform = nullptr;
 	//
-	std::vector<std::shared_ptr<GameObject>> m_pOtherEntities;
+	std::pair<std::vector<std::shared_ptr<GameObject>>, std::vector<bool>> m_pOtherEntities;//bool is used to know when to delete the object
 	std::shared_ptr<GameObject> m_pGyaraga;
 };

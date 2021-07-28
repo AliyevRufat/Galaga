@@ -8,38 +8,40 @@
 
 void CollisionDetectionManager::Update()
 {
-	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
-		for (size_t j = 0; j < m_pOtherEntities.size(); j++)
+		for (size_t j = 0; j < m_pOtherEntities.first.size(); j++)
 		{
-			if (m_pOtherEntities[i]->GetName() == "Bee" && m_pOtherEntities[j]->GetName() == "Bullet")
+			if (m_pOtherEntities.first[i]->GetName() == "Bee" && m_pOtherEntities.first[j]->GetName() == "Bullet")
 			{
 				if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
 				{
-					m_pOtherEntities[i]->SetMarkForDelete(true);
-					m_pOtherEntities[j]->SetMarkForDelete(true);
-					//DeleteCollisionGameObject(m_pOtherEntities[i]);
-					//DeleteCollisionGameObject(m_pOtherEntities[j]);
+					m_pOtherEntities.first[i]->SetMarkForDelete(true);
+					m_pOtherEntities.first[j]->SetMarkForDelete(true);
+					m_pOtherEntities.second[i] = true;
+					m_pOtherEntities.second[j] = true;
 				}
 			}
 		}
 	}
 
-	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
 		if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 		{
-			if (m_pOtherEntities[i]->GetName() == "Bee" || m_pOtherEntities[i]->GetName() == "Butterfly" || m_pOtherEntities[i]->GetName() == "Boss" || m_pOtherEntities[i]->GetName() == "EnemyBullet")
+			if (m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly" || m_pOtherEntities.first[i]->GetName() == "Boss" || m_pOtherEntities.first[i]->GetName() == "EnemyBullet")
 			{
 				m_pGyaraga->GetComponent<HealthComponent>()->Die();
-				m_pOtherEntities[i]->SetMarkForDelete(true);
-				DeleteCollisionGameObject(m_pOtherEntities[i]);
+				m_pOtherEntities.first[i]->SetMarkForDelete(true);
+				m_pOtherEntities.second[i] = true;
 			}
-			else if (m_pOtherEntities[i]->GetName() == "Beam")
+			else if (m_pOtherEntities.first[i]->GetName() == "Beam")
 			{
 			}
 		}
 	}
+
+	DeleteCollidedObjects();
 }
 
 void CollisionDetectionManager::AddCollisionGameObject(const std::shared_ptr<GameObject>& gameObject)
@@ -54,7 +56,8 @@ void CollisionDetectionManager::AddCollisionGameObject(const std::shared_ptr<Gam
 	else
 	{
 		m_pOtherEntityTransforms.push_back(transform);
-		m_pOtherEntities.push_back(gameObject);
+		m_pOtherEntities.first.push_back(gameObject);
+		m_pOtherEntities.second.push_back(false);
 	}
 }
 
@@ -73,13 +76,14 @@ bool CollisionDetectionManager::IsOverlapping(const SDL_Rect& r1, const SDL_Rect
 	return true;
 }
 
-void CollisionDetectionManager::DeleteCollisionGameObject(const std::shared_ptr<GameObject>& gameObject)
+void CollisionDetectionManager::DeleteCollidedObjects()
 {
-	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
-		if (m_pOtherEntities[i] == gameObject)
+		if (m_pOtherEntities.second[i])
 		{
-			m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
+			m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
+			m_pOtherEntities.second.erase(m_pOtherEntities.second.begin() + i);
 			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		}
 	}
@@ -87,9 +91,9 @@ void CollisionDetectionManager::DeleteCollisionGameObject(const std::shared_ptr<
 
 void CollisionDetectionManager::ClearCollisions()
 {
-	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
-		m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
+		m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
 		m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		--i;
 	}
