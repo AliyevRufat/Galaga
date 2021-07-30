@@ -8,14 +8,13 @@ void FormationManager::Init()
 {
 	const int posY = 300;
 
-	std::vector<std::pair<glm::vec2, GameObject*>> tempPos;
-
-	for (size_t i = 0; i < 10; i++)
+	for (size_t i = 0; i < 2; i++)
 	{
-		for (size_t j = 0; j < 2; j++)
+		std::vector<std::pair<glm::vec2, GameObject*>> tempPos;
+		for (size_t j = 0; j < 10; j++)
 		{
-			tempPos.push_back(std::make_pair(glm::vec2{ 100 + i * 50 ,posY - j * 50 }, nullptr));
-			if (i >= 9)
+			tempPos.push_back(std::make_pair(glm::vec2{ 100 + j * 50 ,posY - i * 50 }, nullptr));
+			if (j >= 9)
 			{
 				m_BeePositions.push_back(tempPos);
 			}
@@ -58,7 +57,7 @@ glm::vec2 FormationManager::GetSpecificPos(GameObject* gameObject)
 {
 	for (size_t i = 0; i < m_BeePositions.size(); i++)
 	{
-		for (size_t j = 0; j < m_BeePositions.size(); j++)
+		for (size_t j = 0; j < m_BeePositions[i].size(); j++)
 		{
 			if (m_BeePositions[i][j].second == gameObject)
 			{

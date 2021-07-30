@@ -187,13 +187,13 @@ void dae::Minigin::Run()
 		const int beeWidth = 35;
 		const int beeHeight = 41;
 		timer += EngineTime::GetInstance().GetDeltaTime();
-		if (timer >= 0.2f && size < 10)
+		if (timer >= 0.2f && size < 2)
 		{
 			timer = 0;
 			auto beeEnemy = std::make_shared<GameObject>("Bee");
 			beeEnemy->AddComponent(new TransformComponent(glm::vec2(350 + 50, -10), glm::vec2(beeWidth, beeHeight)));
 			beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
-			beeEnemy->AddComponent(new BeeStateManager(size));
+			beeEnemy->AddComponent(new BeeStateManager(5));
 			SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
 			CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
 			size++;
