@@ -8,7 +8,7 @@ class BeeState;
 class BeeStateManager : public BaseComponent
 {
 public:
-	BeeStateManager();
+	BeeStateManager(int formationPositionIndex);
 	~BeeStateManager();
 	void Update() override;
 	GameObject* GetGameObject();
@@ -16,6 +16,6 @@ private:
 
 	void StateSwitch();
 	bool m_IsInit;
-
 	BeeState* m_pBeeState;
+	int m_FormationIndex;
 };

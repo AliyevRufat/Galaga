@@ -42,9 +42,6 @@
     <ClInclude Include="BeeFormationState.h">
       <Filter>Enemies\BeeStates</Filter>
     </ClInclude>
-    <ClInclude Include="BeeTurnAroundState.h">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClInclude>
     <ClInclude Include="BeeStateManager.h">
       <Filter>Enemies\Types</Filter>
     </ClInclude>
@@ -57,7 +54,12 @@
     <ClInclude Include="BeeSpawnState.h">
       <Filter>Enemies\BeeStates</Filter>
     </ClInclude>
-    <ClInclude Include="BezierPath.h" />
+    <ClInclude Include="BezierPath.h">
+      <Filter>BezierPath</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierPathManager.h">
+      <Filter>BezierPath</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -93,9 +95,6 @@
     <ClCompile Include="BeeFormationState.cpp">
       <Filter>Enemies\BeeStates</Filter>
     </ClCompile>
-    <ClCompile Include="BeeTurnAroundState.cpp">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClCompile>
     <ClCompile Include="BeeStateManager.cpp">
       <Filter>Enemies\Types</Filter>
     </ClCompile>
@@ -107,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="BeeSpawnState.cpp">
       <Filter>Enemies\BeeStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BezierPathManager.cpp">
+      <Filter>BezierPath</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +135,9 @@
     </Filter>
     <Filter Include="Enemies\FormationManager">
       <UniqueIdentifier>{ef6f5994-cf07-4eb9-b10b-10f12e1234d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BezierPath">
+      <UniqueIdentifier>{be6bdd1b-3135-4b27-aec9-924bba3930b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

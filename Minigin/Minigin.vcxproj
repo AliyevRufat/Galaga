@@ -210,7 +210,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="BeeStateManager.h" />
     <ClInclude Include="BeeDivingState.h" />
     <ClInclude Include="BeeFormationState.h" />
-    <ClInclude Include="BeeTurnAroundState.h" />
+    <ClInclude Include="BezierPathManager.h" />
     <ClInclude Include="BulletMovementComponent.h" />
     <ClInclude Include="CollisionDetectionManager.h" />
     <ClInclude Include="Commands.h" />
@@ -233,7 +233,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="BeeStateManager.cpp" />
     <ClCompile Include="BeeDivingState.cpp" />
     <ClCompile Include="BeeFormationState.cpp" />
-    <ClCompile Include="BeeTurnAroundState.cpp" />
+    <ClCompile Include="BezierPathManager.cpp" />
     <ClCompile Include="BulletMovementComponent.cpp" />
     <ClCompile Include="CollisionDetectionManager.cpp" />
     <ClCompile Include="FormationManager.cpp" />

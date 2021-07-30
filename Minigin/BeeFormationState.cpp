@@ -16,7 +16,7 @@ void BeeFormationState::Update(BeeStateManager& bee)
 	//timer before getting out of the formation
 	m_TimeBeforeDiving += EngineTime::GetInstance().GetDeltaTime();
 
-	if (m_TimeBeforeDiving >= m_TimerBeforeDiving)
+	if (m_TimeBeforeDiving >= 2)
 	{
 		m_TimeBeforeDiving -= m_TimeBeforeDiving;
 		m_SwitchState = true;

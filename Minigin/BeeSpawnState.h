@@ -4,7 +4,8 @@
 class BeeSpawnState final : public BeeState
 {
 public:
-	BeeSpawnState(int path);
+	BeeSpawnState();
+	~BeeSpawnState();
 
 	void Update(BeeStateManager& bee) override;
 	void Enter(BeeStateManager& bee) override;

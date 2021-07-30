@@ -11,7 +11,7 @@ class FormationManager final : public dae::Singleton<FormationManager>
 public:
 	void Init();
 	void Update();
-	glm::vec2 SaveAvailablePosInFormation(GameObject* gameObject);
+	glm::vec2 SaveAvailablePosInFormation(GameObject* gameObject, int formationIndex);
 	glm::vec2 GetSpecificPos(GameObject* gameObject);
 	void ClearFormation();
 private:
@@ -19,7 +19,7 @@ private:
 
 	FormationManager() = default;
 
-	std::vector<std::pair<glm::vec2, GameObject*>> m_BeePositions;
+	std::vector<std::vector<std::pair<glm::vec2, GameObject*>>> m_BeePositions;
 
 	const int m_TimerBeforeMovingToOtherSide = 3;
 	float m_TimeBeforeMovingToOtherSide = 0.0f;

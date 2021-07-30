@@ -4,11 +4,13 @@
 #include "BeeSpawnState.h"
 #include "EngineTime.h"
 
-BeeStateManager::BeeStateManager()
+BeeStateManager::BeeStateManager(int formationPositionIndex)
 	:m_IsInit{ false }
+	, m_FormationIndex{ formationPositionIndex }
 {
-	m_pBeeState = new BeeSpawnState(0);
+	m_pBeeState = new BeeSpawnState();
 	m_pBeeState->Enter(*this);
+	m_pBeeState->SetFormationIndex(formationPositionIndex);
 }
 
 BeeStateManager::~BeeStateManager()
@@ -40,6 +42,7 @@ void BeeStateManager::StateSwitch()
 		delete m_pBeeState;
 		m_pBeeState = state;
 		m_pBeeState->Enter(*this);
+		m_pBeeState->SetFormationIndex(m_FormationIndex);
 		m_pBeeState->CreatePaths(*this);
 	}
 }

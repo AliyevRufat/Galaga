@@ -5,6 +5,7 @@ class BeeDivingState final : public BeeState
 {
 public:
 	BeeDivingState();
+	~BeeDivingState();
 
 	void Update(BeeStateManager& bee) override;
 	void Enter(BeeStateManager& bee) override;
