@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "FormationManager.h"
 #include "TransformComponent.h"
-#include "BeeStateManager.h"
+#include "EnemyStateManager.h"
 #include <algorithm>
 
 void FormationManager::Init()

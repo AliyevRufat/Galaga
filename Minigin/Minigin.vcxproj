@@ -206,16 +206,18 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="BeeSpawnState.h" />
-    <ClInclude Include="BeeStateManager.h" />
-    <ClInclude Include="BeeDivingState.h" />
-    <ClInclude Include="BeeFormationState.h" />
+    <ClInclude Include="EnemySpawnState.h" />
+    <ClInclude Include="EnemyStateManager.h" />
+    <ClInclude Include="EnemyDivingState.h" />
+    <ClInclude Include="EnemyFormationState.h" />
     <ClInclude Include="BezierPathManager.h" />
     <ClInclude Include="BulletMovementComponent.h" />
     <ClInclude Include="CollisionDetectionManager.h" />
     <ClInclude Include="Commands.h" />
-    <ClInclude Include="BeeState.h" />
+    <ClInclude Include="EnemyState.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FormationManager.h" />
+    <ClInclude Include="GoToFormationState.h" />
     <ClInclude Include="GyaragaMovementComponent.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="ComponentIncludes.h" />
@@ -229,14 +231,16 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
-    <ClCompile Include="BeeSpawnState.cpp" />
-    <ClCompile Include="BeeStateManager.cpp" />
-    <ClCompile Include="BeeDivingState.cpp" />
-    <ClCompile Include="BeeFormationState.cpp" />
+    <ClCompile Include="EnemySpawnState.cpp" />
+    <ClCompile Include="EnemyStateManager.cpp" />
+    <ClCompile Include="EnemyDivingState.cpp" />
+    <ClCompile Include="EnemyFormationState.cpp" />
     <ClCompile Include="BezierPathManager.cpp" />
     <ClCompile Include="BulletMovementComponent.cpp" />
     <ClCompile Include="CollisionDetectionManager.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FormationManager.cpp" />
+    <ClCompile Include="GoToFormationState.cpp" />
     <ClCompile Include="GyaragaMovementComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LivesObserver.cpp" />

@@ -15,9 +15,9 @@
 #include "ScoreObserver.h"
 #include "GyaragaMovementComponent.h"
 #include "PlayerWeaponComponent.h"
-#include "BeeStateManager.h"
 #include "CollisionDetectionManager.h"
 #include "FormationManager.h"
+#include "EnemyManager.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -54,7 +54,6 @@ void dae::Minigin::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 	Renderer::GetInstance().Init(m_Window);
-
 	//Locator::Provide(new ConsoleAudioService());
 	//Locator::GetAudio().AddSound(AudioService::SoundIds::FallEffect, "../Data/Sounds/.wav", true); // TODO : get correct sound/music names
 	//Locator::GetAudio().AddSound(AudioService::SoundIds::JumpEffect, "../Data//Sounds/.wav", true);
@@ -71,6 +70,8 @@ void dae::Minigin::InitGame()
 	const auto window = SDL_GetWindowSurface(m_Window);
 	//create and get scene
 	SceneManager::GetInstance().CreateScene("Galaga");
+	SceneManager::GetInstance().SetScreenDimensions(glm::vec2{ window->w,window->h });
+
 	auto scene = SceneManager::GetInstance().GetCurrentScene();
 
 	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
@@ -103,8 +104,8 @@ void dae::Minigin::InitGame()
 	gyaraga->AddComponent(new HealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
-	gyaraga->AddComponent(new GyaragaMovementComponent(window));
-	gyaraga->AddComponent(new PlayerWeaponComponent(window, playerWidth));
+	gyaraga->AddComponent(new GyaragaMovementComponent());
+	gyaraga->AddComponent(new PlayerWeaponComponent(playerWidth));
 	//watchers
 	gyaraga->AddWatcher(new ScoreObserver());
 	gyaraga->AddWatcher(new LivesObserver());
@@ -117,6 +118,27 @@ void dae::Minigin::InitGame()
 	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
 	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255,255,255 }, false));
 	scene->Add(playerDied);
+	//Spawn enemies
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 3);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 4);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 5);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 6);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 7);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 8);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 9);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 2);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 3);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 4);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 5);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 6);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 7);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 8);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 9);
 }
 
 void dae::Minigin::BindCommands()
@@ -183,22 +205,6 @@ void dae::Minigin::Run()
 		const float deltaTime{ duration<float>(currentTime - lastTime).count() };
 		lastTime = currentTime;
 
-		//---------------------------------------------------------------------ENEMIES--------------------------------------------------
-		const int beeWidth = 35;
-		const int beeHeight = 41;
-		timer += EngineTime::GetInstance().GetDeltaTime();
-		if (timer >= 0.2f && size < 2)
-		{
-			timer = 0;
-			auto beeEnemy = std::make_shared<GameObject>("Bee");
-			beeEnemy->AddComponent(new TransformComponent(glm::vec2(350 + 50, -10), glm::vec2(beeWidth, beeHeight)));
-			beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
-			beeEnemy->AddComponent(new BeeStateManager(5));
-			SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
-			CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
-			size++;
-		}
-
 		input.ProcessInput();
 		input.ControllerAnalogs();
 		input.InputHandler();
@@ -206,6 +212,7 @@ void dae::Minigin::Run()
 		EngineTime::GetInstance().SetDeltaTime(deltaTime);
 		FormationManager::GetInstance().Update();
 		CollisionDetectionManager::GetInstance().Update();
+		EnemyManager::GetInstance().Update();
 
 		//collision check
 		//enemy etc. update

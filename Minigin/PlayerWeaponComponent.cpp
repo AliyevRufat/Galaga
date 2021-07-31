@@ -7,11 +7,10 @@
 #include "CollisionDetectionManager.h"
 #include "Scene.h"
 
-PlayerWeaponComponent::PlayerWeaponComponent(SDL_Surface* windowSurface, const int playerWidth)
+PlayerWeaponComponent::PlayerWeaponComponent(const int playerWidth)
 	:m_MaxBulletCountOnScreen{ 2 }
 	, m_CurrentBulletCountOnScreen{ 0 }
 	, m_PlayerWidth{ playerWidth }
-	, m_Window{ windowSurface }
 {
 }
 
@@ -26,7 +25,7 @@ void PlayerWeaponComponent::Update()
 	{
 		auto bulletPos = m_spBullets[i]->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 
-		if (bulletPos.y < 0 || bulletPos.y > m_Window->h || m_spBullets[i]->GetMarkForDelete())
+		if (bulletPos.y < 0 || bulletPos.y > dae::SceneManager::GetInstance().GetScreenDimensions().y || m_spBullets[i]->GetMarkForDelete())
 		{
 			m_spBullets.erase(m_spBullets.begin() + i); //delete the element
 			--m_CurrentBulletCountOnScreen;

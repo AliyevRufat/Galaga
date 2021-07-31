@@ -6,7 +6,7 @@ class GyaragaMovementComponent final : public BaseComponent
 {
 public:
 
-	GyaragaMovementComponent(SDL_Surface* windowSurface);
+	GyaragaMovementComponent();
 	void Update() override;
 	//
 	void Move(bool moveLeft);
@@ -16,5 +16,4 @@ private:
 
 	bool m_MoveLeft;
 	bool m_MoveRight;
-	SDL_Surface* m_WindowSurface;
 };

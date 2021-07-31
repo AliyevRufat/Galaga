@@ -2,12 +2,12 @@
 #include "GyaragaMovementComponent.h"
 #include "GameObject.h"
 #include "TransformComponent.h"
+#include "SceneManager.h"
 #include "EngineTime.h"
 
-GyaragaMovementComponent::GyaragaMovementComponent(SDL_Surface* windowSurface)
+GyaragaMovementComponent::GyaragaMovementComponent()
 	: m_MoveLeft{ false }
 	, m_MoveRight{ false }
-	, m_WindowSurface{ windowSurface }
 {
 }
 
@@ -20,7 +20,7 @@ void GyaragaMovementComponent::Update()
 	{
 		m_MoveLeft = false;
 	}
-	if (transformComponent->GetTransform().GetPosition().x >= m_WindowSurface->w - playerWidth)
+	if (transformComponent->GetTransform().GetPosition().x >= dae::SceneManager::GetInstance().GetScreenDimensions().x - playerWidth)
 	{
 		m_MoveRight = false;
 	}

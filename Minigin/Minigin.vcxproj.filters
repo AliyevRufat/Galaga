@@ -33,32 +33,38 @@
     <ClInclude Include="BulletMovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BeeState.h">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClInclude>
-    <ClInclude Include="BeeDivingState.h">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClInclude>
-    <ClInclude Include="BeeFormationState.h">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClInclude>
-    <ClInclude Include="BeeStateManager.h">
-      <Filter>Enemies\Types</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionDetectionManager.h">
       <Filter>Collision</Filter>
     </ClInclude>
     <ClInclude Include="FormationManager.h">
       <Filter>Enemies\FormationManager</Filter>
     </ClInclude>
-    <ClInclude Include="BeeSpawnState.h">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClInclude>
     <ClInclude Include="BezierPath.h">
       <Filter>BezierPath</Filter>
     </ClInclude>
     <ClInclude Include="BezierPathManager.h">
       <Filter>BezierPath</Filter>
+    </ClInclude>
+    <ClInclude Include="GoToFormationState.h">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateManager.h">
+      <Filter>Enemies\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawnState.h">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFormationState.h">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyDivingState.h">
+      <Filter>Enemies\BeeStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,26 +95,32 @@
     <ClCompile Include="BulletMovementComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="BeeDivingState.cpp">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClCompile>
-    <ClCompile Include="BeeFormationState.cpp">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClCompile>
-    <ClCompile Include="BeeStateManager.cpp">
-      <Filter>Enemies\Types</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionDetectionManager.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="FormationManager.cpp">
       <Filter>Enemies\FormationManager</Filter>
     </ClCompile>
-    <ClCompile Include="BeeSpawnState.cpp">
-      <Filter>Enemies\BeeStates</Filter>
-    </ClCompile>
     <ClCompile Include="BezierPathManager.cpp">
       <Filter>BezierPath</Filter>
+    </ClCompile>
+    <ClCompile Include="GoToFormationState.cpp">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateManager.cpp">
+      <Filter>Enemies\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawnState.cpp">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFormationState.cpp">
+      <Filter>Enemies\BeeStates</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyDivingState.cpp">
+      <Filter>Enemies\BeeStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

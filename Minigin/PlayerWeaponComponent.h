@@ -7,7 +7,7 @@ class PlayerWeaponComponent final : public BaseComponent
 {
 public:
 
-	PlayerWeaponComponent(SDL_Surface* windowSurface, const int playerWidth);
+	PlayerWeaponComponent(const int playerWidth);
 	void Update() override;
 	//
 	void Shoot();
@@ -19,7 +19,6 @@ private:
 	const int m_MaxBulletCountOnScreen;
 	int m_CurrentBulletCountOnScreen;
 	const int m_PlayerWidth;
-	SDL_Surface* m_Window;
 	//
 	std::vector<std::shared_ptr<GameObject>> m_spBullets;
 };

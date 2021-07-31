@@ -34,7 +34,7 @@ glm::vec2 BezierPathManager::CalculatePath(const glm::vec2& pos)
 
 	if (m_CurrentWayPoint < m_Paths[m_CurrentPath].size())
 	{
-		const float speed = 300.0f;
+		const float speed = 600.0f;
 		glm::vec2 distance = m_Paths[m_CurrentPath][m_CurrentWayPoint] - pos;
 		return pos + Normalize(distance) * EngineTime::GetInstance().GetDeltaTime() * speed;
 	}
