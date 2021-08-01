@@ -6,17 +6,31 @@
 
 void FormationManager::Init()
 {
-	const int posY = 300;
+	const int posYBees = 300;
+	const int posYButterflies = 200;
 
 	for (size_t i = 0; i < 2; i++)
 	{
 		std::vector<std::pair<glm::vec2, GameObject*>> tempPos;
 		for (size_t j = 0; j < 10; j++)
 		{
-			tempPos.push_back(std::make_pair(glm::vec2{ 100 + j * 50 ,posY - i * 50 }, nullptr));
+			tempPos.push_back(std::make_pair(glm::vec2{ 100 + j * 50 ,posYBees - i * 50 }, nullptr));
 			if (j >= 9)
 			{
 				m_BeePositions.push_back(tempPos);
+			}
+		}
+	}
+	//
+	for (size_t i = 0; i < 2; i++)
+	{
+		std::vector<std::pair<glm::vec2, GameObject*>> tempPos;
+		for (size_t j = 0; j < 10; j++)
+		{
+			tempPos.push_back(std::make_pair(glm::vec2{ 100 + j * 50 ,posYButterflies - i * 50 }, nullptr));
+			if (j >= 9)
+			{
+				m_ButterflyPositions.push_back(tempPos);
 			}
 		}
 	}
@@ -31,6 +45,14 @@ void FormationManager::Update()
 			m_BeePositions[i][j].first.x = m_BeePositions[i][j].first.x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 		}
 	}
+	//
+	for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
+	{
+		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
+		{
+			m_ButterflyPositions[i][j].first.x = m_ButterflyPositions[i][j].first.x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+		}
+	}
 
 	if (m_TimeBeforeMovingToOtherSide >= m_TimerBeforeMovingToOtherSide)
 	{
@@ -40,16 +62,31 @@ void FormationManager::Update()
 	m_TimeBeforeMovingToOtherSide += EngineTime::GetInstance().GetDeltaTime();
 }
 
-glm::vec2 FormationManager::SaveAvailablePosInFormation(GameObject* gameObject, int formationIndex)
+glm::vec2 FormationManager::SaveAvailablePosInFormation(GameObject* gameObject, int formationIndex, EnemyType enemyType)
 {
-	for (size_t i = 0; i < m_BeePositions.size(); i++)
+	if (enemyType == EnemyType::Bee)
 	{
-		if (m_BeePositions[i][formationIndex].second == nullptr)
+		for (size_t i = 0; i < m_BeePositions.size(); i++)
 		{
-			m_BeePositions[i][formationIndex].second = gameObject;
-			return m_BeePositions[i][formationIndex].first;
+			if (m_BeePositions[i][formationIndex].second == nullptr)
+			{
+				m_BeePositions[i][formationIndex].second = gameObject;
+				return m_BeePositions[i][formationIndex].first;
+			}
 		}
 	}
+	else if (enemyType == EnemyType::Butterfly)
+	{
+		for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
+		{
+			if (m_ButterflyPositions[i][formationIndex].second == nullptr)
+			{
+				m_ButterflyPositions[i][formationIndex].second = gameObject;
+				return m_ButterflyPositions[i][formationIndex].first;
+			}
+		}
+	}
+
 	return glm::vec2{ 0,0 };
 }
 
@@ -65,6 +102,18 @@ glm::vec2 FormationManager::GetSpecificPos(GameObject* gameObject)
 			}
 		}
 	}
+	//
+	for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
+	{
+		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
+		{
+			if (m_ButterflyPositions[i][j].second == gameObject)
+			{
+				return m_ButterflyPositions[i][j].first;
+			}
+		}
+	}
+	//
 	return glm::vec2{ 0,0 };
 }
 
@@ -75,6 +124,14 @@ void FormationManager::ClearFormation()
 		for (size_t j = 0; j < m_BeePositions[i].size(); j++)
 		{
 			m_BeePositions[i][j].second = nullptr;
+		}
+	}
+	//
+	for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
+	{
+		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
+		{
+			m_ButterflyPositions[i][j].second = nullptr;
 		}
 	}
 }

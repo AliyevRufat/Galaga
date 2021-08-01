@@ -44,7 +44,7 @@ void EnemySpawnState::Enter(EnemyStateManager&)
 void EnemySpawnState::CreatePaths(EnemyStateManager& enemyStateMngr)
 {
 	auto startPos = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	auto endPos = FormationManager::GetInstance().SaveAvailablePosInFormation(enemyStateMngr.GetGameObject(), m_FormationIndex);
+	auto endPos = FormationManager::GetInstance().SaveAvailablePosInFormation(enemyStateMngr.GetGameObject(), m_FormationIndex, enemyStateMngr.GetEnemyType());
 	//
 	BezierPath* path = new BezierPath();
 

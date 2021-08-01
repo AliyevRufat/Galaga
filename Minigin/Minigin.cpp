@@ -129,16 +129,36 @@ void dae::Minigin::InitGame()
 	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 7);
 	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 8);
 	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 9);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 2);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 3);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 4);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 5);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 6);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 7);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 8);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 9);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 2);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 3);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 4);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 5);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 6);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 7);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 8);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 9);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 3);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 4);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 5);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 6);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 7);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 8);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 9);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 2);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 3);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 4);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 5);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 6);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 7);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 8);
+	//EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 9);
 }
 
 void dae::Minigin::BindCommands()

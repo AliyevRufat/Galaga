@@ -12,7 +12,7 @@ void CollisionDetectionManager::Update()
 	{
 		for (size_t j = 0; j < m_pOtherEntities.first.size(); j++)
 		{
-			if (m_pOtherEntities.first[i]->GetName() == "Bee" && m_pOtherEntities.first[j]->GetName() == "Bullet")
+			if ((m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly") && m_pOtherEntities.first[j]->GetName() == "Bullet")
 			{
 				if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
 				{
