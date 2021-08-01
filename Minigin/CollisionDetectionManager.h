@@ -11,6 +11,7 @@ public:
 	void Update();
 	void AddCollisionGameObject(const std::shared_ptr<GameObject>& gameObject);
 	void DeleteCollidedObjects();
+	void DeleteSpecificObject(const std::shared_ptr<GameObject>& object);
 	void ClearCollisions();
 private:
 	friend class dae::Singleton<CollisionDetectionManager>;

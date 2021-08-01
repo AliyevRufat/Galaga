@@ -6,6 +6,7 @@
 #include "TransformComponent.h"
 #include "Scene.h"
 #include "CollisionDetectionManager.h"
+#include "EnemyWeaponComponent.h"
 
 void EnemyManager::Update()
 {
@@ -49,6 +50,7 @@ void EnemyManager::SpawnBee(EnemyType enemyType, int formationRowIndex, int form
 	beeEnemy->AddComponent(new TransformComponent(glm::vec2(350 + 50, -10), glm::vec2(beeWidth, beeHeight)));
 	beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, false));
 	beeEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
+	beeEnemy->AddComponent(new EnemyWeaponComponent(beeWidth));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
 }
@@ -62,6 +64,7 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	butterflyEnemy->AddComponent(new TransformComponent(glm::vec2(350 - 50, -10), glm::vec2(butterflyWidth, butterflyHeight)));
 	butterflyEnemy->AddComponent(new Texture2DComponent("Butterfly.png", 1, false));
 	butterflyEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
+	butterflyEnemy->AddComponent(new EnemyWeaponComponent(butterflyWidth));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(butterflyEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(butterflyEnemy);
 }
@@ -75,4 +78,19 @@ void EnemyManager::ClearEnemies()
 	m_Index = 0;
 	m_SpawnTime = 0.0f;
 	m_QueuedEnemies.clear();
+}
+
+bool EnemyManager::CanDive() const
+{
+	return m_AmountOfDivingEnemies <= m_MaxAmountOfDivingEnemies;
+}
+
+void EnemyManager::IncreaseAmountOfDivingEnemies()
+{
+	++m_AmountOfDivingEnemies;
+}
+
+void EnemyManager::DecreaseAmountOfDivingEnemies()
+{
+	--m_AmountOfDivingEnemies;
 }

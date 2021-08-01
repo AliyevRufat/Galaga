@@ -17,8 +17,13 @@ public:
 	bool GetSwitchState() const { return m_SwitchState; }
 protected:
 	bool m_SwitchState = false;
+	//formation vars
 	int m_FormationPosIndex = 0;
 	int m_FormationRowIndex = 0;
+	//shoot vars
+	bool m_CanShoot = false;
+	float m_ShootTime = 0.0f;
+	int m_ShootTimer = 0;
 	//
 	BezierPathManager* m_pBezierPathManager = nullptr;
 };

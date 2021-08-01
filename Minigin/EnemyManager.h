@@ -19,6 +19,10 @@ public:
 	void Update();
 	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void ClearEnemies();
+	bool CanDive() const;
+	void IncreaseAmountOfDivingEnemies();
+	void DecreaseAmountOfDivingEnemies();
+
 private:
 	friend class dae::Singleton<EnemyManager>;
 	EnemyManager() = default;
@@ -29,9 +33,12 @@ private:
 	void SpawnButterfly(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	//Datamembers
-	std::vector< std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
+	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
 	//
 	int m_Index = 0;
 	float m_SpawnTime = 0.0f;
 	const float m_SpawnTimer = 0.2f;
+	//
+	int m_AmountOfDivingEnemies;
+	const int m_MaxAmountOfDivingEnemies;
 };

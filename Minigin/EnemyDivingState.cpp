@@ -10,6 +10,7 @@ EnemyDivingState::EnemyDivingState()
 {
 	m_SwitchState = { false };
 	m_pBezierPathManager = new BezierPathManager();
+	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies();
 }
 
 EnemyDivingState::~EnemyDivingState()
@@ -43,6 +44,8 @@ void EnemyDivingState::Update(EnemyStateManager& enemyStateMngr)
 
 EnemyState* EnemyDivingState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
+	EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+	//
 	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly)
 	{
 		return new GoToFormationState();

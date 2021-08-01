@@ -66,6 +66,9 @@
     <ClInclude Include="EnemyDivingState.h">
       <Filter>Enemies\States</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyWeaponComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="EnemyDivingState.cpp">
       <Filter>Enemies\States</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyWeaponComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

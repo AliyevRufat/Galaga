@@ -14,7 +14,7 @@ void BulletMovementComponent::Update()
 {
 	auto transformComponent = m_pGameObject->GetComponent<TransformComponent>();
 	auto currentPos = transformComponent->GetTransform().GetPosition();
-	const int speed = 1500;
+	int speed = 1500;
 	//
 	if (m_Target == glm::vec2{ 0,0 })
 	{
@@ -22,10 +22,11 @@ void BulletMovementComponent::Update()
 	}
 	else
 	{
-		//lerp between current pos and target // TODO : untested, probably not working coz you rewrite the start pos every time
-		float newX = currentPos.x + m_LerpT * (m_Target.x - currentPos.x);
-		float newY = currentPos.y + m_LerpT * (m_Target.y - currentPos.y);
-		m_LerpT += EngineTime::GetInstance().GetDeltaTime();
+		speed = 30;
+		const int targetOffset = 2;
+		float newX = currentPos.x + m_LerpT * (m_Target.x * targetOffset - currentPos.x);
+		float newY = currentPos.y + m_LerpT * (m_Target.y * targetOffset - currentPos.y);
+		m_LerpT += EngineTime::GetInstance().GetDeltaTime() / (float)speed;
 		//
 		transformComponent->SetPosition(glm::vec2{ newX,newY });
 	}

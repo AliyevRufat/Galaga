@@ -8,6 +8,7 @@
 
 void CollisionDetectionManager::Update()
 {
+	//if player bullet collides with the enemy
 	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
 		for (size_t j = 0; j < m_pOtherEntities.first.size(); j++)
@@ -24,7 +25,7 @@ void CollisionDetectionManager::Update()
 			}
 		}
 	}
-
+	//if enemy or enemy bullet collides with the player
 	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
 		if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
@@ -81,6 +82,19 @@ void CollisionDetectionManager::DeleteCollidedObjects()
 	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
 	{
 		if (m_pOtherEntities.second[i])
+		{
+			m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
+			m_pOtherEntities.second.erase(m_pOtherEntities.second.begin() + i);
+			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
+		}
+	}
+}
+
+void CollisionDetectionManager::DeleteSpecificObject(const std::shared_ptr<GameObject>& object)
+{
+	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
+	{
+		if (m_pOtherEntities.first[i] == object)
 		{
 			m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
 			m_pOtherEntities.second.erase(m_pOtherEntities.second.begin() + i);

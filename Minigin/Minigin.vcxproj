@@ -216,6 +216,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="Commands.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="EnemyWeaponComponent.h" />
     <ClInclude Include="FormationManager.h" />
     <ClInclude Include="GoToFormationState.h" />
     <ClInclude Include="GyaragaMovementComponent.h" />
@@ -239,6 +240,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="BulletMovementComponent.cpp" />
     <ClCompile Include="CollisionDetectionManager.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="EnemyWeaponComponent.cpp" />
     <ClCompile Include="FormationManager.cpp" />
     <ClCompile Include="GoToFormationState.cpp" />
     <ClCompile Include="GyaragaMovementComponent.cpp" />
