@@ -17,19 +17,19 @@ class EnemyManager final : public dae::Singleton<EnemyManager>
 {
 public:
 	void Update();
-	void QueueEnemy(EnemyType enemyType, int formationIndex);
+	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void ClearEnemies();
 private:
 	friend class dae::Singleton<EnemyManager>;
 	EnemyManager() = default;
 	//Methods
-	void SpawnEnemy(EnemyType enemyType, int formationIndex);
+	void SpawnEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	//
-	void SpawnBee(EnemyType enemyType, int formationIndex);
-	void SpawnButterfly(EnemyType enemyType, int formationIndex);
-	void SpawnBoss(EnemyType enemyType, int formationIndex);
+	void SpawnBee(EnemyType enemyType, int formationRowIndex, int formationIndex);
+	void SpawnButterfly(EnemyType enemyType, int formationRowIndex, int formationIndex);
+	void SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	//Datamembers
-	std::vector<std::pair<EnemyType, int>> m_QueuedEnemies;
+	std::vector< std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
 	//
 	int m_Index = 0;
 	float m_SpawnTime = 0.0f;

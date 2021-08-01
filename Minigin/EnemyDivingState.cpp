@@ -70,7 +70,7 @@ void EnemyDivingState::CreatePaths(EnemyStateManager& enemyStateMngr)
 		const int offsetY = 100;
 		auto curvePoint = glm::vec2(randomDiveX, screenDimensions.y + offsetY);
 		//
-		if (m_FormationIndex < formationMiddleIndex)
+		if (m_FormationPosIndex < formationMiddleIndex)
 		{
 			path->AddCurve({ startPos, glm::vec2(startPos.x - 320,startPos.y - 110), glm::vec2(curvePoint.x + 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
 			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x + 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
@@ -93,7 +93,7 @@ void EnemyDivingState::CreatePaths(EnemyStateManager& enemyStateMngr)
 		const int distanceOnY = 200;
 		auto endPos = startPos;
 
-		if (m_FormationIndex < formationMiddleIndex)
+		if (m_FormationPosIndex < formationMiddleIndex)
 		{
 			range = (int)screenDimensions.x - (int)screenDimensions.x / 2 + 1;
 			randTargetPoint = rand() % range + (int)screenDimensions.x / 2;

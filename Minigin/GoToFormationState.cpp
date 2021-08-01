@@ -43,7 +43,7 @@ EnemyState* GoToFormationState::StateSwitch(EnemyStateManager&)
 void GoToFormationState::CreatePaths(EnemyStateManager& enemyStateMngr)
 {
 	auto startPos = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	auto endPos = FormationManager::GetInstance().GetSpecificPos(enemyStateMngr.GetGameObject());
+	auto endPos = FormationManager::GetInstance().GetSpecificPos(m_FormationRowIndex, m_FormationPosIndex, enemyStateMngr.GetEnemyType());
 	//
 	BezierPath* path = new BezierPath();
 	path->AddCurve({ startPos,startPos, endPos,endPos }, 1);

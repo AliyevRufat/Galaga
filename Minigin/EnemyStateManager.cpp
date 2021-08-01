@@ -5,14 +5,15 @@
 #include "EngineTime.h"
 #include "EnemyManager.h"
 
-EnemyStateManager::EnemyStateManager(EnemyType enemyType, int formationPositionIndex)
+EnemyStateManager::EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex)
 	:m_IsInit{ false }
 	, m_EnemyType{ enemyType }
 	, m_FormationIndex{ formationPositionIndex }
+	, m_FormationRowIndex{ formationRowIndex }
 {
 	m_pEnemyState = new EnemySpawnState();
 	m_pEnemyState->Enter(*this);
-	m_pEnemyState->SetFormationIndex(formationPositionIndex);
+	m_pEnemyState->SetFormationIndex(formationRowIndex, formationPositionIndex);
 }
 
 EnemyStateManager::~EnemyStateManager()
@@ -44,7 +45,7 @@ void EnemyStateManager::StateSwitch()
 		delete m_pEnemyState;
 		m_pEnemyState = state;
 		m_pEnemyState->Enter(*this);
-		m_pEnemyState->SetFormationIndex(m_FormationIndex);
+		m_pEnemyState->SetFormationIndex(m_FormationRowIndex, m_FormationIndex);
 		m_pEnemyState->CreatePaths(*this);
 	}
 }

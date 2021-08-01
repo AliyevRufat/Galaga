@@ -11,10 +11,10 @@ void FormationManager::Init()
 
 	for (size_t i = 0; i < 2; i++)
 	{
-		std::vector<std::pair<glm::vec2, GameObject*>> tempPos;
+		std::vector<glm::vec2> tempPos;
 		for (size_t j = 0; j < 10; j++)
 		{
-			tempPos.push_back(std::make_pair(glm::vec2{ 100 + j * 50 ,posYBees - i * 50 }, nullptr));
+			tempPos.push_back(glm::vec2{ 100 + j * 50 ,posYBees - i * 50 });
 			if (j >= 9)
 			{
 				m_BeePositions.push_back(tempPos);
@@ -24,10 +24,10 @@ void FormationManager::Init()
 	//
 	for (size_t i = 0; i < 2; i++)
 	{
-		std::vector<std::pair<glm::vec2, GameObject*>> tempPos;
+		std::vector<glm::vec2> tempPos;
 		for (size_t j = 0; j < 10; j++)
 		{
-			tempPos.push_back(std::make_pair(glm::vec2{ 100 + j * 50 ,posYButterflies - i * 50 }, nullptr));
+			tempPos.push_back(glm::vec2{ 100 + j * 50 ,posYButterflies - i * 50 });
 			if (j >= 9)
 			{
 				m_ButterflyPositions.push_back(tempPos);
@@ -42,7 +42,7 @@ void FormationManager::Update()
 	{
 		for (size_t j = 0; j < m_BeePositions[i].size(); j++)
 		{
-			m_BeePositions[i][j].first.x = m_BeePositions[i][j].first.x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+			m_BeePositions[i][j].x = m_BeePositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 		}
 	}
 	//
@@ -50,7 +50,7 @@ void FormationManager::Update()
 	{
 		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
 		{
-			m_ButterflyPositions[i][j].first.x = m_ButterflyPositions[i][j].first.x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+			m_ButterflyPositions[i][j].x = m_ButterflyPositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 		}
 	}
 
@@ -62,76 +62,16 @@ void FormationManager::Update()
 	m_TimeBeforeMovingToOtherSide += EngineTime::GetInstance().GetDeltaTime();
 }
 
-glm::vec2 FormationManager::SaveAvailablePosInFormation(GameObject* gameObject, int formationIndex, EnemyType enemyType)
+glm::vec2 FormationManager::GetSpecificPos(int rowIndex, int posIndex, EnemyType enemyType)
 {
 	if (enemyType == EnemyType::Bee)
 	{
-		for (size_t i = 0; i < m_BeePositions.size(); i++)
-		{
-			if (m_BeePositions[i][formationIndex].second == nullptr)
-			{
-				m_BeePositions[i][formationIndex].second = gameObject;
-				return m_BeePositions[i][formationIndex].first;
-			}
-		}
+		return m_BeePositions[rowIndex][posIndex];
 	}
 	else if (enemyType == EnemyType::Butterfly)
 	{
-		for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
-		{
-			if (m_ButterflyPositions[i][formationIndex].second == nullptr)
-			{
-				m_ButterflyPositions[i][formationIndex].second = gameObject;
-				return m_ButterflyPositions[i][formationIndex].first;
-			}
-		}
-	}
-
-	return glm::vec2{ 0,0 };
-}
-
-glm::vec2 FormationManager::GetSpecificPos(GameObject* gameObject)
-{
-	for (size_t i = 0; i < m_BeePositions.size(); i++)
-	{
-		for (size_t j = 0; j < m_BeePositions[i].size(); j++)
-		{
-			if (m_BeePositions[i][j].second == gameObject)
-			{
-				return m_BeePositions[i][j].first;
-			}
-		}
-	}
-	//
-	for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
-	{
-		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
-		{
-			if (m_ButterflyPositions[i][j].second == gameObject)
-			{
-				return m_ButterflyPositions[i][j].first;
-			}
-		}
+		return m_ButterflyPositions[rowIndex][posIndex];
 	}
 	//
 	return glm::vec2{ 0,0 };
-}
-
-void FormationManager::ClearFormation()
-{
-	for (size_t i = 0; i < m_BeePositions.size(); i++)
-	{
-		for (size_t j = 0; j < m_BeePositions[i].size(); j++)
-		{
-			m_BeePositions[i][j].second = nullptr;
-		}
-	}
-	//
-	for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
-	{
-		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
-		{
-			m_ButterflyPositions[i][j].second = nullptr;
-		}
-	}
 }

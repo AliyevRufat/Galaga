@@ -9,7 +9,7 @@ class EnemyState;
 class EnemyStateManager : public BaseComponent
 {
 public:
-	EnemyStateManager(EnemyType enemyType, int formationPositionIndex);
+	EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex);
 	~EnemyStateManager();
 	void Update() override;
 	GameObject* GetGameObject();
@@ -23,4 +23,5 @@ private:
 
 	bool m_IsInit;
 	int m_FormationIndex;
+	int m_FormationRowIndex;
 };

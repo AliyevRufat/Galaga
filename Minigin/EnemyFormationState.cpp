@@ -22,7 +22,7 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 		m_SwitchState = true;
 	}
 	//update pos in formation
-	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetSpecificPos(enemyStateMngr.GetGameObject()));
+	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetSpecificPos(m_FormationRowIndex, m_FormationPosIndex, enemyStateMngr.GetEnemyType()));
 }
 
 EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager&)
