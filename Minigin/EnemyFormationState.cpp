@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include "EnemyManager.h"
 #include "EnemyFormationState.h"
 #include "EnemyDivingState.h"
 #include "FormationManager.h"
@@ -6,12 +7,12 @@
 #include "EnemyWeaponComponent.h"
 
 EnemyFormationState::EnemyFormationState()
-	:m_TimerBeforeDiving{ rand() % 12 + 3 }
+	:m_TimerBeforeDiving{ rand() % 7 + 2 }
 	, m_TimeBeforeDiving{ 0.0f }
 {
 	m_SwitchState = { false };
 	//if can shoot
-	const int randNr = rand() % 10 + 1;
+	const int randNr = rand() % 5 + 1;
 	if (randNr == 1)// 20% chance that it can shoot
 	{
 		m_CanShoot = true;

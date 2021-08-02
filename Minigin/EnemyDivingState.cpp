@@ -5,6 +5,7 @@
 #include "FormationManager.h"
 #include "SceneManager.h"
 #include "GoToFormationState.h"
+#include "EnemyManager.h"
 
 EnemyDivingState::EnemyDivingState()
 {

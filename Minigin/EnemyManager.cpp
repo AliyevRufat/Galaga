@@ -82,7 +82,7 @@ void EnemyManager::ClearEnemies()
 
 bool EnemyManager::CanDive() const
 {
-	return m_AmountOfDivingEnemies <= m_MaxAmountOfDivingEnemies;
+	return m_AmountOfDivingEnemies < m_MaxAmountOfDivingEnemies;
 }
 
 void EnemyManager::IncreaseAmountOfDivingEnemies()

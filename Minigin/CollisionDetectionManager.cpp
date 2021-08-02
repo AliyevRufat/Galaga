@@ -5,6 +5,8 @@
 #include "HealthComponent.h"
 #include "../AliEngine/Scene.h"
 #include "../AliEngine/Locator.h"
+#include "EnemyStateManager.h"
+#include "EnemyDivingState.h"
 
 void CollisionDetectionManager::Update()
 {
@@ -21,6 +23,16 @@ void CollisionDetectionManager::Update()
 					m_pOtherEntities.first[j]->SetMarkForDelete(true);
 					m_pOtherEntities.second[i] = true;
 					m_pOtherEntities.second[j] = true;
+					//check if enemy was diving
+					if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+					{
+						auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+
+						if (dynamic_cast<EnemyDivingState*>(enemyState))
+						{
+							EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+						}
+					}
 				}
 			}
 		}
@@ -35,6 +47,16 @@ void CollisionDetectionManager::Update()
 				m_pGyaraga->GetComponent<HealthComponent>()->Die();
 				m_pOtherEntities.first[i]->SetMarkForDelete(true);
 				m_pOtherEntities.second[i] = true;
+				//check if enemy was diving
+				if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+				{
+					auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+
+					if (dynamic_cast<EnemyDivingState*>(enemyState))
+					{
+						EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+					}
+				}
 			}
 			else if (m_pOtherEntities.first[i]->GetName() == "Beam")
 			{

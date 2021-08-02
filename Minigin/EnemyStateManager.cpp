@@ -3,7 +3,6 @@
 #include "EnemyFormationState.h"
 #include "EnemySpawnState.h"
 #include "EngineTime.h"
-#include "EnemyManager.h"
 
 EnemyStateManager::EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex)
 	:m_IsInit{ false }
@@ -58,4 +57,9 @@ GameObject* EnemyStateManager::GetGameObject()
 EnemyType EnemyStateManager::GetEnemyType() const
 {
 	return m_EnemyType;
+}
+
+EnemyState* EnemyStateManager::GetState()const
+{
+	return m_pEnemyState;
 }

@@ -5,6 +5,7 @@
 #include "BezierPath.h"
 #include "TransformComponent.h"
 #include "FormationManager.h"
+#include "EnemyManager.h"
 
 EnemySpawnState::EnemySpawnState()
 {

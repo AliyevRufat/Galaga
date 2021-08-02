@@ -16,12 +16,13 @@ enum class EnemyType
 class EnemyManager final : public dae::Singleton<EnemyManager>
 {
 public:
+
 	void Update();
 	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
-	void ClearEnemies();
-	bool CanDive() const;
 	void IncreaseAmountOfDivingEnemies();
 	void DecreaseAmountOfDivingEnemies();
+	bool CanDive() const;
+	void ClearEnemies();
 
 private:
 	friend class dae::Singleton<EnemyManager>;
@@ -39,6 +40,6 @@ private:
 	float m_SpawnTime = 0.0f;
 	const float m_SpawnTimer = 0.2f;
 	//
-	int m_AmountOfDivingEnemies;
-	const int m_MaxAmountOfDivingEnemies;
+	int m_AmountOfDivingEnemies = 0;
+	const int m_MaxAmountOfDivingEnemies = 3;
 };

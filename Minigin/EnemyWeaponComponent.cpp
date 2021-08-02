@@ -46,6 +46,7 @@ void EnemyWeaponComponent::CreateBullet()
 	bullet->AddComponent(new TransformComponent(glm::vec2{ position.x + m_EnemyWidth / 2 - bulletWidth / 2.0f , position.y }));
 	bullet->AddComponent(new Texture2DComponent("EnemyBullet.png", 1, false));
 	bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+	bullet->GetComponent<BulletMovementComponent>()->Init();
 	//Collision
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bullet);
 	//add to scene and vector

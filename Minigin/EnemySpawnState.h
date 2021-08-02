@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyState.h"
+#include "EnemyManager.h"
 
 class EnemySpawnState final : public EnemyState
 {

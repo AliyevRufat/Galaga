@@ -14,6 +14,7 @@ public:
 	void Update() override;
 	GameObject* GetGameObject();
 	EnemyType GetEnemyType() const;
+	EnemyState* GetState()const;
 private:
 
 	void StateSwitch();
