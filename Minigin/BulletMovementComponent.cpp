@@ -41,8 +41,9 @@ void BulletMovementComponent::Update()
 		auto newTarget = glm::vec2(furtherTarget.x + startPos.x, furtherTarget.y + startPos.y);
 
 		speed = 30;
-		float newX = currentPos.x + m_LerpT * newTarget.x;
-		float newY = currentPos.y + m_LerpT * newTarget.y;
+		float newX = currentPos.x + m_LerpT * (newTarget.x - currentPos.x);
+		float newY = currentPos.y + m_LerpT * (newTarget.y - currentPos.y);
+
 		m_LerpT += EngineTime::GetInstance().GetDeltaTime() / (float)speed;
 		//
 		transformComponent->SetPosition(glm::vec2{ newX,newY });
