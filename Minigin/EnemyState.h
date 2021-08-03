@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyStateManager.h"
 #include "BezierPathManager.h"
+#include "EnemyWeaponComponent.h"
 
 class EnemyState
 {
@@ -15,6 +16,22 @@ public:
 	void SetFormationIndex(int formationRowIndex, int formationPosIndex) { m_FormationPosIndex = formationPosIndex; m_FormationRowIndex = formationRowIndex; }
 
 	bool GetSwitchState() const { return m_SwitchState; }
+
+	void ShootBullet(EnemyStateManager& enemyStateMngr)
+	{
+		if (m_CanShoot)
+		{
+			m_ShootTime += EngineTime::GetInstance().GetDeltaTime();
+			if (m_ShootTime >= m_ShootTimer)
+			{
+				m_CanShoot = false;
+				m_ShootTime -= m_ShootTime;
+				//shoot
+				enemyStateMngr.GetGameObject()->GetComponent<EnemyWeaponComponent>()->Shoot();
+			}
+		}
+	}
+
 protected:
 	bool m_SwitchState = false;
 	//formation vars
@@ -23,7 +40,7 @@ protected:
 	//shoot vars
 	bool m_CanShoot = false;
 	float m_ShootTime = 0.0f;
-	int m_ShootTimer = 0;
+	float m_ShootTimer = 0.0f;
 	//
 	BezierPathManager* m_pBezierPathManager = nullptr;
 };

@@ -21,7 +21,7 @@ EnemyFormationState::EnemyFormationState()
 	{
 		m_CanShoot = false;
 	}
-	m_ShootTimer = m_TimerBeforeDiving - 2;
+	m_ShootTimer = float(m_TimerBeforeDiving) - 2.0f;
 }
 
 void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
@@ -36,18 +36,8 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 	}
 	//update pos in formation
 	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetSpecificPos(m_FormationRowIndex, m_FormationPosIndex, enemyStateMngr.GetEnemyType()));
-	//shooting
-	if (m_CanShoot)
-	{
-		m_ShootTime += EngineTime::GetInstance().GetDeltaTime();
-		if (m_ShootTime >= m_ShootTimer)
-		{
-			m_CanShoot = false;
-			m_ShootTime -= m_ShootTime;
-			//shoot
-			enemyStateMngr.GetGameObject()->GetComponent<EnemyWeaponComponent>()->Shoot();
-		}
-	}
+	//
+	ShootBullet(enemyStateMngr);
 }
 
 EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager&)

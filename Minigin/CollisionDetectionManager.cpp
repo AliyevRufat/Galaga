@@ -7,6 +7,8 @@
 #include "../AliEngine/Locator.h"
 #include "EnemyStateManager.h"
 #include "EnemyDivingState.h"
+#include "AnimationComponent.h"
+#include "Texture2DComponent.h"
 
 void CollisionDetectionManager::Update()
 {
@@ -33,6 +35,13 @@ void CollisionDetectionManager::Update()
 							EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
 						}
 					}
+					//explosion
+					auto explosion = std::make_shared<GameObject>("Explosion");
+					explosion->AddComponent(new TransformComponent(m_pOtherEntities.first[i]->GetComponent<TransformComponent>()->GetTransform().GetPosition(), glm::vec2(20, 20)));
+					explosion->AddComponent(new Texture2DComponent("Bee.png", 1, false));
+					explosion->AddComponent(new AnimationComponent(1));
+					dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
+					CollisionDetectionManager::GetInstance().AddCollisionGameObject(explosion);
 				}
 			}
 		}

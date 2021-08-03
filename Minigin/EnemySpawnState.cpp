@@ -6,11 +6,23 @@
 #include "TransformComponent.h"
 #include "FormationManager.h"
 #include "EnemyManager.h"
+#include "EnemyWeaponComponent.h"
 
 EnemySpawnState::EnemySpawnState()
 {
 	m_SwitchState = false;
 	m_pBezierPathManager = new BezierPathManager();
+	//if can shoot
+	const int randNr = rand() % 5 + 1;
+	if (randNr == 1)// 20% chance that it can shoot
+	{
+		m_CanShoot = true;
+	}
+	else
+	{
+		m_CanShoot = false;
+	}
+	m_ShootTimer = 2;
 }
 
 EnemySpawnState::~EnemySpawnState()
@@ -31,6 +43,8 @@ void EnemySpawnState::Update(EnemyStateManager& enemyStateMngr)
 	{
 		m_SwitchState = true;
 	}
+	//
+	ShootBullet(enemyStateMngr);
 }
 
 EnemyState* EnemySpawnState::StateSwitch(EnemyStateManager&)

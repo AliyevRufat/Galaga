@@ -6,12 +6,26 @@
 #include "SceneManager.h"
 #include "GoToFormationState.h"
 #include "EnemyManager.h"
+#include "EnemyWeaponComponent.h"
 
 EnemyDivingState::EnemyDivingState()
 {
 	m_SwitchState = { false };
 	m_pBezierPathManager = new BezierPathManager();
 	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies();
+	//
+	m_SwitchState = { false };
+	//if can shoot
+	const int randNr = rand() % 3 + 1;
+	if (randNr == 1)// 33% chance that it can shoot
+	{
+		m_CanShoot = true;
+	}
+	else
+	{
+		m_CanShoot = false;
+	}
+	m_ShootTimer = 0.3f;
 }
 
 EnemyDivingState::~EnemyDivingState()
@@ -41,6 +55,8 @@ void EnemyDivingState::Update(EnemyStateManager& enemyStateMngr)
 	{
 		m_SwitchState = true;
 	}
+	//
+	ShootBullet(enemyStateMngr);
 }
 
 EnemyState* EnemyDivingState::StateSwitch(EnemyStateManager& enemyStateMngr)
