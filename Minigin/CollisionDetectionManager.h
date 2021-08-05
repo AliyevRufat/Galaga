@@ -16,6 +16,7 @@ public:
 private:
 	friend class dae::Singleton<CollisionDetectionManager>;
 	//Methods
+	void AddExplosionEffect(int enemyIndex) const;
 	bool IsOverlapping(const SDL_Rect& r1, const SDL_Rect& r2);
 	CollisionDetectionManager() = default;
 	//Datamembers

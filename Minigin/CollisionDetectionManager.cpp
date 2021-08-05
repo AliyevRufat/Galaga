@@ -36,12 +36,7 @@ void CollisionDetectionManager::Update()
 						}
 					}
 					//explosion
-					auto explosion = std::make_shared<GameObject>("Explosion");
-					explosion->AddComponent(new TransformComponent(m_pOtherEntities.first[i]->GetComponent<TransformComponent>()->GetTransform().GetPosition(), glm::vec2(20, 20)));
-					explosion->AddComponent(new Texture2DComponent("Bee.png", 1, false));
-					explosion->AddComponent(new AnimationComponent(1));
-					dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
-					CollisionDetectionManager::GetInstance().AddCollisionGameObject(explosion);
+					AddExplosionEffect(int(i));
 				}
 			}
 		}
@@ -53,6 +48,10 @@ void CollisionDetectionManager::Update()
 		{
 			if (m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly" || m_pOtherEntities.first[i]->GetName() == "Boss" || m_pOtherEntities.first[i]->GetName() == "EnemyBullet")
 			{
+				if (m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly")//explosion effect if these enemies collide with the player
+				{
+					AddExplosionEffect(int(i));
+				}
 				m_pGyaraga->GetComponent<HealthComponent>()->Die();
 				m_pOtherEntities.first[i]->SetMarkForDelete(true);
 				m_pOtherEntities.second[i] = true;
@@ -147,4 +146,15 @@ void CollisionDetectionManager::ClearCollisions()
 	{
 		m_pOtherEntityTransforms[i] = nullptr;
 	}
+}
+
+void CollisionDetectionManager::AddExplosionEffect(int enemyIndex) const
+{
+	const int offset = 8;
+	auto enemyPos = m_pOtherEntities.first[enemyIndex]->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	auto explosion = std::make_shared<GameObject>("Explosion");
+	explosion->AddComponent(new TransformComponent(glm::vec2(enemyPos.x - offset, enemyPos.y), glm::vec2(1, 1)));
+	explosion->AddComponent(new Texture2DComponent("Explosion.png", 1, true));
+	explosion->AddComponent(new AnimationComponent(0.05f, 5, false));
+	dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
 }

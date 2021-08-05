@@ -2,10 +2,12 @@
 #include "AnimationComponent.h"
 #include "Texture2DComponent.h"
 
-AnimationComponent::AnimationComponent(int nrOfColumns)
+AnimationComponent::AnimationComponent(float frameSwitchTimer, int nrOfColumns, bool isLoop)
 	:m_NrOfColumns{ nrOfColumns }
-	, m_AnimState{}
-	, m_CubeColorState{}
+	, m_AnimIndex{ 0 }
+	, m_IsLoop{ isLoop }
+	, m_NextFrameTimer{ frameSwitchTimer }
+	, m_NextFrameTime{ 0.0f }
 {
 }
 
@@ -21,49 +23,35 @@ void AnimationComponent::Animate()
 		m_IsInitialized = true;
 		m_spTexture2D = m_pGameObject->GetComponent<Texture2DComponent>()->GetTexture2D();
 	}
-
-	int animIndex = 0;
-	if (m_pGameObject->GetName() == "Cube")
-	{
-		animIndex = (int)m_CubeColorState;
-	}
-	else
-	{
-		animIndex = (int)m_AnimState;
-	}
-
+	//get the correct frame
 	SDL_Rect srcRect{};
-	if (animIndex <= m_NrOfColumns)
+	int textureWidth, textureHeight;
+	SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &textureWidth, &textureHeight);
+	srcRect.h = textureHeight;
+	srcRect.w = textureWidth / m_NrOfColumns;
+	srcRect.y = 0;
+	srcRect.x = srcRect.w * m_AnimIndex;
+	//loop
+	if (m_AnimIndex >= m_NrOfColumns)
 	{
-		int textureWidth, textureHeight;
-		SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &textureWidth, &textureHeight);
-		srcRect.h = textureHeight;
-		srcRect.w = textureWidth / m_NrOfColumns;
-		srcRect.y = 0;
-		srcRect.x = srcRect.w * animIndex;
+		if (m_IsLoop)
+		{
+			m_AnimIndex = 0;
+		}
+		else if (!m_IsLoop)
+		{
+			m_pGameObject->SetMarkForDelete(true);
+		}
 	}
-
+	//next frame
+	m_NextFrameTime += EngineTime::GetInstance().GetDeltaTime();
+	if (m_NextFrameTime >= m_NextFrameTimer)
+	{
+		m_NextFrameTime -= m_NextFrameTime;
+		++m_AnimIndex;
+	}
+	//
 	m_pGameObject->GetComponent<Texture2DComponent>()->SetSrcRect(srcRect);
-}
-
-void AnimationComponent::SetAnimationState(AnimationState animState)
-{
-	m_AnimState = animState;
-}
-
-void AnimationComponent::SetAnimationState(CubeColorState cubeAnimState)
-{
-	m_CubeColorState = cubeAnimState;
-}
-
-AnimationComponent::AnimationState AnimationComponent::GetAnimationState() const
-{
-	return m_AnimState;
-}
-
-AnimationComponent::CubeColorState AnimationComponent::GetCubeColorState() const
-{
-	return m_CubeColorState;
 }
 
 int AnimationComponent::GetNrOfColumns() const
