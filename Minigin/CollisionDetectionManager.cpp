@@ -155,6 +155,6 @@ void CollisionDetectionManager::AddExplosionEffect(int enemyIndex) const
 	auto explosion = std::make_shared<GameObject>("Explosion");
 	explosion->AddComponent(new TransformComponent(glm::vec2(enemyPos.x - offset, enemyPos.y), glm::vec2(1, 1)));
 	explosion->AddComponent(new Texture2DComponent("Explosion.png", 1, true));
-	explosion->AddComponent(new AnimationComponent(0.05f, 5, false));
+	explosion->AddComponent(new AnimationComponent(0.05f, 5, 1, false));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
 }

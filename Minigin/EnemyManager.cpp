@@ -50,7 +50,7 @@ void EnemyManager::SpawnBee(EnemyType enemyType, int formationRowIndex, int form
 	auto beeEnemy = std::make_shared<GameObject>("Bee");
 	beeEnemy->AddComponent(new TransformComponent(glm::vec2(350 + 50, -10), glm::vec2(beeWidth, beeHeight)));
 	beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, true));
-	beeEnemy->AddComponent(new AnimationComponent(0.2f, 2, true));
+	beeEnemy->AddComponent(new AnimationComponent(0.2f, 2, 1, true));
 	beeEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
 	beeEnemy->AddComponent(new EnemyWeaponComponent(beeWidth));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
@@ -65,7 +65,7 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	auto butterflyEnemy = std::make_shared<GameObject>("Butterfly");
 	butterflyEnemy->AddComponent(new TransformComponent(glm::vec2(350 - 50, -10), glm::vec2(butterflyWidth, butterflyHeight)));
 	butterflyEnemy->AddComponent(new Texture2DComponent("Butterfly.png", 1, true));
-	butterflyEnemy->AddComponent(new AnimationComponent(0.2f, 2, true));
+	butterflyEnemy->AddComponent(new AnimationComponent(0.2f, 2, 1, true));
 	butterflyEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
 	butterflyEnemy->AddComponent(new EnemyWeaponComponent(butterflyWidth));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(butterflyEnemy);
