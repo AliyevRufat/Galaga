@@ -8,6 +8,7 @@ void FormationManager::Init()
 {
 	const int posYBees = 300;
 	const int posYButterflies = 200;
+	const int posYBoss = 80;
 
 	for (size_t i = 0; i < 2; i++)
 	{
@@ -34,26 +35,38 @@ void FormationManager::Init()
 			}
 		}
 	}
+	//
+	for (size_t i = 0; i < 4; i++)
+	{
+		m_BossPositions.push_back(glm::vec2{ m_BeePositions[0][3].x + i * 50 ,posYBoss });
+	}
 }
 
 void FormationManager::Update()
 {
-	for (size_t i = 0; i < m_BeePositions.size(); i++)
-	{
-		for (size_t j = 0; j < m_BeePositions[i].size(); j++)
+	{ //formation left right movement
+		for (size_t i = 0; i < m_BeePositions.size(); i++)
 		{
-			m_BeePositions[i][j].x = m_BeePositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+			for (size_t j = 0; j < m_BeePositions[i].size(); j++)
+			{
+				m_BeePositions[i][j].x = m_BeePositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+			}
+		}
+		//
+		for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
+		{
+			for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
+			{
+				m_ButterflyPositions[i][j].x = m_ButterflyPositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+			}
+		}
+		//
+		for (size_t i = 0; i < m_BossPositions.size(); i++)
+		{
+			m_BossPositions[i].x = m_BossPositions[i].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 		}
 	}
 	//
-	for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
-	{
-		for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
-		{
-			m_ButterflyPositions[i][j].x = m_ButterflyPositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
-		}
-	}
-
 	if (m_TimeBeforeMovingToOtherSide >= m_TimerBeforeMovingToOtherSide)
 	{
 		m_TimeBeforeMovingToOtherSide -= m_TimeBeforeMovingToOtherSide;
@@ -72,6 +85,8 @@ glm::vec2 FormationManager::GetSpecificPos(int rowIndex, int posIndex, EnemyType
 	{
 		return m_ButterflyPositions[rowIndex][posIndex];
 	}
-	//
-	return glm::vec2{ 0,0 };
+	else
+	{
+		return m_BossPositions[posIndex];
+	}
 }

@@ -159,6 +159,11 @@ void dae::Minigin::InitGame()
 	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 7);
 	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 8);
 	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 9);
+	//
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 1);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 2);
+	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 3);
 }
 
 void dae::Minigin::BindCommands()

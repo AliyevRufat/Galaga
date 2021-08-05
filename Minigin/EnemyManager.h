@@ -32,7 +32,7 @@ private:
 	//
 	void SpawnBee(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void SpawnButterfly(EnemyType enemyType, int formationRowIndex, int formationIndex);
-	void SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex);
+	void SpawnBoss(EnemyType enemyType, int formationIndex);
 	//Datamembers
 	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
 	//

@@ -33,7 +33,7 @@ void AnimationComponent::Animate()
 	srcRect.w = textureWidth / m_NrOfColumns;
 	srcRect.y = srcRect.h * m_CurrentRowIndex;
 	srcRect.x = srcRect.w * m_CurrentAnimIndex;
-	//loop
+	//loop animation
 	if (m_CurrentAnimIndex >= m_NrOfColumns)
 	{
 		if (m_IsLoop)

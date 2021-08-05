@@ -6,6 +6,7 @@
 #include "TransformComponent.h"
 #include "Scene.h"
 #include "CollisionDetectionManager.h"
+#include "HealthComponent.h"
 #include "EnemyWeaponComponent.h"
 #include "AnimationComponent.h"
 
@@ -37,7 +38,7 @@ void EnemyManager::SpawnEnemy(EnemyType enemyType, int formationRowIndex, int fo
 		SpawnButterfly(enemyType, formationRowIndex, formationIndex);
 		break;
 	case EnemyType::Boss:
-		SpawnBoss(enemyType, formationRowIndex, formationIndex);
+		SpawnBoss(enemyType, formationIndex);
 		break;
 	}
 }
@@ -72,8 +73,20 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(butterflyEnemy);
 }
 
-void EnemyManager::SpawnBoss(EnemyType, int, int)
+void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
 {
+	const int bossWidth = 55;
+	const int bossHeight = 59;
+	//
+	auto bossEnemy = std::make_shared<GameObject>("Boss");
+	bossEnemy->AddComponent(new TransformComponent(glm::vec2(350 - 50, -10), glm::vec2(bossWidth, bossHeight)));
+	bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
+	bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
+	bossEnemy->AddComponent(new EnemyStateManager(enemyType, 0, formationIndex));
+	bossEnemy->AddComponent(new EnemyWeaponComponent(bossWidth));
+	bossEnemy->AddComponent(new HealthComponent(2));
+	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
+	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
 }
 
 void EnemyManager::ClearEnemies()

@@ -75,6 +75,12 @@ void EnemySpawnState::CreatePaths(EnemyStateManager& enemyStateMngr)
 		path->AddCurve({ glm::vec2(625,850 - 400), glm::vec2(620,850 - 230) ,glm::vec2(100,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
 		path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x - 30,endPos.y) }, 10);
 	}
+	else //TODO : change this later to a unique path for the boss
+	{
+		path->AddCurve({ glm::vec2(startPos.x,startPos.y), glm::vec2(385,850 - 615), glm::vec2(90,850 - 690),glm::vec2(75,850 - 400) }, 30);
+		path->AddCurve({ glm::vec2(75,850 - 400), glm::vec2(70,850 - 230) ,glm::vec2(600,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
+		path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x + 30,endPos.y) }, 10);
+	}
 
 	m_pBezierPathManager->CreatePaths(path);
 	delete path;

@@ -19,6 +19,7 @@ private:
 
 	std::vector<std::vector<glm::vec2>> m_BeePositions;
 	std::vector<std::vector<glm::vec2>> m_ButterflyPositions;
+	std::vector<glm::vec2> m_BossPositions;
 
 	const int m_TimerBeforeMovingToOtherSide = 3;
 	float m_TimeBeforeMovingToOtherSide = 0.0f;

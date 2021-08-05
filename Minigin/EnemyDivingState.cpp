@@ -149,6 +149,27 @@ void EnemyDivingState::CreatePaths(EnemyStateManager& enemyStateMngr)
 		}
 	}
 	break;
+
+	case EnemyType::Boss: //TODO : make unique diving path for the boss
+	{
+		int randomDiveX = rand() % (int)screenDimensions.x + 1;
+		const int offsetY = 100;
+		auto curvePoint = glm::vec2(randomDiveX, screenDimensions.y + offsetY);
+		//
+		if (m_FormationPosIndex < formationMiddleIndex)
+		{
+			path->AddCurve({ startPos, glm::vec2(startPos.x - 320,startPos.y - 110), glm::vec2(curvePoint.x + 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
+			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x + 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
+			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 120,curvePoint.y - 180) ,glm::vec2(startPos.x - 70,startPos.y + 130),startPos }, amountOfSamplesOnACurve);
+		}
+		else
+		{
+			path->AddCurve({ startPos, glm::vec2(startPos.x + 320,startPos.y - 110), glm::vec2(curvePoint.x - 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
+			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x - 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
+			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + 120,curvePoint.y - 180) ,glm::vec2(startPos.x + 70,startPos.y + 130),startPos }, amountOfSamplesOnACurve);
+		}
+	}
+	break;
 	}
 	//
 	m_pBezierPathManager->CreatePaths(path);

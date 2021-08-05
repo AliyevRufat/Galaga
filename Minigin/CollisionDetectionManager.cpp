@@ -17,26 +17,60 @@ void CollisionDetectionManager::Update()
 	{
 		for (size_t j = 0; j < m_pOtherEntities.first.size(); j++)
 		{
-			if ((m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly") && m_pOtherEntities.first[j]->GetName() == "Bullet")
+			if (m_pOtherEntities.first[j]->GetName() == "Bullet")
 			{
-				if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
+				if ((m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly"))
 				{
-					m_pOtherEntities.first[i]->SetMarkForDelete(true);
-					m_pOtherEntities.first[j]->SetMarkForDelete(true);
-					m_pOtherEntities.second[i] = true;
-					m_pOtherEntities.second[j] = true;
-					//check if enemy was diving
-					if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+					if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
 					{
-						auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
-
-						if (dynamic_cast<EnemyDivingState*>(enemyState))
+						m_pOtherEntities.first[i]->SetMarkForDelete(true);
+						m_pOtherEntities.first[j]->SetMarkForDelete(true);
+						m_pOtherEntities.second[i] = true;
+						m_pOtherEntities.second[j] = true;
+						//check if enemy was diving
+						if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
 						{
-							EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+							auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+
+							if (dynamic_cast<EnemyDivingState*>(enemyState))
+							{
+								EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+							}
+						}
+						//explosion
+						AddExplosionEffect(int(i));
+					}
+				}
+				else if (m_pOtherEntities.first[i]->GetName() == "Boss")
+				{
+					auto healthComponent = m_pOtherEntities.first[i]->GetComponent<HealthComponent>();
+					//
+					if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
+					{
+						healthComponent->Die();
+						//destroying the bullet
+						m_pOtherEntities.first[j]->SetMarkForDelete(true);
+						m_pOtherEntities.second[j] = true;
+						//
+						if (healthComponent->GetLives() <= 0)
+						{
+							//destroying the boss
+							m_pOtherEntities.first[i]->SetMarkForDelete(true);
+							m_pOtherEntities.second[i] = true;
+							//check if enemy was diving
+							if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+							{
+								auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+
+								if (dynamic_cast<EnemyDivingState*>(enemyState))
+								{
+									EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+								}
+							}
+							//explosion
+							AddExplosionEffect(int(i));
 						}
 					}
-					//explosion
-					AddExplosionEffect(int(i));
 				}
 			}
 		}
