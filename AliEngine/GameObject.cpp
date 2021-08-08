@@ -6,11 +6,12 @@
 #include "EngineTime.h"
 #include "Subject.h"
 
-GameObject::GameObject(const std::string& name)
+GameObject::GameObject(const std::string& name, GameObject* parent)
 	:m_Name{ name }
 	, m_pActorChanged{ new Subject() }
 	, m_IsActive{ true }
 	, m_MarkForDelete{ false }
+	, m_pParent{ parent }
 {
 }
 
@@ -60,4 +61,13 @@ void GameObject::AddWatcher(Observer* pObserver)
 void GameObject::Notify(const std::string& event)
 {
 	m_pActorChanged->Notify(this, event);
+}
+
+GameObject* GameObject::GetParent() const
+{
+	if (m_pParent)
+	{
+		return m_pParent;
+	}
+	return nullptr;
 }

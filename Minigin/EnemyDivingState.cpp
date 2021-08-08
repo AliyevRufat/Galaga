@@ -4,20 +4,20 @@
 #include "EnemyFormationState.h"
 #include "FormationManager.h"
 #include "SceneManager.h"
-#include "GoToFormationState.h"
+#include "EnemyGoToFormationState.h"
 #include "EnemyManager.h"
 #include "EnemyWeaponComponent.h"
 
-EnemyDivingState::EnemyDivingState()
+EnemyDivingState::EnemyDivingState(EnemyStateManager& enemyStateMngr)
 {
 	m_SwitchState = { false };
 	m_pBezierPathManager = new BezierPathManager();
-	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies();
+	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 	//
 	m_SwitchState = { false };
 	//if can shoot
-	const int randNr = rand() % 3 + 1;
-	if (randNr == 1)// 33% chance that it can shoot
+	const int randNr = rand() % 10 + 1;
+	if (randNr <= EnemyManager::GetInstance().GetEnemyChanceToShoot())
 	{
 		m_CanShoot = true;
 	}
@@ -38,7 +38,7 @@ void EnemyDivingState::Update(EnemyStateManager& enemyStateMngr)
 	auto transformComp = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>();
 	glm::vec2 newPos = m_pBezierPathManager->CalculatePath(transformComp->GetTransform().GetPosition());
 	//boundary check for butterfly
-	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly)
+	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly || enemyStateMngr.GetEnemyType() == EnemyType::Boss)
 	{
 		if (transformComp->GetTransform().GetPosition().y >= dae::SceneManager::GetInstance().GetScreenDimensions().y)
 		{
@@ -61,11 +61,11 @@ void EnemyDivingState::Update(EnemyStateManager& enemyStateMngr)
 
 EnemyState* EnemyDivingState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
-	EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+	EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 	//
-	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly)
+	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly || enemyStateMngr.GetEnemyType() == EnemyType::Boss)
 	{
-		return new GoToFormationState();
+		return new EnemyGoToFormationState();
 	}
 	return new EnemyFormationState();
 }
@@ -87,21 +87,17 @@ void EnemyDivingState::CreatePaths(EnemyStateManager& enemyStateMngr)
 	case EnemyType::Bee:
 	{
 		int randomDiveX = rand() % (int)screenDimensions.x + 1;
-		const int offsetY = 100;
-		auto curvePoint = glm::vec2(randomDiveX, screenDimensions.y + offsetY);
+		const int offsetY = 40;
+		auto curvePoint = glm::vec2(randomDiveX, screenDimensions.y - offsetY);
+		int mutiplier = 1;
 		//
 		if (m_FormationPosIndex < formationMiddleIndex)
 		{
-			path->AddCurve({ startPos, glm::vec2(startPos.x - 320,startPos.y - 110), glm::vec2(curvePoint.x + 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x + 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 120,curvePoint.y - 180) ,glm::vec2(startPos.x - 70,startPos.y + 130),startPos }, amountOfSamplesOnACurve);
+			mutiplier *= -1;
 		}
-		else
-		{
-			path->AddCurve({ startPos, glm::vec2(startPos.x + 320,startPos.y - 110), glm::vec2(curvePoint.x - 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x - 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + 120,curvePoint.y - 180) ,glm::vec2(startPos.x + 70,startPos.y + 130),startPos }, amountOfSamplesOnACurve);
-		}
+		path->AddCurve({ startPos, glm::vec2(startPos.x + (100 * mutiplier),startPos.y - 150), glm::vec2(startPos.x + (150 * mutiplier),startPos.y + 100),glm::vec2(startPos.x,startPos.y + 200) }, amountOfSamplesOnACurve);
+		path->AddCurve({ glm::vec2(startPos.x,startPos.y + 200), glm::vec2(startPos.x - (200 * mutiplier),startPos.y + 250) ,glm::vec2(curvePoint.x - (200 * mutiplier),curvePoint.y - 30),curvePoint }, amountOfSamplesOnACurve);
+		path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + (150 * mutiplier),curvePoint.y) ,glm::vec2(startPos.x + (60 * mutiplier),startPos.y + 200),startPos }, amountOfSamplesOnACurve);
 	}
 	break;
 
@@ -117,57 +113,34 @@ void EnemyDivingState::CreatePaths(EnemyStateManager& enemyStateMngr)
 		{
 			range = (int)screenDimensions.x - (int)screenDimensions.x / 2 + 1;
 			randTargetPoint = rand() % range + (int)screenDimensions.x / 2;
-			//calculate endpos based on the distance
-			const int distanceOnX = (randTargetPoint - (int)startPos.x) / amountOfBezierCurves;
-			endPos.x += distanceOnX;
-			endPos.y += distanceOnY;
-			for (size_t i = 0; i < amountOfBezierCurves; i++)
-			{
-				path->AddCurve({ startPos, glm::vec2(startPos.x - distanceOnX, endPos.y), glm::vec2(endPos.x + distanceOnX ,startPos.y),endPos }, amountOfSamplesOnACurve);
-				//
-				startPos = endPos;
-				endPos.x += distanceOnX;
-				endPos.y += distanceOnY;
-			}
 		}
 		else
 		{
 			range = (int)screenDimensions.x / 2 - 0 + 1;
 			randTargetPoint = rand() % range + 0;
-			//calculate endpos based on the distance
-			const int distanceOnX = (randTargetPoint - (int)startPos.x) / amountOfBezierCurves;
+		}
+		//calculate endpos based on the distance
+		const int distanceOnX = (randTargetPoint - (int)startPos.x) / amountOfBezierCurves;
+		endPos.x += distanceOnX;
+		endPos.y += distanceOnY;
+		for (size_t i = 0; i < amountOfBezierCurves; i++)
+		{
+			path->AddCurve({ startPos, glm::vec2(startPos.x - distanceOnX, endPos.y), glm::vec2(endPos.x + distanceOnX ,startPos.y),endPos }, amountOfSamplesOnACurve);
+			//
+			startPos = endPos;
 			endPos.x += distanceOnX;
 			endPos.y += distanceOnY;
-			for (size_t i = 0; i < amountOfBezierCurves; i++)
-			{
-				path->AddCurve({ startPos, glm::vec2(startPos.x - distanceOnX, endPos.y), glm::vec2(endPos.x + distanceOnX ,startPos.y),endPos }, amountOfSamplesOnACurve);
-				//
-				startPos = endPos;
-				endPos.x += distanceOnX;
-				endPos.y += distanceOnY;
-			}
 		}
 	}
 	break;
 
-	case EnemyType::Boss: //TODO : make unique diving path for the boss
+	case EnemyType::Boss:
 	{
-		int randomDiveX = rand() % (int)screenDimensions.x + 1;
-		const int offsetY = 100;
-		auto curvePoint = glm::vec2(randomDiveX, screenDimensions.y + offsetY);
+		const int offset = 200;
+		const int randomDiveX = rand() % ((int)screenDimensions.x - offset * 2) + offset;
 		//
-		if (m_FormationPosIndex < formationMiddleIndex)
-		{
-			path->AddCurve({ startPos, glm::vec2(startPos.x - 320,startPos.y - 110), glm::vec2(curvePoint.x + 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x + 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x - 120,curvePoint.y - 180) ,glm::vec2(startPos.x - 70,startPos.y + 130),startPos }, amountOfSamplesOnACurve);
-		}
-		else
-		{
-			path->AddCurve({ startPos, glm::vec2(startPos.x + 320,startPos.y - 110), glm::vec2(curvePoint.x - 620 ,curvePoint.y),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + 220,curvePoint.y - 400) ,glm::vec2(curvePoint.x - 220,curvePoint.y - 400),curvePoint }, amountOfSamplesOnACurve);
-			path->AddCurve({ curvePoint, glm::vec2(curvePoint.x + 120,curvePoint.y - 180) ,glm::vec2(startPos.x + 70,startPos.y + 130),startPos }, amountOfSamplesOnACurve);
-		}
+		path->AddCurve({ startPos, glm::vec2(startPos.x - 100,startPos.y - 250), glm::vec2(randomDiveX - 400,startPos.y + 240), glm::vec2(randomDiveX - 140,startPos.y + 240) }, amountOfSamplesOnACurve);
+		path->AddCurve({ glm::vec2(randomDiveX - 140,startPos.y + 240), glm::vec2(randomDiveX + 160,startPos.y + 240),glm::vec2(randomDiveX - 450 ,-150) ,glm::vec2(randomDiveX,int(screenDimensions.y + 200)) }, amountOfSamplesOnACurve);
 	}
 	break;
 	}

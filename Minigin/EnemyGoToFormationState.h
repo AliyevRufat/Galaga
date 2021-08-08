@@ -1,12 +1,11 @@
 #pragma once
 #include "EnemyState.h"
-#include "EnemyManager.h"
 
-class EnemyDivingState final : public EnemyState
+class EnemyGoToFormationState final : public EnemyState
 {
 public:
-	EnemyDivingState(EnemyStateManager& enemyStateMngr);
-	~EnemyDivingState();
+	EnemyGoToFormationState();
+	~EnemyGoToFormationState();
 
 	void Update(EnemyStateManager& enemyStateMngr) override;
 	void Enter(EnemyStateManager& enemyStateMngr) override;

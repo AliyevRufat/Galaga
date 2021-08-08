@@ -42,7 +42,15 @@ void AnimationComponent::Animate()
 		}
 		else if (!m_IsLoop)
 		{
-			m_pGameObject->SetMarkForDelete(true);
+			if (m_CurrentRowIndex == m_NrOfRows - 1)
+			{
+				m_pGameObject->SetMarkForDelete(true);
+			}
+			else
+			{
+				++m_CurrentRowIndex;
+				m_CurrentAnimIndex = 0;
+			}
 		}
 	}
 	//next frame
@@ -59,6 +67,16 @@ void AnimationComponent::Animate()
 int AnimationComponent::GetNrOfColumns() const
 {
 	return m_NrOfColumns;
+}
+
+int AnimationComponent::GetCurrentFrame() const
+{
+	return m_CurrentAnimIndex;
+}
+
+int AnimationComponent::GetCurrentRowIndex() const
+{
+	return m_CurrentRowIndex;
 }
 
 void AnimationComponent::SetCurrentRowIndex(int currentRowIndex)

@@ -9,62 +9,62 @@
 #include "EnemyDivingState.h"
 #include "AnimationComponent.h"
 #include "Texture2DComponent.h"
+#include "TractorBeamComponent.h"
+#include "EnemyTractorBeamState.h"
 
 void CollisionDetectionManager::Update()
 {
 	//if player bullet collides with the enemy
-	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
-		for (size_t j = 0; j < m_pOtherEntities.first.size(); j++)
+		for (size_t j = 0; j < m_pOtherEntities.size(); j++)
 		{
-			if (m_pOtherEntities.first[j]->GetName() == "Bullet")
+			if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
 			{
-				if ((m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly"))
+				if (m_pOtherEntities[j].first->GetName() == "Bullet")
 				{
-					if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
+					if ((m_pOtherEntities[i].first->GetName() == "Bee" || m_pOtherEntities[i].first->GetName() == "Butterfly"))
 					{
-						m_pOtherEntities.first[i]->SetMarkForDelete(true);
-						m_pOtherEntities.first[j]->SetMarkForDelete(true);
-						m_pOtherEntities.second[i] = true;
-						m_pOtherEntities.second[j] = true;
-						//check if enemy was diving
-						if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+						//set destroy for later for the bullet and the enemy
+						m_pOtherEntities[i].first->SetMarkForDelete(true);
+						m_pOtherEntities[j].first->SetMarkForDelete(true);
+						m_pOtherEntities[i].second = true;
+						m_pOtherEntities[j].second = true;
+						//check if enemy was diving to decrease the amount of diving enemies
+						if (m_pOtherEntities[i].first->GetComponent<EnemyStateManager>())
 						{
-							auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+							auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
 
 							if (dynamic_cast<EnemyDivingState*>(enemyState))
 							{
-								EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+								EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
 							}
 						}
 						//explosion
 						AddExplosionEffect(int(i));
 					}
-				}
-				else if (m_pOtherEntities.first[i]->GetName() == "Boss")
-				{
-					auto healthComponent = m_pOtherEntities.first[i]->GetComponent<HealthComponent>();
-					//
-					if (IsOverlapping(m_pOtherEntityTransforms[i]->GetRect(), m_pOtherEntityTransforms[j]->GetRect()))
+					else if (m_pOtherEntities[i].first->GetName() == "Boss")
 					{
+						//decrease 1 life of the boss
+						auto healthComponent = m_pOtherEntities[i].first->GetComponent<HealthComponent>();
 						healthComponent->Die();
-						//destroying the bullet
-						m_pOtherEntities.first[j]->SetMarkForDelete(true);
-						m_pOtherEntities.second[j] = true;
+						//set destroy for the bullet
+						m_pOtherEntities[j].first->SetMarkForDelete(true);
+						m_pOtherEntities[j].second = true;
 						//
 						if (healthComponent->GetLives() <= 0)
 						{
-							//destroying the boss
-							m_pOtherEntities.first[i]->SetMarkForDelete(true);
-							m_pOtherEntities.second[i] = true;
-							//check if enemy was diving
-							if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+							//set destroy for the boss
+							m_pOtherEntities[i].first->SetMarkForDelete(true);
+							m_pOtherEntities[i].second = true;
+							//check if enemy was diving to decrease the amount of diving enemies
+							if (m_pOtherEntities[i].first->GetComponent<EnemyStateManager>())
 							{
-								auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+								auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
 
-								if (dynamic_cast<EnemyDivingState*>(enemyState))
+								if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState))
 								{
-									EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+									EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
 								}
 							}
 							//explosion
@@ -76,32 +76,36 @@ void CollisionDetectionManager::Update()
 		}
 	}
 	//if enemy or enemy bullet collides with the player
-	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
 		if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 		{
-			if (m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly" || m_pOtherEntities.first[i]->GetName() == "Boss" || m_pOtherEntities.first[i]->GetName() == "EnemyBullet")
+			if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
 			{
-				if (m_pOtherEntities.first[i]->GetName() == "Bee" || m_pOtherEntities.first[i]->GetName() == "Butterfly")//explosion effect if these enemies collide with the player
+				m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform->GetTransform().GetPosition());//boss gets the fighter of the player
+			}
+			else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
+			{
+				if (m_pOtherEntities[i].first->GetName() == "Boss")
 				{
-					AddExplosionEffect(int(i));
+					m_pOtherEntities[i].first->GetComponent<TractorBeamComponent>()->Clean();//destroy the fighter of the boss if it has one
 				}
+				//
+				AddExplosionEffect(int(i));
+				//decrease 1 life of the player and destroy whatever collided with the player
 				m_pGyaraga->GetComponent<HealthComponent>()->Die();
-				m_pOtherEntities.first[i]->SetMarkForDelete(true);
-				m_pOtherEntities.second[i] = true;
+				m_pOtherEntities[i].first->SetMarkForDelete(true);
+				m_pOtherEntities[i].second = true;
 				//check if enemy was diving
-				if (m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>())
+				if (m_pOtherEntities[i].first->GetComponent<EnemyStateManager>())
 				{
-					auto enemyState = m_pOtherEntities.first[i]->GetComponent<EnemyStateManager>()->GetState();
+					auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
 
-					if (dynamic_cast<EnemyDivingState*>(enemyState))
+					if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState))
 					{
-						EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies();
+						EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
 					}
 				}
-			}
-			else if (m_pOtherEntities.first[i]->GetName() == "Beam")
-			{
 			}
 		}
 	}
@@ -121,8 +125,7 @@ void CollisionDetectionManager::AddCollisionGameObject(const std::shared_ptr<Gam
 	else
 	{
 		m_pOtherEntityTransforms.push_back(transform);
-		m_pOtherEntities.first.push_back(gameObject);
-		m_pOtherEntities.second.push_back(false);
+		m_pOtherEntities.push_back(std::make_pair(gameObject, false));
 	}
 }
 
@@ -143,12 +146,11 @@ bool CollisionDetectionManager::IsOverlapping(const SDL_Rect& r1, const SDL_Rect
 
 void CollisionDetectionManager::DeleteCollidedObjects()
 {
-	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
-		if (m_pOtherEntities.second[i])
+		if (m_pOtherEntities[i].second)
 		{
-			m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
-			m_pOtherEntities.second.erase(m_pOtherEntities.second.begin() + i);
+			m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
 			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		}
 	}
@@ -156,12 +158,11 @@ void CollisionDetectionManager::DeleteCollidedObjects()
 
 void CollisionDetectionManager::DeleteSpecificObject(const std::shared_ptr<GameObject>& object)
 {
-	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
-		if (m_pOtherEntities.first[i] == object)
+		if (m_pOtherEntities[i].first == object)
 		{
-			m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
-			m_pOtherEntities.second.erase(m_pOtherEntities.second.begin() + i);
+			m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
 			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		}
 	}
@@ -169,9 +170,9 @@ void CollisionDetectionManager::DeleteSpecificObject(const std::shared_ptr<GameO
 
 void CollisionDetectionManager::ClearCollisions()
 {
-	for (size_t i = 0; i < m_pOtherEntities.first.size(); i++)
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
-		m_pOtherEntities.first.erase(m_pOtherEntities.first.begin() + i);
+		m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
 		m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		--i;
 	}
@@ -185,7 +186,7 @@ void CollisionDetectionManager::ClearCollisions()
 void CollisionDetectionManager::AddExplosionEffect(int enemyIndex) const
 {
 	const int offset = 8;
-	auto enemyPos = m_pOtherEntities.first[enemyIndex]->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	auto enemyPos = m_pOtherEntities[enemyIndex].first->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	auto explosion = std::make_shared<GameObject>("Explosion");
 	explosion->AddComponent(new TransformComponent(glm::vec2(enemyPos.x - offset, enemyPos.y), glm::vec2(1, 1)));
 	explosion->AddComponent(new Texture2DComponent("Explosion.png", 1, true));

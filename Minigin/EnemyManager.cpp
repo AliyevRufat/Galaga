@@ -9,7 +9,7 @@
 #include "HealthComponent.h"
 #include "EnemyWeaponComponent.h"
 #include "AnimationComponent.h"
-
+#include "TractorBeamComponent.h"
 void EnemyManager::Update()
 {
 	m_SpawnTime += EngineTime::GetInstance().GetDeltaTime();
@@ -19,6 +19,11 @@ void EnemyManager::Update()
 		m_SpawnTime -= m_SpawnTime;
 		SpawnEnemy(m_QueuedEnemies[m_Index].first, m_QueuedEnemies[m_Index].second.first, m_QueuedEnemies[m_Index].second.second);
 		++m_Index;
+	}
+	//
+	if (m_Index == m_QueuedEnemies.size())
+	{
+		m_AllEnemiesAreSpawned = true;
 	}
 }
 
@@ -85,6 +90,7 @@ void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
 	bossEnemy->AddComponent(new EnemyStateManager(enemyType, 0, formationIndex));
 	bossEnemy->AddComponent(new EnemyWeaponComponent(bossWidth));
 	bossEnemy->AddComponent(new HealthComponent(2));
+	bossEnemy->AddComponent(new TractorBeamComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
 }
@@ -96,17 +102,67 @@ void EnemyManager::ClearEnemies()
 	m_QueuedEnemies.clear();
 }
 
-bool EnemyManager::CanDive() const
+bool EnemyManager::CanDive(EnemyType enemyType) const
 {
-	return m_AmountOfDivingEnemies < m_MaxAmountOfDivingEnemies;
+	switch (enemyType)
+	{
+	case EnemyType::Bee:
+		return m_AmountOfDivingBees < m_MaxAmountOfDivingEnemies;
+		break;
+	case EnemyType::Butterfly:
+		return m_AmountOfDivingButterflies < m_MaxAmountOfDivingEnemies;
+		break;
+	case EnemyType::Boss:
+		return m_AmountOfDivingBosses < m_MaxAmountOfDivingEnemies;
+		break;
+	}
+	return false;
 }
 
-void EnemyManager::IncreaseAmountOfDivingEnemies()
+void EnemyManager::IncreaseAmountOfDivingEnemies(EnemyType enemyType)
 {
-	++m_AmountOfDivingEnemies;
+	switch (enemyType)
+	{
+	case EnemyType::Bee:
+		++m_AmountOfDivingBees;
+		break;
+	case EnemyType::Butterfly:
+		++m_AmountOfDivingButterflies;
+		break;
+	case EnemyType::Boss:
+		++m_AmountOfDivingBosses;
+		break;
+	}
 }
 
-void EnemyManager::DecreaseAmountOfDivingEnemies()
+void EnemyManager::DecreaseAmountOfDivingEnemies(EnemyType enemyType)
 {
-	--m_AmountOfDivingEnemies;
+	switch (enemyType)
+	{
+	case EnemyType::Bee:
+		--m_AmountOfDivingBees;
+		break;
+	case EnemyType::Butterfly:
+		--m_AmountOfDivingButterflies;
+		break;
+	case EnemyType::Boss:
+		--m_AmountOfDivingBosses;
+		break;
+	}
+}
+
+void EnemyManager::IncreaseDifficulty()
+{
+	++m_EnemyChanceToShoot; // +10%
+	++m_MaxAmountOfDivingEnemies; // 1 extra enemy per type can dive at the same time
+}
+
+int EnemyManager::GetEnemyChanceToShoot() const
+{
+	return m_EnemyChanceToShoot;
+}
+
+bool EnemyManager::GetAllEnemiesAreSpawned() const
+{
+	return m_AllEnemiesAreSpawned;
 }

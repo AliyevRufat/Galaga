@@ -5,6 +5,8 @@
 #include "FormationManager.h"
 #include "TransformComponent.h"
 #include "EnemyWeaponComponent.h"
+#include "EnemyGoToBeamState.h"
+#include "TractorBeamComponent.h"
 
 EnemyFormationState::EnemyFormationState()
 	:m_TimerBeforeDiving{ rand() % 7 + 2 }
@@ -12,8 +14,8 @@ EnemyFormationState::EnemyFormationState()
 {
 	m_SwitchState = { false };
 	//if can shoot
-	const int randNr = rand() % 5 + 1;
-	if (randNr == 1)// 20% chance that it can shoot
+	const int randNr = rand() % 10 + 1;
+	if (randNr == EnemyManager::GetInstance().GetEnemyChanceToShoot())
 	{
 		m_CanShoot = true;
 	}
@@ -26,10 +28,14 @@ EnemyFormationState::EnemyFormationState()
 
 void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 {
+	if (!EnemyManager::GetInstance().GetAllEnemiesAreSpawned())
+	{
+		return;
+	}
 	//timer before getting out of the formation
 	m_TimeBeforeDiving += EngineTime::GetInstance().GetDeltaTime();
 
-	if (EnemyManager::GetInstance().CanDive() && m_TimeBeforeDiving >= m_TimerBeforeDiving)
+	if (EnemyManager::GetInstance().CanDive(enemyStateMngr.GetEnemyType()) && m_TimeBeforeDiving >= m_TimerBeforeDiving)
 	{
 		m_TimeBeforeDiving -= m_TimeBeforeDiving;
 		m_SwitchState = true;
@@ -40,9 +46,27 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 	ShootBullet(enemyStateMngr);
 }
 
-EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager&)
+EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
-	return new EnemyDivingState();
+	if (enemyStateMngr.GetEnemyType() == EnemyType::Boss)
+	{
+		if (enemyStateMngr.GetGameObject()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())//if boss has caught a player it can't go tractor beam again
+		{
+			return new EnemyDivingState(enemyStateMngr);
+		}
+		const int randNr = rand() % 2;
+		//
+		if (randNr == 0)
+		{
+			return new EnemyGoToBeamState(enemyStateMngr);
+		}
+		else
+		{
+			return new EnemyDivingState(enemyStateMngr);
+		}
+	}
+	//
+	return new EnemyDivingState(enemyStateMngr);
 }
 
 void EnemyFormationState::Enter(EnemyStateManager&)

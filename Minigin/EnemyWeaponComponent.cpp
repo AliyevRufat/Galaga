@@ -6,14 +6,21 @@
 #include "SceneManager.h"
 #include "CollisionDetectionManager.h"
 #include "Scene.h"
+#include "EnemyStateManager.h"
+#include "EnemyFormationState.h"
 
-EnemyWeaponComponent::EnemyWeaponComponent(const int enemyWidth)
+EnemyWeaponComponent::EnemyWeaponComponent(const int enemyWidth, bool isAutoFire)
 	:m_EnemyWidth{ enemyWidth }
+	, m_IsAutoFire{ isAutoFire }
+	, m_AutoFireTime{ 0.0f }
+	, m_AutoFireTimer{ 2.f }
 {
 }
 
 void EnemyWeaponComponent::Update()
 {
+	HandleAutoFire();
+	//
 	if (m_spBullets.size() <= 0)
 	{
 		return;
@@ -52,4 +59,26 @@ void EnemyWeaponComponent::CreateBullet()
 	//add to scene and vector
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bullet);
 	m_spBullets.push_back(bullet);
+}
+
+void EnemyWeaponComponent::HandleAutoFire()
+{
+	if (m_IsAutoFire)
+	{
+		m_AutoFireTime += EngineTime::GetInstance().GetDeltaTime();
+		//
+		if (m_AutoFireTime >= m_AutoFireTimer)
+		{
+			if (m_pGameObject->GetParent()->GetComponent<EnemyStateManager>())
+			{
+				auto enemyState = m_pGameObject->GetParent()->GetComponent<EnemyStateManager>()->GetState();
+
+				if (dynamic_cast<EnemyFormationState*>(enemyState))
+				{
+					m_AutoFireTime -= m_AutoFireTime;
+					Shoot();
+				}
+			}
+		}
+	}
 }

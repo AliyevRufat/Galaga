@@ -27,7 +27,7 @@ public:
 		return nullptr;
 	}
 
-	GameObject(const std::string& name);
+	GameObject(const std::string& name, GameObject* parent = nullptr);
 	~GameObject();
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) = delete;
@@ -49,7 +49,10 @@ public:
 	void SetMarkForDelete(bool markFordelete) { m_MarkForDelete = markFordelete; }
 	bool GetMarkForDelete() const { return m_MarkForDelete; }
 
+	GameObject* GetParent() const;
+
 private:
+	GameObject* m_pParent = nullptr;
 	std::vector<BaseComponent*> m_pComponents;
 	std::unique_ptr<Subject> m_pActorChanged;
 

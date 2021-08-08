@@ -23,6 +23,6 @@ private:
 	std::vector<TransformComponent*> m_pOtherEntityTransforms;
 	TransformComponent* m_pGyaragaTransform = nullptr;
 	//
-	std::pair<std::vector<std::shared_ptr<GameObject>>, std::vector<bool>> m_pOtherEntities;//bool is used to know when to delete the object
+	std::vector<std::pair<std::shared_ptr<GameObject>, bool>> m_pOtherEntities;
 	std::shared_ptr<GameObject> m_pGyaraga;
 };

@@ -1,22 +1,22 @@
 #include "MiniginPCH.h"
-#include "GoToFormationState.h"
+#include "EnemyGoToFormationState.h"
 #include "EnemyFormationState.h"
 #include "BezierPath.h"
 #include "TransformComponent.h"
 #include "FormationManager.h"
 
-GoToFormationState::GoToFormationState()
+EnemyGoToFormationState::EnemyGoToFormationState()
 {
 	m_SwitchState = false;
 	m_pBezierPathManager = new BezierPathManager();
 }
 
-GoToFormationState::~GoToFormationState()
+EnemyGoToFormationState::~EnemyGoToFormationState()
 {
 	delete m_pBezierPathManager;
 }
 
-void GoToFormationState::Update(EnemyStateManager& enemyStateMngr)
+void EnemyGoToFormationState::Update(EnemyStateManager& enemyStateMngr)
 {
 	auto transformComp = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>();
 	glm::vec2 newPos = m_pBezierPathManager->CalculatePath(transformComp->GetTransform().GetPosition());
@@ -31,16 +31,16 @@ void GoToFormationState::Update(EnemyStateManager& enemyStateMngr)
 	}
 }
 
-void GoToFormationState::Enter(EnemyStateManager&)
+void EnemyGoToFormationState::Enter(EnemyStateManager&)
 {
 }
 
-EnemyState* GoToFormationState::StateSwitch(EnemyStateManager&)
+EnemyState* EnemyGoToFormationState::StateSwitch(EnemyStateManager&)
 {
 	return new EnemyFormationState();
 }
 
-void GoToFormationState::CreatePaths(EnemyStateManager& enemyStateMngr)
+void EnemyGoToFormationState::CreatePaths(EnemyStateManager& enemyStateMngr)
 {
 	auto startPos = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	auto endPos = FormationManager::GetInstance().GetSpecificPos(m_FormationRowIndex, m_FormationPosIndex, enemyStateMngr.GetEnemyType());

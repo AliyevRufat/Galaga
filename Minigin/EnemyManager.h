@@ -19,11 +19,13 @@ public:
 
 	void Update();
 	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
-	void IncreaseAmountOfDivingEnemies();
-	void DecreaseAmountOfDivingEnemies();
-	bool CanDive() const;
+	void IncreaseAmountOfDivingEnemies(EnemyType enemyType);
+	void DecreaseAmountOfDivingEnemies(EnemyType enemyType);
+	bool CanDive(EnemyType enemyType) const;
+	int GetEnemyChanceToShoot() const;
+	void IncreaseDifficulty();
+	bool GetAllEnemiesAreSpawned() const;
 	void ClearEnemies();
-
 private:
 	friend class dae::Singleton<EnemyManager>;
 	EnemyManager() = default;
@@ -40,6 +42,12 @@ private:
 	float m_SpawnTime = 0.0f;
 	const float m_SpawnTimer = 0.2f;
 	//
-	int m_AmountOfDivingEnemies = 0;
-	const int m_MaxAmountOfDivingEnemies = 3;
+	int m_AmountOfDivingBees = 0;
+	int m_AmountOfDivingButterflies = 0;
+	int m_AmountOfDivingBosses = 0;
+	//
+	int m_MaxAmountOfDivingEnemies = 1;
+	//
+	int m_EnemyChanceToShoot = 2;//20%
+	bool m_AllEnemiesAreSpawned = false;
 };

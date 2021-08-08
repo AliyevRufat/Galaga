@@ -2,11 +2,11 @@
 #include "EnemyState.h"
 #include "EnemyManager.h"
 
-class EnemyDivingState final : public EnemyState
+class EnemyGoToBeamState final : public EnemyState
 {
 public:
-	EnemyDivingState(EnemyStateManager& enemyStateMngr);
-	~EnemyDivingState();
+	EnemyGoToBeamState(EnemyStateManager& enemyStateMngr);
+	~EnemyGoToBeamState();
 
 	void Update(EnemyStateManager& enemyStateMngr) override;
 	void Enter(EnemyStateManager& enemyStateMngr) override;

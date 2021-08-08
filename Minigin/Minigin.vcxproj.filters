@@ -45,9 +45,6 @@
     <ClInclude Include="BezierPathManager.h">
       <Filter>BezierPath</Filter>
     </ClInclude>
-    <ClInclude Include="GoToFormationState.h">
-      <Filter>Enemies\States</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyManager.h">
       <Filter>Enemies</Filter>
     </ClInclude>
@@ -67,6 +64,21 @@
       <Filter>Enemies\States</Filter>
     </ClInclude>
     <ClInclude Include="EnemyWeaponComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyGoToBeamState.h">
+      <Filter>Enemies\States</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyGoToFormationState.h">
+      <Filter>Enemies\States</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyTractorBeamState.h">
+      <Filter>Enemies\States</Filter>
+    </ClInclude>
+    <ClInclude Include="TractorBeamComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LerpComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,9 +119,6 @@
     <ClCompile Include="BezierPathManager.cpp">
       <Filter>BezierPath</Filter>
     </ClCompile>
-    <ClCompile Include="GoToFormationState.cpp">
-      <Filter>Enemies\States</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
       <Filter>Enemies</Filter>
     </ClCompile>
@@ -126,6 +135,21 @@
       <Filter>Enemies\States</Filter>
     </ClCompile>
     <ClCompile Include="EnemyWeaponComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyGoToBeamState.cpp">
+      <Filter>Enemies\States</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyGoToFormationState.cpp">
+      <Filter>Enemies\States</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyTractorBeamState.cpp">
+      <Filter>Enemies\States</Filter>
+    </ClCompile>
+    <ClCompile Include="TractorBeamComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="LerpComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>

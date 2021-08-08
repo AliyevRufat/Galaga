@@ -5,6 +5,7 @@
 #include "Locator.h"
 #include "AudioService.h"
 #include "AnimationComponent.h"
+#include "TractorBeamComponent.h"
 
 HealthComponent::HealthComponent(const unsigned int& health)
 	: m_Lives{ health }
@@ -25,10 +26,18 @@ void HealthComponent::Die()
 		}
 		else
 		{
+			auto tractorBeamComp = m_pGameObject->GetComponent<TractorBeamComponent>();
+			if (tractorBeamComp)
+			{
+				tractorBeamComp->Clean();
+			}
 		}
 	}
 	//
-	m_Lives--;
+	if (m_Lives > 0)
+	{
+		m_Lives--;
+	}
 }
 
 const unsigned int& HealthComponent::GetLives() const
