@@ -26,6 +26,20 @@ void AnimationComponent::Animate()
 		m_spTexture2D = m_pGameObject->GetComponent<Texture2DComponent>()->GetTexture2D();
 	}
 	//get the correct frame
+	CutAndSetSourceRect();
+	//loop animation
+	HandleLoopedAnimation();
+	//next frame
+	m_NextFrameTime += EngineTime::GetInstance().GetDeltaTime();
+	if (m_NextFrameTime >= m_NextFrameTimer)
+	{
+		m_NextFrameTime -= m_NextFrameTime;
+		++m_CurrentAnimIndex;
+	}
+}
+
+void AnimationComponent::CutAndSetSourceRect()
+{
 	SDL_Rect srcRect{};
 	int textureWidth, textureHeight;
 	SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &textureWidth, &textureHeight);
@@ -33,7 +47,11 @@ void AnimationComponent::Animate()
 	srcRect.w = textureWidth / m_NrOfColumns;
 	srcRect.y = srcRect.h * m_CurrentRowIndex;
 	srcRect.x = srcRect.w * m_CurrentAnimIndex;
-	//loop animation
+	m_pGameObject->GetComponent<Texture2DComponent>()->SetSrcRect(srcRect);
+}
+
+void AnimationComponent::HandleLoopedAnimation()
+{
 	if (m_CurrentAnimIndex >= m_NrOfColumns)
 	{
 		if (m_IsLoop)
@@ -53,20 +71,6 @@ void AnimationComponent::Animate()
 			}
 		}
 	}
-	//next frame
-	m_NextFrameTime += EngineTime::GetInstance().GetDeltaTime();
-	if (m_NextFrameTime >= m_NextFrameTimer)
-	{
-		m_NextFrameTime -= m_NextFrameTime;
-		++m_CurrentAnimIndex;
-	}
-	//
-	m_pGameObject->GetComponent<Texture2DComponent>()->SetSrcRect(srcRect);
-}
-
-int AnimationComponent::GetNrOfColumns() const
-{
-	return m_NrOfColumns;
 }
 
 int AnimationComponent::GetCurrentFrame() const

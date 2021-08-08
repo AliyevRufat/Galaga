@@ -25,14 +25,14 @@ void EnemyWeaponComponent::Update()
 	{
 		return;
 	}
-
-	for (size_t i = 0; i < m_spBullets.size(); i++)//check if the bullet is out of the screen
+	//check if the bullet is out of the screen
+	for (size_t i = 0; i < m_spBullets.size(); i++)
 	{
 		auto bulletPos = m_spBullets[i]->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 
 		if (bulletPos.y < 0 || bulletPos.y > dae::SceneManager::GetInstance().GetScreenDimensions().y || m_spBullets[i]->GetMarkForDelete())
 		{
-			CollisionDetectionManager::GetInstance().DeleteSpecificObject(m_spBullets[i]);
+			CollisionDetectionManager::GetInstance().DeleteSpecificObject(m_spBullets[i]); //delete the bullet from the collisionmanager
 			m_spBullets.erase(m_spBullets.begin() + i); //delete the element
 		}
 	}
@@ -69,7 +69,7 @@ void EnemyWeaponComponent::HandleAutoFire()
 		//
 		if (m_AutoFireTime >= m_AutoFireTimer)
 		{
-			if (m_pGameObject->GetParent()->GetComponent<EnemyStateManager>())
+			if (m_pGameObject->GetParent()->GetComponent<EnemyStateManager>())//autoFire is only for formationState
 			{
 				auto enemyState = m_pGameObject->GetParent()->GetComponent<EnemyStateManager>()->GetState();
 

@@ -20,8 +20,8 @@ void PlayerWeaponComponent::Update()
 	{
 		return;
 	}
-
-	for (size_t i = 0; i < m_spBullets.size(); i++) //check if the bullet is out of the screen
+	//check if the bullet is out of the screen
+	for (size_t i = 0; i < m_spBullets.size(); i++)
 	{
 		auto bulletPos = m_spBullets[i]->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 
@@ -40,7 +40,7 @@ void PlayerWeaponComponent::Shoot()
 	{
 		return;
 	}
-
+	//
 	CreateBullet();
 }
 

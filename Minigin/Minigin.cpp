@@ -104,7 +104,7 @@ void dae::Minigin::InitGame()
 	gyaraga->AddComponent(new HealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
-	gyaraga->AddComponent(new GyaragaMovementComponent());
+	gyaraga->AddComponent(new GyaragaMovementComponent(playerWidth));
 	gyaraga->AddComponent(new PlayerWeaponComponent(playerWidth));
 	//watchers
 	gyaraga->AddWatcher(new ScoreObserver());

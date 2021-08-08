@@ -25,11 +25,6 @@ EnemySpawnState::EnemySpawnState()
 	m_ShootTimer = 2;
 }
 
-EnemySpawnState::~EnemySpawnState()
-{
-	delete m_pBezierPathManager;
-}
-
 void EnemySpawnState::Update(EnemyStateManager& enemyStateMngr)
 {
 	auto transformComp = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>();
@@ -52,8 +47,9 @@ EnemyState* EnemySpawnState::StateSwitch(EnemyStateManager&)
 	return new EnemyFormationState();
 }
 
-void EnemySpawnState::Enter(EnemyStateManager&)
+void EnemySpawnState::Enter(EnemyStateManager& enemyStateManager)
 {
+	CreatePaths(enemyStateManager);
 }
 
 void EnemySpawnState::CreatePaths(EnemyStateManager& enemyStateMngr)

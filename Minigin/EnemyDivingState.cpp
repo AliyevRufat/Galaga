@@ -28,21 +28,16 @@ EnemyDivingState::EnemyDivingState(EnemyStateManager& enemyStateMngr)
 	m_ShootTimer = 0.3f;
 }
 
-EnemyDivingState::~EnemyDivingState()
-{
-	delete m_pBezierPathManager;
-}
-
 void EnemyDivingState::Update(EnemyStateManager& enemyStateMngr)
 {
 	auto transformComp = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>();
 	glm::vec2 newPos = m_pBezierPathManager->CalculatePath(transformComp->GetTransform().GetPosition());
-	//boundary check for butterfly
+	//boundary check for butterfly and boss
 	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly || enemyStateMngr.GetEnemyType() == EnemyType::Boss)
 	{
 		if (transformComp->GetTransform().GetPosition().y >= dae::SceneManager::GetInstance().GetScreenDimensions().y)
 		{
-			newPos.y = 0;
+			newPos.y = 0;//spawn on top if out of boundary
 			m_SwitchState = true;
 		}
 	}
@@ -70,8 +65,9 @@ EnemyState* EnemyDivingState::StateSwitch(EnemyStateManager& enemyStateMngr)
 	return new EnemyFormationState();
 }
 
-void EnemyDivingState::Enter(EnemyStateManager&)
+void EnemyDivingState::Enter(EnemyStateManager& enemyStateManager)
 {
+	CreatePaths(enemyStateManager);
 }
 
 void EnemyDivingState::CreatePaths(EnemyStateManager& enemyStateMngr)

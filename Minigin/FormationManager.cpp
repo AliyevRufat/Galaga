@@ -10,32 +10,23 @@ void FormationManager::Init()
 	const int posYButterflies = 200;
 	const int posYBoss = 80;
 
+	//make formation positions for the bees and the butterflies
 	for (size_t i = 0; i < 2; i++)
 	{
-		std::vector<glm::vec2> tempPos;
+		std::vector<glm::vec2> tempPosBees;
+		std::vector<glm::vec2> tempPosButterflies;
 		for (size_t j = 0; j < 10; j++)
 		{
-			tempPos.push_back(glm::vec2{ 100 + j * 50 ,posYBees - i * 50 });
+			tempPosBees.push_back(glm::vec2{ 100 + j * 50 ,posYBees - i * 50 });
+			tempPosButterflies.push_back(glm::vec2{ 100 + j * 50 ,posYButterflies - i * 50 });
 			if (j >= 9)
 			{
-				m_BeePositions.push_back(tempPos);
+				m_BeePositions.push_back(tempPosBees);
+				m_ButterflyPositions.push_back(tempPosButterflies);
 			}
 		}
 	}
-	//
-	for (size_t i = 0; i < 2; i++)
-	{
-		std::vector<glm::vec2> tempPos;
-		for (size_t j = 0; j < 10; j++)
-		{
-			tempPos.push_back(glm::vec2{ 100 + j * 50 ,posYButterflies - i * 50 });
-			if (j >= 9)
-			{
-				m_ButterflyPositions.push_back(tempPos);
-			}
-		}
-	}
-	//
+	//make formation positions for the bosses
 	for (size_t i = 0; i < 4; i++)
 	{
 		m_BossPositions.push_back(glm::vec2{ m_BeePositions[0][3].x + i * 50 ,posYBoss });
@@ -66,7 +57,7 @@ void FormationManager::Update()
 			m_BossPositions[i].x = m_BossPositions[i].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 		}
 	}
-	//
+	//timer and the multiplier for moving left and right
 	if (m_TimeBeforeMovingToOtherSide >= m_TimerBeforeMovingToOtherSide)
 	{
 		m_TimeBeforeMovingToOtherSide -= m_TimeBeforeMovingToOtherSide;
@@ -75,7 +66,7 @@ void FormationManager::Update()
 	m_TimeBeforeMovingToOtherSide += EngineTime::GetInstance().GetDeltaTime();
 }
 
-glm::vec2 FormationManager::GetSpecificPos(int rowIndex, int posIndex, EnemyType enemyType)
+glm::vec2 FormationManager::GetSpecificPos(int rowIndex, int posIndex, EnemyType enemyType) const
 {
 	if (enemyType == EnemyType::Bee)
 	{

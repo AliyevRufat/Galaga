@@ -69,10 +69,7 @@ EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 	return new EnemyDivingState(enemyStateMngr);
 }
 
-void EnemyFormationState::Enter(EnemyStateManager&)
+void EnemyFormationState::Enter(EnemyStateManager& enemyStateManager)
 {
-}
-
-void EnemyFormationState::CreatePaths(EnemyStateManager&)
-{
+	CreatePaths(enemyStateManager);
 }

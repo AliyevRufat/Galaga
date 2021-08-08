@@ -6,11 +6,16 @@
 class GameObject;
 class EnemyState;
 
-class EnemyStateManager : public BaseComponent
+class EnemyStateManager final : public BaseComponent
 {
 public:
 	EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex);
 	~EnemyStateManager();
+	EnemyStateManager(const EnemyStateManager& other) = delete;
+	EnemyStateManager(EnemyStateManager&& other) = delete;
+	EnemyStateManager& operator=(const EnemyStateManager& other) = delete;
+	EnemyStateManager& operator=(EnemyStateManager&& other) = delete;
+	//
 	void Update() override;
 	GameObject* GetGameObject();
 	EnemyType GetEnemyType() const;

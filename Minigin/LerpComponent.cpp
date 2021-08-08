@@ -3,9 +3,8 @@
 #include "TransformComponent.h"
 #include "EngineTime.h"
 
-LerpComponent::LerpComponent(const glm::vec2& startPos, const glm::vec2& endPos)
-	:m_StartPos{ startPos }
-	, m_EndPos{ endPos }
+LerpComponent::LerpComponent(const glm::vec2& endPos)
+	: m_EndPos{ endPos }
 	, m_LerpT{ 0.0f }
 	, m_IsAtEndPos{ false }
 {
@@ -19,12 +18,10 @@ void LerpComponent::Update()
 	}
 	//
 	auto currentPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	auto BA = m_EndPos - m_StartPos;
-	auto newTarget = glm::vec2(BA.x + m_StartPos.x, BA.y + m_StartPos.y);
 	//
 	const int speed = 30;
-	float newX = currentPos.x + m_LerpT * (newTarget.x - currentPos.x);
-	float newY = currentPos.y + m_LerpT * (newTarget.y - currentPos.y);
+	float newX = currentPos.x + m_LerpT * (m_EndPos.x - currentPos.x);
+	float newY = currentPos.y + m_LerpT * (m_EndPos.y - currentPos.y);
 	//
 	m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(newX, newY));
 	//

@@ -13,7 +13,7 @@
 void EnemyManager::Update()
 {
 	m_SpawnTime += EngineTime::GetInstance().GetDeltaTime();
-
+	//
 	if (m_SpawnTime >= m_SpawnTimer && m_Index < m_QueuedEnemies.size())
 	{
 		m_SpawnTime -= m_SpawnTime;

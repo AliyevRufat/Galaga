@@ -11,16 +11,11 @@ EnemyGoToFormationState::EnemyGoToFormationState()
 	m_pBezierPathManager = new BezierPathManager();
 }
 
-EnemyGoToFormationState::~EnemyGoToFormationState()
-{
-	delete m_pBezierPathManager;
-}
-
 void EnemyGoToFormationState::Update(EnemyStateManager& enemyStateMngr)
 {
 	auto transformComp = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>();
 	glm::vec2 newPos = m_pBezierPathManager->CalculatePath(transformComp->GetTransform().GetPosition());
-
+	//
 	if (newPos != glm::vec2{ 0,0 })
 	{
 		transformComp->SetPosition(newPos);
@@ -31,8 +26,9 @@ void EnemyGoToFormationState::Update(EnemyStateManager& enemyStateMngr)
 	}
 }
 
-void EnemyGoToFormationState::Enter(EnemyStateManager&)
+void EnemyGoToFormationState::Enter(EnemyStateManager& enemyStateManager)
 {
+	CreatePaths(enemyStateManager);
 }
 
 EnemyState* EnemyGoToFormationState::StateSwitch(EnemyStateManager&)

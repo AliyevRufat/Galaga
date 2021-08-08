@@ -16,11 +16,6 @@ EnemyGoToBeamState::EnemyGoToBeamState(EnemyStateManager& enemyStateMngr)
 	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 }
 
-EnemyGoToBeamState::~EnemyGoToBeamState()
-{
-	delete m_pBezierPathManager;
-}
-
 void EnemyGoToBeamState::Update(EnemyStateManager& enemyStateMngr)
 {
 	auto transformComp = enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>();
@@ -41,8 +36,9 @@ EnemyState* EnemyGoToBeamState::StateSwitch(EnemyStateManager&)
 	return new EnemyTractorBeamState();
 }
 
-void EnemyGoToBeamState::Enter(EnemyStateManager&)
+void EnemyGoToBeamState::Enter(EnemyStateManager& enemyStateManager)
 {
+	CreatePaths(enemyStateManager);
 }
 
 void EnemyGoToBeamState::CreatePaths(EnemyStateManager& enemyStateMngr)

@@ -14,17 +14,13 @@ EnemyTractorBeamState::EnemyTractorBeamState()
 	m_pBezierPathManager = new BezierPathManager();
 }
 
-EnemyTractorBeamState::~EnemyTractorBeamState()
-{
-	delete m_pBezierPathManager;
-}
-
 void EnemyTractorBeamState::Update(EnemyStateManager& enemyStateManager)
 {
 	auto tractorBeamComp = enemyStateManager.GetGameObject()->GetComponent<TractorBeamComponent>();
 	if (tractorBeamComp->GetIsFinished())
 	{
-		if (tractorBeamComp->GetIsPlayerCaught())//go to formation if player caught
+		//go to formation if player caught
+		if (tractorBeamComp->GetIsPlayerCaught())
 		{
 			m_SwitchState = true;
 		}
@@ -45,9 +41,10 @@ void EnemyTractorBeamState::Update(EnemyStateManager& enemyStateManager)
 	}
 }
 
-void EnemyTractorBeamState::Enter(EnemyStateManager& enemyManager)
+void EnemyTractorBeamState::Enter(EnemyStateManager& enemyStateManager)
 {
-	enemyManager.GetGameObject()->GetComponent<TractorBeamComponent>()->CreateTractorBeam();
+	enemyStateManager.GetGameObject()->GetComponent<TractorBeamComponent>()->CreateTractorBeam();
+	CreatePaths(enemyStateManager);
 }
 
 EnemyState* EnemyTractorBeamState::StateSwitch(EnemyStateManager& enemyStateMngr)
@@ -55,8 +52,4 @@ EnemyState* EnemyTractorBeamState::StateSwitch(EnemyStateManager& enemyStateMngr
 	EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 	//
 	return new EnemyGoToFormationState();
-}
-
-void EnemyTractorBeamState::CreatePaths(EnemyStateManager&)
-{
 }

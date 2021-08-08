@@ -5,8 +5,9 @@
 #include "SceneManager.h"
 #include "EngineTime.h"
 
-GyaragaMovementComponent::GyaragaMovementComponent()
-	: m_MoveLeft{ false }
+GyaragaMovementComponent::GyaragaMovementComponent(int playerWidth)
+	:m_PlayerWidth{ playerWidth }
+	, m_MoveLeft{ false }
 	, m_MoveRight{ false }
 {
 }
@@ -15,12 +16,11 @@ void GyaragaMovementComponent::Update()
 {
 	auto transformComponent = m_pGameObject->GetComponent<TransformComponent>();
 	//restrict movement on the sides
-	const int playerWidth = 45;
 	if (transformComponent->GetTransform().GetPosition().x <= 0)
 	{
 		m_MoveLeft = false;
 	}
-	if (transformComponent->GetTransform().GetPosition().x >= dae::SceneManager::GetInstance().GetScreenDimensions().x - playerWidth)
+	if (transformComponent->GetTransform().GetPosition().x >= dae::SceneManager::GetInstance().GetScreenDimensions().x - m_PlayerWidth)
 	{
 		m_MoveRight = false;
 	}
@@ -33,7 +33,7 @@ void GyaragaMovementComponent::Update()
 	{
 		int speed = 500;
 		//
-		if (m_MoveLeft) //reverse sign if go to left
+		if (m_MoveLeft) //reverse sign if going to left side
 		{
 			speed *= -1;
 		}

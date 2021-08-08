@@ -11,6 +11,4 @@ public:
 	void Update() override;
 private:
 	glm::vec2 m_Target;
-	glm::vec2 m_TargetOffset;
-	float m_LerpT;
 };

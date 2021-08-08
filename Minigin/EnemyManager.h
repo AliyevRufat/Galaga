@@ -18,13 +18,17 @@ class EnemyManager final : public dae::Singleton<EnemyManager>
 public:
 
 	void Update();
+
 	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
+
+	void IncreaseDifficulty();
 	void IncreaseAmountOfDivingEnemies(EnemyType enemyType);
 	void DecreaseAmountOfDivingEnemies(EnemyType enemyType);
-	bool CanDive(EnemyType enemyType) const;
+
 	int GetEnemyChanceToShoot() const;
-	void IncreaseDifficulty();
 	bool GetAllEnemiesAreSpawned() const;
+	bool CanDive(EnemyType enemyType) const;
+
 	void ClearEnemies();
 private:
 	friend class dae::Singleton<EnemyManager>;

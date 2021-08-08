@@ -5,11 +5,11 @@
 class LerpComponent : public BaseComponent
 {
 public:
-	LerpComponent(const glm::vec2& startPos, const glm::vec2& endPos);
+	LerpComponent(const glm::vec2& endPos);
+	//
 	void Update() override;
 	bool GetIsAtEndPos() const;
 private:
-	glm::vec2 m_StartPos;
 	glm::vec2 m_EndPos;
 	float m_LerpT;
 	bool m_IsAtEndPos;

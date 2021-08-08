@@ -11,7 +11,6 @@ EnemyStateManager::EnemyStateManager(EnemyType enemyType, int formationRowIndex,
 	, m_FormationRowIndex{ formationRowIndex }
 {
 	m_pEnemyState = new EnemySpawnState();
-	m_pEnemyState->Enter(*this);
 	m_pEnemyState->SetFormationIndex(formationRowIndex, formationPositionIndex);
 }
 
@@ -24,7 +23,7 @@ void EnemyStateManager::Update()
 {
 	if (!m_IsInit)
 	{
-		m_pEnemyState->CreatePaths(*this);
+		m_pEnemyState->Enter(*this);
 		m_IsInit = true;
 	}
 	m_pEnemyState->Update(*this);
@@ -43,9 +42,8 @@ void EnemyStateManager::StateSwitch()
 	{
 		delete m_pEnemyState;
 		m_pEnemyState = state;
-		m_pEnemyState->Enter(*this);
 		m_pEnemyState->SetFormationIndex(m_FormationRowIndex, m_FormationIndex);
-		m_pEnemyState->CreatePaths(*this);
+		m_pEnemyState->Enter(*this);
 	}
 }
 

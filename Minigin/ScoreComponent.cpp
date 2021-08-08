@@ -15,7 +15,7 @@ void ScoreComponent::SetScore(const unsigned int& score)
 void ScoreComponent::IncreaseScore(const int score)
 {
 	m_Score += score;
-	//m_pGameObject->Notify(Event(score)); //TODO : incomplete, event doesn't give the int of score anymore, find another way
+	//m_pGameObject->Notify(Event(score));
 }
 
 const unsigned int& ScoreComponent::GetScore() const
