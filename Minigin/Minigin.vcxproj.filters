@@ -49,7 +49,7 @@
       <Filter>Enemies</Filter>
     </ClInclude>
     <ClInclude Include="EnemyStateManager.h">
-      <Filter>Enemies\Types</Filter>
+      <Filter>Enemies\StateManager</Filter>
     </ClInclude>
     <ClInclude Include="EnemySpawnState.h">
       <Filter>Enemies\States</Filter>
@@ -80,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="LerpComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AccuracyObserver.h">
+      <Filter>Observers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +126,7 @@
       <Filter>Enemies</Filter>
     </ClCompile>
     <ClCompile Include="EnemyStateManager.cpp">
-      <Filter>Enemies\Types</Filter>
+      <Filter>Enemies\StateManager</Filter>
     </ClCompile>
     <ClCompile Include="EnemySpawnState.cpp">
       <Filter>Enemies\States</Filter>
@@ -152,6 +155,9 @@
     <ClCompile Include="LerpComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="AccuracyObserver.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -166,9 +172,6 @@
     <Filter Include="Enemies">
       <UniqueIdentifier>{a8add019-ab56-4b42-b121-50664937feae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Enemies\Types">
-      <UniqueIdentifier>{7c756f52-b4ce-4b00-82f8-b55bd7e0fe38}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Collision">
       <UniqueIdentifier>{bbb726ed-f992-41d6-8add-e1948f065c83}</UniqueIdentifier>
     </Filter>
@@ -180,6 +183,9 @@
     </Filter>
     <Filter Include="Enemies\States">
       <UniqueIdentifier>{7617bafa-1e97-4c9a-ae7c-421df51409cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\StateManager">
+      <UniqueIdentifier>{7c756f52-b4ce-4b00-82f8-b55bd7e0fe38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

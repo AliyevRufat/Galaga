@@ -7,7 +7,7 @@ class BezierPath;
 class BezierPathManager
 {
 public:
-	BezierPathManager();
+	BezierPathManager(int speed);
 	glm::vec2 CalculatePath(const glm::vec2& pos);
 	void CreatePaths(BezierPath* path);
 
@@ -16,4 +16,5 @@ private:
 	int m_CurrentPath;
 	int m_CurrentWayPoint;
 	const float EPSILON;
+	const int m_Speed;
 };

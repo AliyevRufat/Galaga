@@ -9,6 +9,7 @@ class TransformComponent;
 class FormationManager final : public dae::Singleton<FormationManager>
 {
 public:
+
 	void Init();
 	void Update();
 	glm::vec2 GetSpecificPos(int rowIndex, int posIndex, EnemyType enemyType) const;

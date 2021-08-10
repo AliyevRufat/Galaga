@@ -14,10 +14,11 @@ glm::vec2 Normalize(const glm::vec2& vector)
 		return vector;
 }
 
-BezierPathManager::BezierPathManager()
+BezierPathManager::BezierPathManager(int speed)
 	:m_CurrentPath{ 0 }
 	, m_CurrentWayPoint{ 0 }
 	, EPSILON{ 5.0f }
+	, m_Speed{ speed }
 {
 }
 
@@ -34,9 +35,8 @@ glm::vec2 BezierPathManager::CalculatePath(const glm::vec2& pos)
 
 	if (m_CurrentWayPoint < m_Paths[m_CurrentPath].size())
 	{
-		const float speed = 600.0f;
 		glm::vec2 distance = m_Paths[m_CurrentPath][m_CurrentWayPoint] - pos;
-		return pos + Normalize(distance) * EngineTime::GetInstance().GetDeltaTime() * speed;
+		return pos + Normalize(distance) * EngineTime::GetInstance().GetDeltaTime() * (float)m_Speed;
 	}
 	else
 	{

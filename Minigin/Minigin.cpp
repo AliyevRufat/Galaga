@@ -18,6 +18,7 @@
 #include "CollisionDetectionManager.h"
 #include "FormationManager.h"
 #include "EnemyManager.h"
+#include "AccuracyObserver.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -75,7 +76,6 @@ void dae::Minigin::InitGame()
 	auto scene = SceneManager::GetInstance().GetCurrentScene();
 
 	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
-	//fps counter
 	auto go = std::make_shared<GameObject>("FPSCounter");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
 	go->AddComponent(new FPSTextComponent(font));
@@ -94,6 +94,13 @@ void dae::Minigin::InitGame()
 	auto livesCounter = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,255,255 });
 	livesDisplay->AddComponent(livesCounter);
 	scene->Add(livesDisplay);
+	//---------------------------------------------------------------------ACCURACY DISPLAY--------------------------------------------------
+	auto accuracyDisplay = std::make_shared<GameObject>("AccuracyDisplay");
+	accuracyDisplay->AddComponent(new TransformComponent(glm::vec2(50, 780)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 50);
+	auto accuracyCounter = new TextComponent("Accuracy : 100 %", font, SDL_Color{ 255,255,255 });
+	accuracyDisplay->AddComponent(accuracyCounter);
+	scene->Add(accuracyDisplay);
 	//---------------------------------------------------------------------PLAYER--------------------------------------------------
 	const int playerScale = 1;
 	const int playerWidth = 45 * playerScale;
@@ -109,61 +116,89 @@ void dae::Minigin::InitGame()
 	//watchers
 	gyaraga->AddWatcher(new ScoreObserver());
 	gyaraga->AddWatcher(new LivesObserver());
+	gyaraga->AddWatcher(new AccuracyObserver());
 	//add
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
+	SceneManager::GetInstance().GetCurrentScene()->AddPlayer(gyaraga);
 	//player died text
 	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
 	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
 	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255,255,255 }, false));
 	scene->Add(playerDied);
-	//Spawn enemies
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 0);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 1);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 2);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 3);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 4);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 5);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 6);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 7);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 8);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 9);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 0);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 1);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 2);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 4);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 5);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 6);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 7);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 8);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 9);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 0);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 1);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 2);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 3);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 4);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 5);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 6);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 7);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 8);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 9);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 0);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 3);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 4);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 5);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 6);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 7);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 8);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 9);
-	//
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 1);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 2);
-	EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 3);
+	{
+		{
+			//first wave
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 4);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 4);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 5);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 5);
+			//
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 4, true);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 4, true);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 5, true);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 5, true);
+			//
+			EnemyManager::GetInstance().Wait();
+		}
+
+		{
+			//second wave
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 3);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 2);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 6);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 3);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 6);
+			//
+			EnemyManager::GetInstance().Wait();
+		}
+
+		{
+			//third wave
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 2);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 7);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 7);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 8);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 8);
+			//
+			EnemyManager::GetInstance().Wait();
+		}
+
+		{
+			//forth wave
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 2);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 2);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 3);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 3);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 6);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 6);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 7);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 7);
+			//
+			EnemyManager::GetInstance().Wait();
+		}
+
+		{
+			//five wave
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 8);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 8);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 9);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 9);
+			//
+			EnemyManager::GetInstance().Wait();
+		}
+	}
 }
 
 void dae::Minigin::BindCommands()

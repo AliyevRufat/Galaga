@@ -76,34 +76,37 @@ void CollisionDetectionManager::Update()
 		}
 	}
 	//if enemy or enemy bullet collides with the player
-	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	if (m_pGyaraga)
 	{
-		if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
+		for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 		{
-			if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
+			if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 			{
-				m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform->GetTransform().GetPosition());//boss gets the fighter of the player
-			}
-			else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
-			{
-				if (m_pOtherEntities[i].first->GetName() == "Boss")
+				if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
 				{
-					m_pOtherEntities[i].first->GetComponent<TractorBeamComponent>()->Clean();//destroy the fighter of the boss if it has one
+					m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform->GetTransform().GetPosition());//boss gets the fighter of the player
 				}
-				//
-				AddExplosionEffect(int(i));
-				//decrease 1 life of the player and destroy whatever collided with the player
-				m_pGyaraga->GetComponent<HealthComponent>()->Die();
-				m_pOtherEntities[i].first->SetMarkForDelete(true);
-				m_pOtherEntities[i].second = true;
-				//check if enemy was diving
-				if (m_pOtherEntities[i].first->GetComponent<EnemyStateManager>())
+				else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
 				{
-					auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
-
-					if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState))
+					if (m_pOtherEntities[i].first->GetName() == "Boss")
 					{
-						EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
+						m_pOtherEntities[i].first->GetComponent<TractorBeamComponent>()->Clean();//destroy the fighter of the boss if it has one
+					}
+					//
+					AddExplosionEffect(int(i));
+					//decrease 1 life of the player and destroy whatever collided with the player
+					m_pGyaraga->GetComponent<HealthComponent>()->Die();
+					m_pOtherEntities[i].first->SetMarkForDelete(true);
+					m_pOtherEntities[i].second = true;
+					//check if enemy was diving
+					if (m_pOtherEntities[i].first->GetComponent<EnemyStateManager>())
+					{
+						auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
+
+						if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState))
+						{
+							EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
+						}
 					}
 				}
 			}
@@ -158,12 +161,18 @@ void CollisionDetectionManager::DeleteCollidedObjects()
 
 void CollisionDetectionManager::DeleteSpecificObject(const std::shared_ptr<GameObject>& object)
 {
+	if (m_pGyaraga == object)
+	{
+		m_pGyaraga = nullptr;
+		return;
+	}
 	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
 		if (m_pOtherEntities[i].first == object)
 		{
 			m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
 			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
+			return;
 		}
 	}
 }

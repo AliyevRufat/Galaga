@@ -10,13 +10,16 @@ public:
 	//
 	void Update() override;
 	void Shoot();
-
+	int GetAccuracy() const;
 private:
 	void CreateBullet();
+	//
+	std::vector<std::shared_ptr<GameObject>> m_spBullets;
 	//
 	const int m_MaxBulletCountOnScreen;
 	int m_CurrentBulletCountOnScreen;
 	const int m_PlayerWidth;
 	//
-	std::vector<std::shared_ptr<GameObject>> m_spBullets;
+	int m_AmountOfShotBullets;
+	int m_AmountOfMissedBullets;
 };

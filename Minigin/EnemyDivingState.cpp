@@ -11,7 +11,7 @@
 EnemyDivingState::EnemyDivingState(EnemyStateManager& enemyStateMngr)
 {
 	m_SwitchState = { false };
-	m_pBezierPathManager = new BezierPathManager();
+	m_pBezierPathManager = new BezierPathManager(700);
 	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 	//
 	m_SwitchState = { false };

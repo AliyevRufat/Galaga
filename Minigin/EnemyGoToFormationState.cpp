@@ -8,7 +8,7 @@
 EnemyGoToFormationState::EnemyGoToFormationState()
 {
 	m_SwitchState = false;
-	m_pBezierPathManager = new BezierPathManager();
+	m_pBezierPathManager = new BezierPathManager(700);
 }
 
 void EnemyGoToFormationState::Update(EnemyStateManager& enemyStateMngr)

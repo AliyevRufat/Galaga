@@ -28,6 +28,9 @@ EnemyFormationState::EnemyFormationState()
 
 void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 {
+	//update pos in formation
+	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetSpecificPos(m_FormationRowIndex, m_FormationPosIndex, enemyStateMngr.GetEnemyType()));
+	//
 	if (!EnemyManager::GetInstance().GetAllEnemiesAreSpawned())
 	{
 		return;
@@ -40,8 +43,6 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 		m_TimeBeforeDiving -= m_TimeBeforeDiving;
 		m_SwitchState = true;
 	}
-	//update pos in formation
-	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(FormationManager::GetInstance().GetSpecificPos(m_FormationRowIndex, m_FormationPosIndex, enemyStateMngr.GetEnemyType()));
 	//
 	ShootBullet(enemyStateMngr);
 }

@@ -11,6 +11,8 @@ PlayerWeaponComponent::PlayerWeaponComponent(const int playerWidth)
 	:m_MaxBulletCountOnScreen{ 2 }
 	, m_CurrentBulletCountOnScreen{ 0 }
 	, m_PlayerWidth{ playerWidth }
+	, m_AmountOfMissedBullets{ 0 }
+	, m_AmountOfShotBullets{ 0 }
 {
 }
 
@@ -27,9 +29,14 @@ void PlayerWeaponComponent::Update()
 
 		if (bulletPos.y < 0 || bulletPos.y > dae::SceneManager::GetInstance().GetScreenDimensions().y || m_spBullets[i]->GetMarkForDelete())
 		{
+			if (bulletPos.y < 0 || bulletPos.y > dae::SceneManager::GetInstance().GetScreenDimensions().y)
+			{
+				++m_AmountOfMissedBullets;
+			}
 			CollisionDetectionManager::GetInstance().DeleteSpecificObject(m_spBullets[i]);
 			m_spBullets.erase(m_spBullets.begin() + i); //delete the element
 			--m_CurrentBulletCountOnScreen;
+			m_pGameObject->Notify("AccuracyUpdate");
 		}
 	}
 }
@@ -61,4 +68,10 @@ void PlayerWeaponComponent::CreateBullet()
 	m_spBullets.push_back(bullet);
 	//
 	++m_CurrentBulletCountOnScreen;
+	++m_AmountOfShotBullets;
+}
+
+int PlayerWeaponComponent::GetAccuracy() const
+{
+	return int((float(m_AmountOfShotBullets - m_AmountOfMissedBullets) / float(m_AmountOfShotBullets)) * 100);
 }

@@ -11,7 +11,7 @@
 EnemyTractorBeamState::EnemyTractorBeamState()
 {
 	m_SwitchState = false;
-	m_pBezierPathManager = new BezierPathManager();
+	m_pBezierPathManager = new BezierPathManager(700);
 }
 
 void EnemyTractorBeamState::Update(EnemyStateManager& enemyStateManager)
