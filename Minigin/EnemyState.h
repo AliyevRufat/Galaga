@@ -2,6 +2,8 @@
 #include "EnemyStateManager.h"
 #include "BezierPathManager.h"
 #include "EnemyWeaponComponent.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 class EnemyState
 {
@@ -21,7 +23,7 @@ public:
 	bool GetSwitchState() const { return m_SwitchState; }
 	void ShootBullet(EnemyStateManager& enemyStateMngr)
 	{
-		if (m_CanShoot)
+		if (m_CanShoot && dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetIsActive())
 		{
 			m_ShootTime += EngineTime::GetInstance().GetDeltaTime();
 			if (m_ShootTime >= m_ShootTimer)

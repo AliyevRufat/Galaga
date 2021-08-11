@@ -84,6 +84,9 @@
     <ClInclude Include="AccuracyObserver.h">
       <Filter>Observers</Filter>
     </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>LevelManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -158,6 +161,9 @@
     <ClCompile Include="AccuracyObserver.cpp">
       <Filter>Observers</Filter>
     </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>LevelManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -186,6 +192,9 @@
     </Filter>
     <Filter Include="Enemies\StateManager">
       <UniqueIdentifier>{7c756f52-b4ce-4b00-82f8-b55bd7e0fe38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LevelManager">
+      <UniqueIdentifier>{2bc0b23d-8cd4-4adb-9812-6911ed9ab4d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

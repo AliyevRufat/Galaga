@@ -2,6 +2,7 @@
 #include "../AliEngine/Singleton.h"
 #include "../AliEngine/GameObject.h"
 #include "ComponentIncludes.h"
+#include "StageManager.h"
 #include <vector>
 
 class BezierPath;
@@ -18,13 +19,6 @@ class EnemyManager final : public dae::Singleton<EnemyManager>
 {
 public:
 
-	enum class Stage
-	{
-		One,
-		Two,
-		Three
-	};
-
 	void Update();
 
 	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex, bool secondQueue = false);
@@ -38,7 +32,7 @@ public:
 	bool CanDive(EnemyType enemyType) const;
 	void Wait();
 
-	std::pair<BezierPath*, glm::vec2> GetSpawnPath(Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos);
+	std::pair<BezierPath*, glm::vec2> GetSpawnPath(StageManager::Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos);
 
 	void ClearEnemies();
 private:
@@ -75,6 +69,4 @@ private:
 	const int m_WaitTimer = 1;
 	float m_WaitTime = 0.0f;
 	std::vector<int> m_WaitIndices;
-	//
-	bool m_PlayerDied = false;
 };

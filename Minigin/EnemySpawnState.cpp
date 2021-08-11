@@ -5,6 +5,7 @@
 #include "BezierPath.h"
 #include "TransformComponent.h"
 #include "FormationManager.h"
+#include "StageManager.h"
 #include "EnemyManager.h"
 #include "EnemyWeaponComponent.h"
 
@@ -58,7 +59,7 @@ void EnemySpawnState::CreatePaths(EnemyStateManager& enemyStateMngr)
 	//
 	std::pair<BezierPath*, glm::vec2> pathAndStartPos;
 
-	pathAndStartPos = EnemyManager::GetInstance().GetSpawnPath(EnemyManager::Stage::One, enemyStateMngr.GetEnemyType(), m_FormationPosIndex, endPos);
+	pathAndStartPos = EnemyManager::GetInstance().GetSpawnPath(StageManager::Stage::One, enemyStateMngr.GetEnemyType(), m_FormationPosIndex, endPos);
 	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(pathAndStartPos.second);
 	//
 	m_pBezierPathManager->CreatePaths(pathAndStartPos.first);

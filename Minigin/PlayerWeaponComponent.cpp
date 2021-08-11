@@ -5,12 +5,12 @@
 #include "GameObject.h"
 #include "SceneManager.h"
 #include "CollisionDetectionManager.h"
+#include "GameObject.h"
 #include "Scene.h"
 
-PlayerWeaponComponent::PlayerWeaponComponent(const int playerWidth)
+PlayerWeaponComponent::PlayerWeaponComponent()
 	:m_MaxBulletCountOnScreen{ 2 }
 	, m_CurrentBulletCountOnScreen{ 0 }
-	, m_PlayerWidth{ playerWidth }
 	, m_AmountOfMissedBullets{ 0 }
 	, m_AmountOfShotBullets{ 0 }
 {
@@ -58,7 +58,7 @@ void PlayerWeaponComponent::CreateBullet()
 	//
 	std::shared_ptr<GameObject> bullet = std::make_shared<GameObject>("Bullet");
 	//add components
-	bullet->AddComponent(new TransformComponent(glm::vec2{ position.x + m_PlayerWidth / 2 - bulletWidth / 2.0f , position.y }));
+	bullet->AddComponent(new TransformComponent(glm::vec2{ position.x + m_pGameObject->GetDimensions().x / 2 - bulletWidth / 2.0f , position.y }));
 	bullet->AddComponent(new Texture2DComponent("Bullet.png", 1, false));
 	bullet->AddComponent(new BulletMovementComponent());
 	//Collision

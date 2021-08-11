@@ -6,7 +6,7 @@
 class EnemyWeaponComponent final : public BaseComponent
 {
 public:
-	EnemyWeaponComponent(const int enemyWidth, bool isAutoFire = false);
+	EnemyWeaponComponent(bool isAutoFire = false);
 	//
 	void Update() override;
 	void Shoot();
@@ -16,8 +16,6 @@ private:
 	void CreateBullet();
 	//
 	std::vector<std::shared_ptr<GameObject>> m_spBullets;
-	//
-	const int m_EnemyWidth;
 	//
 	bool m_IsAutoFire;
 	//

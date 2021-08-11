@@ -17,7 +17,9 @@ private:
 	friend class dae::Singleton<CollisionDetectionManager>;
 	//Methods
 	void AddExplosionEffect(int enemyIndex) const;
+	void IncreasePlayerScore(const std::shared_ptr<GameObject>& gameObject);
 	bool IsOverlapping(const SDL_Rect& r1, const SDL_Rect& r2);
+	//
 	CollisionDetectionManager() = default;
 	//Datamembers
 	std::vector<TransformComponent*> m_pOtherEntityTransforms;

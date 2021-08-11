@@ -6,7 +6,7 @@
 class PlayerWeaponComponent final : public BaseComponent
 {
 public:
-	PlayerWeaponComponent(const int playerWidth);
+	PlayerWeaponComponent();
 	//
 	void Update() override;
 	void Shoot();
@@ -18,7 +18,6 @@ private:
 	//
 	const int m_MaxBulletCountOnScreen;
 	int m_CurrentBulletCountOnScreen;
-	const int m_PlayerWidth;
 	//
 	int m_AmountOfShotBullets;
 	int m_AmountOfMissedBullets;

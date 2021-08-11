@@ -11,6 +11,8 @@
 #include "Texture2DComponent.h"
 #include "TractorBeamComponent.h"
 #include "EnemyTractorBeamState.h"
+#include "ScoreComponent.h"
+#include "EnemyFormationState.h"
 
 void CollisionDetectionManager::Update()
 {
@@ -23,6 +25,8 @@ void CollisionDetectionManager::Update()
 			{
 				if (m_pOtherEntities[j].first->GetName() == "Bullet")
 				{
+					IncreasePlayerScore(m_pOtherEntities[i].first);
+					//
 					if ((m_pOtherEntities[i].first->GetName() == "Bee" || m_pOtherEntities[i].first->GetName() == "Butterfly"))
 					{
 						//set destroy for later for the bullet and the enemy
@@ -82,6 +86,12 @@ void CollisionDetectionManager::Update()
 		{
 			if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 			{
+				//if player dead
+				if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetIsActive() == false)
+				{
+					return;
+				}
+
 				if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
 				{
 					m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform->GetTransform().GetPosition());//boss gets the fighter of the player
@@ -201,4 +211,57 @@ void CollisionDetectionManager::AddExplosionEffect(int enemyIndex) const
 	explosion->AddComponent(new Texture2DComponent("Explosion.png", 1, true));
 	explosion->AddComponent(new AnimationComponent(0.05f, 5, 1, false));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
+}
+
+void CollisionDetectionManager::IncreasePlayerScore(const std::shared_ptr<GameObject>& gameObject)
+{
+	auto playerSoreComp = m_pGyaraga->GetComponent<ScoreComponent>();
+	auto enemyStateManager = gameObject->GetComponent<EnemyStateManager>();
+	EnemyState* enemyState = nullptr;
+	//
+	if (enemyStateManager)
+	{
+		enemyState = enemyStateManager->GetState();
+	}
+	//
+	if (!enemyState)
+	{
+		return;
+	}
+	if (dynamic_cast<EnemyFormationState*>(enemyState))
+	{
+		if (gameObject->GetName() == "Bee")
+		{
+			playerSoreComp->IncreaseScore(50);
+		}
+		else if (gameObject->GetName() == "Butterfly")
+		{
+			playerSoreComp->IncreaseScore(80);
+		}
+		else
+		{
+			if (gameObject->GetComponent<HealthComponent>()->GetLives() == 1)
+			{
+				playerSoreComp->IncreaseScore(150);
+			}
+		}
+	}
+	else
+	{
+		if (gameObject->GetName() == "Bee")
+		{
+			playerSoreComp->IncreaseScore(100);
+		}
+		else if (gameObject->GetName() == "Butterfly")
+		{
+			playerSoreComp->IncreaseScore(160);
+		}
+		else
+		{
+			if (gameObject->GetComponent<HealthComponent>()->GetLives() == 1)
+			{
+				playerSoreComp->IncreaseScore(400);
+			}
+		}
+	}
 }

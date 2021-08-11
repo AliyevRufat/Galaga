@@ -114,24 +114,6 @@ bool dae::Scene::AreAllObjectsActive() const
 	return m_AreAllObjectsActive;
 }
 
-void dae::Scene::SetObjectsIsActive(bool isActive)
-{
-	for (auto& object : m_SpObjects)
-	{
-		if (object->GetName() != "Cube" && object->GetName() != "Pyramid")
-		{
-			object->SetIsActive(isActive);
-		}
-	}
-
-	for (auto& player : m_SpPlayers)
-	{
-		player->SetIsActive(isActive);
-	}
-
-	m_AreAllObjectsActive = !m_AreAllObjectsActive;
-}
-
 void dae::Scene::ClearScene()
 {
 	m_SpObjects.clear();

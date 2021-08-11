@@ -82,42 +82,42 @@ void dae::Minigin::InitGame()
 	scene->Add(go);
 	//---------------------------------------------------------------------SCORE DISPLAY--------------------------------------------------
 	auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(150, 50)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(550, 780)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
 	auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
 	scoreDisplay->AddComponent(scoreCounter);
 	scene->Add(scoreDisplay);
 	//---------------------------------------------------------------------LIVES DISPLAY--------------------------------------------------
 	auto livesDisplay = std::make_shared<GameObject>("LivesDisplay");
-	livesDisplay->AddComponent(new TransformComponent(glm::vec2(350, 50)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	auto livesCounter = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,255,255 });
+	livesDisplay->AddComponent(new TransformComponent(glm::vec2(350, 780)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
+	auto livesCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
 	livesDisplay->AddComponent(livesCounter);
 	scene->Add(livesDisplay);
 	//---------------------------------------------------------------------ACCURACY DISPLAY--------------------------------------------------
 	auto accuracyDisplay = std::make_shared<GameObject>("AccuracyDisplay");
 	accuracyDisplay->AddComponent(new TransformComponent(glm::vec2(50, 780)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 50);
-	auto accuracyCounter = new TextComponent("Accuracy : 100 %", font, SDL_Color{ 255,255,255 });
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
+	auto accuracyCounter = new TextComponent("Accuracy: 100 %", font, SDL_Color{ 255,255,255 });
 	accuracyDisplay->AddComponent(accuracyCounter);
 	scene->Add(accuracyDisplay);
 	//---------------------------------------------------------------------PLAYER--------------------------------------------------
 	const int playerScale = 1;
 	const int playerWidth = 45 * playerScale;
 	const int playerHeight = 43 * playerScale;
-	auto gyaraga = std::make_shared<GameObject>("Gyaraga");
+	auto gyaraga = std::make_shared<GameObject>("Gyaraga", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga->AddComponent(new TransformComponent(glm::vec2(window->w / 2 - playerWidth / 2, window->h - window->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
 	gyaraga->AddComponent(new HealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
-	gyaraga->AddComponent(new GyaragaMovementComponent(playerWidth));
-	gyaraga->AddComponent(new PlayerWeaponComponent(playerWidth));
+	gyaraga->AddComponent(new GyaragaMovementComponent());
+	gyaraga->AddComponent(new PlayerWeaponComponent());
 	//watchers
 	gyaraga->AddWatcher(new ScoreObserver());
 	gyaraga->AddWatcher(new LivesObserver());
 	gyaraga->AddWatcher(new AccuracyObserver());
-	//add
+	//Adds
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
@@ -139,7 +139,7 @@ void dae::Minigin::InitGame()
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 4, true);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 5, true);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 5, true);
-			//
+
 			EnemyManager::GetInstance().Wait();
 		}
 

@@ -18,23 +18,27 @@ HealthComponent::HealthComponent(const unsigned int& health)
 
 void HealthComponent::Die()
 {
+	if (m_Lives > 0)
+	{
+		m_Lives--;
+	}
+	//
 	if (m_pGameObject->GetName() == "Gyaraga")
 	{
 		m_pGameObject->Notify("PlayerDied");
-		m_pGameObject->SetMarkForDelete(true);
+		m_pGameObject->SetIsActive(false);
 		CollisionDetectionManager::GetInstance().DeleteSpecificObject(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0));
 		//death animation
-		const int offset = 8;
 		auto enemyPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-		auto explosion = std::make_shared<GameObject>("Explosion");
-		explosion->AddComponent(new TransformComponent(glm::vec2(enemyPos.x - offset, enemyPos.y), glm::vec2(1, 1)));
-		explosion->AddComponent(new Texture2DComponent("Explosion.png", 1, true));
-		explosion->AddComponent(new AnimationComponent(0.05f, 5, 1, false));
+		auto explosion = std::make_shared<GameObject>("PlayerDeath");
+		explosion->AddComponent(new TransformComponent(glm::vec2(enemyPos.x - m_pGameObject->GetDimensions().x / 2, enemyPos.y + m_pGameObject->GetDimensions().y / 10), glm::vec2(1, 1)));
+		explosion->AddComponent(new Texture2DComponent("PlayerDeath.png", 1, true));
+		explosion->AddComponent(new AnimationComponent(0.10f, 4, 1, false));
 		dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
 	}
 	else if (m_pGameObject->GetName() == "Boss")
 	{
-		if (m_Lives > 1)
+		if (m_Lives == 1)
 		{
 			m_pGameObject->GetComponent<AnimationComponent>()->SetCurrentRowIndex(1);
 		}
@@ -46,11 +50,6 @@ void HealthComponent::Die()
 				tractorBeamComp->Clean();
 			}
 		}
-	}
-	//
-	if (m_Lives > 0)
-	{
-		m_Lives--;
 	}
 }
 

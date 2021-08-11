@@ -47,7 +47,7 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 		std::cout << "WARNING: HealthComp of Player0 not found after player death" << std::endl;
 		return;
 	}
-	textComp->UpdateText("Remaining lives: " + std::to_string(healthComp->GetLives()));
+	textComp->UpdateText("Lives: " + std::to_string(healthComp->GetLives()));
 	//player died text
 	std::shared_ptr<GameObject> spPlayerDiedGO = nullptr;
 	if (actor->GetName() == "Gyaraga")

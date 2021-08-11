@@ -107,10 +107,10 @@ void TractorBeamComponent::SpawnAFighter(const glm::vec2& playerPos)
 	const int widthOffset = 5;
 	auto parentPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	//
-	m_pCaughtPlayer = std::make_shared<GameObject>("CaughtFighter", m_pGameObject);
+	m_pCaughtPlayer = std::make_shared<GameObject>("CaughtFighter", m_pGameObject, glm::vec2(caughtPlayerWidth, caughtPlayerHeight));
 	m_pCaughtPlayer->AddComponent(new TransformComponent(playerPos, glm::vec2(caughtPlayerWidth, caughtPlayerHeight)));
 	m_pCaughtPlayer->AddComponent(new Texture2DComponent("CaughtGyaraga.png", 1, false));
-	m_pCaughtPlayer->AddComponent(new EnemyWeaponComponent(caughtPlayerWidth, true));
+	m_pCaughtPlayer->AddComponent(new EnemyWeaponComponent(true));
 	m_pCaughtPlayer->AddComponent(new LerpComponent(glm::vec2(parentPos.x + widthOffset, parentPos.y - caughtPlayerHeight)));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(m_pCaughtPlayer);
 	//

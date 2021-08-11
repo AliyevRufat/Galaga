@@ -9,9 +9,8 @@
 #include "EnemyStateManager.h"
 #include "EnemyFormationState.h"
 
-EnemyWeaponComponent::EnemyWeaponComponent(const int enemyWidth, bool isAutoFire)
-	:m_EnemyWidth{ enemyWidth }
-	, m_IsAutoFire{ isAutoFire }
+EnemyWeaponComponent::EnemyWeaponComponent(bool isAutoFire)
+	:m_IsAutoFire{ isAutoFire }
 	, m_AutoFireTime{ 0.0f }
 	, m_AutoFireTimer{ 2.f }
 {
@@ -50,7 +49,7 @@ void EnemyWeaponComponent::CreateBullet()
 	//
 	std::shared_ptr<GameObject> bullet = std::make_shared<GameObject>("EnemyBullet");
 	//add components
-	bullet->AddComponent(new TransformComponent(glm::vec2{ position.x + m_EnemyWidth / 2 - bulletWidth / 2.0f , position.y }));
+	bullet->AddComponent(new TransformComponent(glm::vec2{ position.x + m_pGameObject->GetDimensions().x / 2 - bulletWidth / 2.0f , position.y }));
 	bullet->AddComponent(new Texture2DComponent("EnemyBullet.png", 1, false));
 	bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
 	bullet->GetComponent<BulletMovementComponent>()->Init();

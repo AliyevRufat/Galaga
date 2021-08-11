@@ -92,12 +92,12 @@ void EnemyManager::SpawnBee(EnemyType enemyType, int formationRowIndex, int form
 	const int beeWidth = 48;
 	const int beeHeight = 37;
 	//
-	auto beeEnemy = std::make_shared<GameObject>("Bee");
+	auto beeEnemy = std::make_shared<GameObject>("Bee", nullptr, glm::vec2(beeWidth, beeHeight));
 	beeEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(beeWidth, beeHeight)));
 	beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, true));
 	beeEnemy->AddComponent(new AnimationComponent(0.2f, 2, 1, true));
 	beeEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
-	beeEnemy->AddComponent(new EnemyWeaponComponent(beeWidth));
+	beeEnemy->AddComponent(new EnemyWeaponComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
 	m_pEnemies.push_back(beeEnemy);
@@ -108,12 +108,12 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	const int butterflyWidth = 48;
 	const int butterflyHeight = 37;
 	//
-	auto butterflyEnemy = std::make_shared<GameObject>("Butterfly");
+	auto butterflyEnemy = std::make_shared<GameObject>("Butterfly", nullptr, glm::vec2(butterflyWidth, butterflyHeight));
 	butterflyEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(butterflyWidth, butterflyHeight)));
 	butterflyEnemy->AddComponent(new Texture2DComponent("Butterfly.png", 1, true));
 	butterflyEnemy->AddComponent(new AnimationComponent(0.2f, 2, 1, true));
 	butterflyEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
-	butterflyEnemy->AddComponent(new EnemyWeaponComponent(butterflyWidth));
+	butterflyEnemy->AddComponent(new EnemyWeaponComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(butterflyEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(butterflyEnemy);
 	m_pEnemies.push_back(butterflyEnemy);
@@ -124,12 +124,12 @@ void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
 	const int bossWidth = 55;
 	const int bossHeight = 59;
 	//
-	auto bossEnemy = std::make_shared<GameObject>("Boss");
+	auto bossEnemy = std::make_shared<GameObject>("Boss", nullptr, glm::vec2(bossWidth, bossHeight));
 	bossEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(bossWidth, bossHeight)));
 	bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
 	bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
 	bossEnemy->AddComponent(new EnemyStateManager(enemyType, 0, formationIndex));
-	bossEnemy->AddComponent(new EnemyWeaponComponent(bossWidth));
+	bossEnemy->AddComponent(new EnemyWeaponComponent());
 	bossEnemy->AddComponent(new HealthComponent(2));
 	bossEnemy->AddComponent(new TractorBeamComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
@@ -217,7 +217,7 @@ void EnemyManager::Wait()
 	m_WaitIndices.push_back(int(m_QueuedEnemies.size() + m_SecondQueuedEnemies.size()));
 }
 
-std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)
+std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(StageManager::Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)
 {
 	BezierPath* path = new BezierPath();
 	glm::vec2 startPos = glm::vec2(0, 0);
@@ -225,7 +225,7 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(Stage stage, EnemyT
 
 	switch (stage)
 	{
-	case Stage::One:
+	case StageManager::Stage::One:
 
 		if (enemyType == EnemyType::Bee)
 		{
@@ -291,7 +291,7 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(Stage stage, EnemyT
 		}
 
 		break;
-	case Stage::Two:
+	case StageManager::Stage::Two:
 
 		switch (enemyType)
 		{
@@ -304,7 +304,7 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(Stage stage, EnemyT
 		}
 
 		break;
-	case Stage::Three:
+	case StageManager::Stage::Three:
 
 		switch (enemyType)
 		{

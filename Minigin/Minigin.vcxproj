@@ -226,6 +226,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="ComponentIncludes.h" />
     <ClInclude Include="LerpComponent.h" />
+    <ClInclude Include="StageManager.h" />
     <ClInclude Include="LivesObserver.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
@@ -254,6 +255,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="GyaragaMovementComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LerpComponent.cpp" />
+    <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="LivesObserver.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />

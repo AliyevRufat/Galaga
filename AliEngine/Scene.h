@@ -33,7 +33,6 @@ namespace dae
 		float  GetSceneScale() const;
 		//
 		bool AreAllObjectsActive() const;
-		void SetObjectsIsActive(bool isActive);
 		void ClearScene();
 
 		void DeleteMarkedObjects();

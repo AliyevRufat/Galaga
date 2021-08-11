@@ -7,6 +7,8 @@
 #include "EnemyWeaponComponent.h"
 #include "EnemyGoToBeamState.h"
 #include "TractorBeamComponent.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 EnemyFormationState::EnemyFormationState()
 	:m_TimerBeforeDiving{ rand() % 7 + 2 }
@@ -49,6 +51,12 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 
 EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
+	//if player is dead don't dive
+	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetIsActive() == false)
+	{
+		return nullptr;
+	}
+	//
 	if (enemyStateMngr.GetEnemyType() == EnemyType::Boss)
 	{
 		if (enemyStateMngr.GetGameObject()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())//if boss has caught a player it can't go tractor beam again

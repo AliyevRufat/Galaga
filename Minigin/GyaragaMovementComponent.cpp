@@ -5,9 +5,8 @@
 #include "SceneManager.h"
 #include "EngineTime.h"
 
-GyaragaMovementComponent::GyaragaMovementComponent(int playerWidth)
-	:m_PlayerWidth{ playerWidth }
-	, m_MoveLeft{ false }
+GyaragaMovementComponent::GyaragaMovementComponent()
+	:m_MoveLeft{ false }
 	, m_MoveRight{ false }
 {
 }
@@ -20,7 +19,7 @@ void GyaragaMovementComponent::Update()
 	{
 		m_MoveLeft = false;
 	}
-	if (transformComponent->GetTransform().GetPosition().x >= dae::SceneManager::GetInstance().GetScreenDimensions().x - m_PlayerWidth)
+	if (transformComponent->GetTransform().GetPosition().x >= dae::SceneManager::GetInstance().GetScreenDimensions().x - m_pGameObject->GetDimensions().x)
 	{
 		m_MoveRight = false;
 	}

@@ -6,12 +6,13 @@
 #include "EngineTime.h"
 #include "Subject.h"
 
-GameObject::GameObject(const std::string& name, GameObject* parent)
+GameObject::GameObject(const std::string& name, GameObject* parent, const glm::vec2& dimensions)
 	:m_Name{ name }
 	, m_pActorChanged{ new Subject() }
 	, m_IsActive{ true }
 	, m_MarkForDelete{ false }
 	, m_pParent{ parent }
+	, m_Dimensions{ dimensions }
 {
 }
 
@@ -25,14 +26,16 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-	if (m_MarkForDelete)
-	{
-		return;
-	}
 	if (!m_IsActive)
 	{
 		return;
 	}
+
+	if (m_MarkForDelete)
+	{
+		return;
+	}
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		m_pComponents[i]->Update();
@@ -41,6 +44,11 @@ void GameObject::Update()
 
 void GameObject::Render() const
 {
+	if (!m_IsActive)
+	{
+		return;
+	}
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		m_pComponents[i]->Render();

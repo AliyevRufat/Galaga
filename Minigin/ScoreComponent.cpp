@@ -9,13 +9,12 @@ ScoreComponent::ScoreComponent(const unsigned int& score)
 void ScoreComponent::SetScore(const unsigned int& score)
 {
 	m_Score = score;
-	//m_pGameObject->Notify(Event::ScoreGained);
 }
 
 void ScoreComponent::IncreaseScore(const int score)
 {
 	m_Score += score;
-	//m_pGameObject->Notify(Event(score));
+	m_pGameObject->Notify("ScoreGained");
 }
 
 const unsigned int& ScoreComponent::GetScore() const

@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <glm/vec2.hpp>
 
 class BaseComponent;
 class Observer;
@@ -27,7 +28,7 @@ public:
 		return nullptr;
 	}
 
-	GameObject(const std::string& name, GameObject* parent = nullptr);
+	GameObject(const std::string& name, GameObject* parent = nullptr, const glm::vec2& dimensions = glm::vec2(0, 0));
 	~GameObject();
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) = delete;
@@ -48,6 +49,7 @@ public:
 
 	void SetMarkForDelete(bool markFordelete) { m_MarkForDelete = markFordelete; }
 	bool GetMarkForDelete() const { return m_MarkForDelete; }
+	glm::vec2 GetDimensions() const { return m_Dimensions; }
 
 	GameObject* GetParent() const;
 
@@ -55,6 +57,7 @@ private:
 	GameObject* m_pParent = nullptr;
 	std::vector<BaseComponent*> m_pComponents;
 	std::unique_ptr<Subject> m_pActorChanged;
+	glm::vec2 m_Dimensions;
 
 	bool m_IsActive;
 	bool m_MarkForDelete;

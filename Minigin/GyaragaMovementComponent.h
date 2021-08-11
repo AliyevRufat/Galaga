@@ -5,14 +5,13 @@
 class GyaragaMovementComponent final : public BaseComponent
 {
 public:
-	GyaragaMovementComponent(int playerWidth);
+	GyaragaMovementComponent();
 	//
 	void Update() override;
 	void Move(bool moveLeft);
 	void StopMoving(bool moveLeft);
 
 private:
-	int m_PlayerWidth;
 	bool m_MoveLeft;
 	bool m_MoveRight;
 };
