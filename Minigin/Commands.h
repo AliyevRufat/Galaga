@@ -13,6 +13,7 @@
 #include "InputManager.h"
 #include "GyaragaMovementComponent.h"
 #include "PlayerWeaponComponent.h"
+#include "StageManager.h"
 
 class ExitCommand final : public Command
 {
@@ -33,9 +34,13 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		if (pPlayerActor)
+		if (pPlayerActor && pPlayerActor->GetIsActive())
 		{
 			pPlayerActor->GetComponent<GyaragaMovementComponent>()->Move(true);
+		}
+		else
+		{
+			Release();
 		}
 	}
 
@@ -59,9 +64,13 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		if (pPlayerActor)
+		if (pPlayerActor && pPlayerActor->GetIsActive())
 		{
 			pPlayerActor->GetComponent<GyaragaMovementComponent>()->Move(false);
+		}
+		else
+		{
+			Release();
 		}
 	}
 
@@ -84,7 +93,7 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		if (pPlayerActor)
+		if (pPlayerActor && pPlayerActor->GetIsActive())
 		{
 			pPlayerActor->GetComponent<PlayerWeaponComponent>()->Shoot();
 		}
@@ -94,60 +103,59 @@ public:
 
 	void Undo() override {};
 };
+//-------------------------------------------------------------------------------------------------------------GAMEMODES AND MENU
+class ChooseSinglePlayerGameMode final : public Command
+{
+public:
+	ChooseSinglePlayerGameMode(int index) :Command(index) { m_ControllerIndex = index; };
 
-//
-//class ChooseSinglePlayerGameMode final : public Command
-//{
-//public:
-//	ChooseSinglePlayerGameMode(int index) :Command(index) { m_ControllerIndex = index; };
-//
-//	void Execute() const override
-//	{
-//		//GameStateManager::GetInstance().LoadGameMode(dae::Scene::GameMode::SinglePlayer);
-//	}
-//	void Release() const override
-//	{};
-//	void Undo() override {};
-//};
-//
-//class ChooseCoOpGameMode final : public Command
-//{
-//public:
-//	ChooseCoOpGameMode(int index) :Command(index) { m_ControllerIndex = index; };
-//
-//	void Execute() const override
-//	{
-//		//GameStateManager::GetInstance().LoadGameMode(dae::Scene::GameMode::Coop);
-//	}
-//	void Release() const override
-//	{};
-//	void Undo() override {};
-//};
-//
-//class ChooseVersusGameMode final : public Command
-//{
-//public:
-//	ChooseVersusGameMode(int index) :Command(index) { m_ControllerIndex = index; };
-//
-//	void Execute() const override
-//	{
-//		//GameStateManager::GetInstance().LoadGameMode(dae::Scene::GameMode::Versus);
-//	}
-//	void Release() const override
-//	{};
-//	void Undo() override {};
-//};
-//
-//class GoToMenu final : public Command
-//{
-//public:
-//	GoToMenu(int index) :Command(index) { m_ControllerIndex = index; };
-//
-//	void Execute() const override
-//	{
-//		//GameStateManager::GetInstance().LoadMenuScreen();
-//	}
-//	void Release() const override
-//	{};
-//	void Undo() override {};
-//};
+	void Execute() const override
+	{
+		StageManager::GetInstance().LoadGameMode(StageManager::GameMode::SinglePlayer);
+	}
+	void Release() const override
+	{};
+	void Undo() override {};
+};
+
+class ChooseCoOpGameMode final : public Command
+{
+public:
+	ChooseCoOpGameMode(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		StageManager::GetInstance().LoadGameMode(StageManager::GameMode::Coop);
+	}
+	void Release() const override
+	{};
+	void Undo() override {};
+};
+
+class ChooseVersusGameMode final : public Command
+{
+public:
+	ChooseVersusGameMode(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		StageManager::GetInstance().LoadGameMode(StageManager::GameMode::Versus);
+	}
+	void Release() const override
+	{};
+	void Undo() override {};
+};
+
+class GoToStartScreen final : public Command
+{
+public:
+	GoToStartScreen(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		StageManager::GetInstance().InitMenuScreen();
+	}
+	void Release() const override
+	{};
+	void Undo() override {};
+};

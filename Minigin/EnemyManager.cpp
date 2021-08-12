@@ -100,7 +100,7 @@ void EnemyManager::SpawnBee(EnemyType enemyType, int formationRowIndex, int form
 	beeEnemy->AddComponent(new EnemyWeaponComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
-	m_pEnemies.push_back(beeEnemy);
+	m_SpEnemies.push_back(beeEnemy);
 }
 
 void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, int formationIndex)
@@ -116,7 +116,7 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	butterflyEnemy->AddComponent(new EnemyWeaponComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(butterflyEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(butterflyEnemy);
-	m_pEnemies.push_back(butterflyEnemy);
+	m_SpEnemies.push_back(butterflyEnemy);
 }
 
 void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
@@ -134,7 +134,7 @@ void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
 	bossEnemy->AddComponent(new TractorBeamComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
-	m_pEnemies.push_back(bossEnemy);
+	m_SpEnemies.push_back(bossEnemy);
 }
 
 void EnemyManager::ClearEnemies()
@@ -215,6 +215,37 @@ bool EnemyManager::GetAllEnemiesAreSpawned() const
 void EnemyManager::Wait()
 {
 	m_WaitIndices.push_back(int(m_QueuedEnemies.size() + m_SecondQueuedEnemies.size()));
+}
+
+void EnemyManager::DeleteAllEnemies()
+{
+	for (auto& spEnemy : m_SpEnemies)
+	{
+		spEnemy->SetMarkForDelete(true);
+		CollisionDetectionManager::GetInstance().DeleteSpecificObject(spEnemy);
+	}
+	//
+	m_IndexBees = 0;
+	m_IndexButterfliesAndBosses = 0;
+	m_SpawnTimeBee = 0.0f;
+	m_SpawnTimeButterfly = 0.0f;
+	//
+	m_AmountOfDivingBees = 0;
+	m_AmountOfDivingButterflies = 0;
+	m_AmountOfDivingBosses = 0;
+	m_AmountOfSpawnedEnemies = 0;
+	//
+	m_MaxAmountOfDivingEnemies = 1;
+	//
+	m_EnemyChanceToShoot = 1;//10%
+	m_AllEnemiesAreSpawned = false;
+	//
+	m_WaitTime = 0.0f;
+	//
+	m_WaitIndices.clear();
+	m_SpEnemies.clear();
+	m_QueuedEnemies.clear();
+	m_SecondQueuedEnemies.clear();
 }
 
 std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(StageManager::Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)

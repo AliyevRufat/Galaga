@@ -32,6 +32,8 @@ public:
 	bool CanDive(EnemyType enemyType) const;
 	void Wait();
 
+	void DeleteAllEnemies();
+
 	std::pair<BezierPath*, glm::vec2> GetSpawnPath(StageManager::Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos);
 
 	void ClearEnemies();
@@ -48,13 +50,13 @@ private:
 	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
 	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_SecondQueuedEnemies;
 	//
-	std::vector<std::shared_ptr<GameObject>> m_pEnemies;
+	std::vector<std::shared_ptr<GameObject>> m_SpEnemies;
 	//
 	int m_IndexBees = 0;
 	int m_IndexButterfliesAndBosses = 0;
 	float m_SpawnTimeBee = 0.0f;
 	float m_SpawnTimeButterfly = 0.0f;
-	const float m_SpawnTimer = 0.2f;
+	const float m_SpawnTimer = 0.05f;
 	//
 	int m_AmountOfDivingBees = 0;
 	int m_AmountOfDivingButterflies = 0;

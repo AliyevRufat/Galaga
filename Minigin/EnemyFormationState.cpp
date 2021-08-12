@@ -40,7 +40,7 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 	//timer before getting out of the formation
 	m_TimeBeforeDiving += EngineTime::GetInstance().GetDeltaTime();
 
-	if (EnemyManager::GetInstance().CanDive(enemyStateMngr.GetEnemyType()) && m_TimeBeforeDiving >= m_TimerBeforeDiving)
+	if (m_TimeBeforeDiving >= m_TimerBeforeDiving)
 	{
 		m_TimeBeforeDiving -= m_TimeBeforeDiving;
 		m_SwitchState = true;
@@ -51,8 +51,13 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 
 EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
+	if (!EnemyManager::GetInstance().CanDive(enemyStateMngr.GetEnemyType()))
+	{
+		return nullptr;
+	}
 	//if player is dead don't dive
-	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetIsActive() == false)
+	auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+	if (player && player->GetIsActive() == false)
 	{
 		return nullptr;
 	}

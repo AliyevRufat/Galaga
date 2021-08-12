@@ -16,6 +16,11 @@
 
 void CollisionDetectionManager::Update()
 {
+	auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+	if (StageManager::GetInstance().GetIsInMenu() || (player && !player->GetIsActive()))
+	{
+		return;
+	}
 	//if player bullet collides with the enemy
 	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
@@ -80,21 +85,16 @@ void CollisionDetectionManager::Update()
 		}
 	}
 	//if enemy or enemy bullet collides with the player
-	if (m_pGyaraga)
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
-		for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+		if (m_pGyaraga && m_pGyaraga->GetIsActive())
 		{
 			if (IsOverlapping(m_pGyaragaTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 			{
-				//if player dead
-				if (dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetIsActive() == false)
-				{
-					return;
-				}
-
 				if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
 				{
 					m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform->GetTransform().GetPosition());//boss gets the fighter of the player
+					m_pGyaraga->GetComponent<HealthComponent>()->Die();
 				}
 				else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
 				{
@@ -105,7 +105,7 @@ void CollisionDetectionManager::Update()
 					//
 					AddExplosionEffect(int(i));
 					//decrease 1 life of the player and destroy whatever collided with the player
-					m_pGyaraga->GetComponent<HealthComponent>()->Die();
+					m_pGyaraga->GetComponent<HealthComponent>()->Die(true);
 					m_pOtherEntities[i].first->SetMarkForDelete(true);
 					m_pOtherEntities[i].second = true;
 					//check if enemy was diving
