@@ -102,7 +102,7 @@ void StageManager::LoadSinglePlayerMode()
 	//---------------------------------------------------------------------SCORE DISPLAY--------------------------------------------------
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
 	auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(550, 780)));
+	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(500, 780)));
 	auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
 	scoreDisplay->AddComponent(scoreCounter);
 	scene->Add(scoreDisplay);
@@ -153,19 +153,89 @@ void StageManager::LoadSinglePlayerMode()
 	gameOver->AddComponent(new TransformComponent(pos));
 	gameOver->AddComponent(new TextComponent("GAMEOVER", font, SDL_Color{ 255,0,0 }, false));
 	scene->Add(gameOver);
+	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
+	//{
+	//	{
+	//		//first wave
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 4);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 4);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 5);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 5);
+	//		//
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 3, true);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3, true);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 4, true);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 4, true);
 	//
+	//		EnemyManager::GetInstance().Wait();
+	//	}
+	//
+	//	{
+	//		//second wave
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 1);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 2);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 2);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 5);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 3);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 5);
+	//		//
+	//		EnemyManager::GetInstance().Wait();
+	//	}
+	//
+	//	{
+	//		//third wave
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 0);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 0);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 1);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 6);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 6);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 7);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 7);
+	//		//
+	//		EnemyManager::GetInstance().Wait();
+	//	}
+	//
+	//	{
+	//		//forth wave
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 2);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 2);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 3);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 3);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 6);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 6);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 7);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 7);
+	//		//
+	//		EnemyManager::GetInstance().Wait();
+	//	}
+	//
+	//	{
+	//		//five wave
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 0);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 0);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 1);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 1);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 8);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 8);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 9);
+	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 9);
+	//		//
+	//		EnemyManager::GetInstance().Wait();
+	//	}
+	//}
+	//-----------------------------------------------SECOND STAGE ENEMY QUEUES----------------------------------------
 	{
 		{
 			//first wave
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 4);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 4);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 4);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 5);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 5);
-			//
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 4, true);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 4, true);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 5, true);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 5, true);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 5);
 
 			EnemyManager::GetInstance().Wait();
 		}
@@ -173,27 +243,23 @@ void StageManager::LoadSinglePlayerMode()
 		{
 			//second wave
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 3);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 6);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 3);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 6);
 			//
 			EnemyManager::GetInstance().Wait();
 		}
 
 		{
 			//third wave
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 0);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 7);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 7);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 8);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 8);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3);
 			//
 			EnemyManager::GetInstance().Wait();
 		}
@@ -202,12 +268,17 @@ void StageManager::LoadSinglePlayerMode()
 			//forth wave
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 2);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 2);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 2);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 3);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 3);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 3);
+
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 6);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 6);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 6);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 7);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 7);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 7);
 			//
 			EnemyManager::GetInstance().Wait();
 		}
@@ -216,12 +287,17 @@ void StageManager::LoadSinglePlayerMode()
 			//five wave
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 0);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 0);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 0);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 1);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 1);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 1);
+
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 8);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 8);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 8);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 9);
 			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 9);
+			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 9);
 			//
 			EnemyManager::GetInstance().Wait();
 		}

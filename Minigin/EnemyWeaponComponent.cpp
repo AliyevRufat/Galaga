@@ -64,18 +64,22 @@ void EnemyWeaponComponent::HandleAutoFire()
 {
 	if (m_IsAutoFire)
 	{
-		m_AutoFireTime += EngineTime::GetInstance().GetDeltaTime();
-		//
-		if (m_AutoFireTime >= m_AutoFireTimer)
+		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+		if (player && player->GetIsActive())
 		{
-			if (m_pGameObject->GetParent()->GetComponent<EnemyStateManager>())//autoFire is only for formationState
+			m_AutoFireTime += EngineTime::GetInstance().GetDeltaTime();
+			//
+			if (m_AutoFireTime >= m_AutoFireTimer)
 			{
-				auto enemyState = m_pGameObject->GetParent()->GetComponent<EnemyStateManager>()->GetState();
-
-				if (dynamic_cast<EnemyFormationState*>(enemyState))
+				if (m_pGameObject->GetParent()->GetComponent<EnemyStateManager>())//autoFire is only for formationState
 				{
-					m_AutoFireTime -= m_AutoFireTime;
-					Shoot();
+					auto enemyState = m_pGameObject->GetParent()->GetComponent<EnemyStateManager>()->GetState();
+
+					if (dynamic_cast<EnemyFormationState*>(enemyState))
+					{
+						m_AutoFireTime -= m_AutoFireTime;
+						Shoot();
+					}
 				}
 			}
 		}

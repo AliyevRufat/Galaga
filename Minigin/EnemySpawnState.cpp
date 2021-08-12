@@ -59,7 +59,7 @@ void EnemySpawnState::CreatePaths(EnemyStateManager& enemyStateMngr)
 	//
 	std::pair<BezierPath*, glm::vec2> pathAndStartPos;
 
-	pathAndStartPos = EnemyManager::GetInstance().GetSpawnPath(StageManager::Stage::One, enemyStateMngr.GetEnemyType(), m_FormationPosIndex, endPos);
+	pathAndStartPos = EnemyManager::GetInstance().GetSpawnPath(enemyStateMngr.GetEnemyType(), m_FormationPosIndex, endPos);
 	enemyStateMngr.GetGameObject()->GetComponent<TransformComponent>()->SetPosition(pathAndStartPos.second);
 	//
 	m_pBezierPathManager->CreatePaths(pathAndStartPos.first);

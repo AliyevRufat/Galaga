@@ -82,7 +82,7 @@ void EnemyManager::SpawnEnemy(EnemyType enemyType, int formationRowIndex, int fo
 		SpawnButterfly(enemyType, formationRowIndex, formationIndex);
 		break;
 	case EnemyType::Boss:
-		SpawnBoss(enemyType, formationIndex);
+		SpawnBoss(enemyType, formationRowIndex, formationIndex);
 		break;
 	}
 }
@@ -119,7 +119,7 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	m_SpEnemies.push_back(butterflyEnemy);
 }
 
-void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
+void EnemyManager::SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex)
 {
 	const int bossWidth = 55;
 	const int bossHeight = 59;
@@ -128,7 +128,7 @@ void EnemyManager::SpawnBoss(EnemyType enemyType, int formationIndex)
 	bossEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(bossWidth, bossHeight)));
 	bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
 	bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
-	bossEnemy->AddComponent(new EnemyStateManager(enemyType, 0, formationIndex));
+	bossEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
 	bossEnemy->AddComponent(new EnemyWeaponComponent());
 	bossEnemy->AddComponent(new HealthComponent(2));
 	bossEnemy->AddComponent(new TractorBeamComponent());
@@ -248,71 +248,50 @@ void EnemyManager::DeleteAllEnemies()
 	m_SecondQueuedEnemies.clear();
 }
 
-std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(StageManager::Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)
+std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)
 {
 	BezierPath* path = new BezierPath();
 	glm::vec2 startPos = glm::vec2(0, 0);
 	auto screenWidth = dae::SceneManager::GetInstance().GetScreenDimensions().x;
 
-	switch (stage)
+	if (enemyType == EnemyType::Bee)
 	{
-	case StageManager::Stage::One:
-
-		if (enemyType == EnemyType::Bee)
+		if (formationPosIndex == 4 || formationPosIndex == 5)//first bee wave of first level
 		{
-			if (formationPosIndex == 4 || formationPosIndex == 5)//first bee wave of first level
-			{
-				startPos = glm::vec2(350 + 50, -10);
+			startPos = glm::vec2(350 + 50, -10);
 
-				path->AddCurve({ startPos, glm::vec2(385,screenWidth - 615), glm::vec2(90,screenWidth - 690),glm::vec2(75,screenWidth - 400) }, 30);
-				path->AddCurve({ glm::vec2(75,screenWidth - 400), glm::vec2(70,screenWidth - 230) ,glm::vec2(600,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
-				path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x + 30,endPos.y) }, 10);
-			}
-			else if (formationPosIndex == 2 || formationPosIndex == 3 || formationPosIndex == 6 || formationPosIndex == 7)//second bee wave of first level
-			{
-				startPos = glm::vec2(425, 0);
-
-				path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(100,100),glm::vec2(100,300) }, 30);
-				path->AddCurve({ glm::vec2(100,300) , glm::vec2(100,500) ,glm::vec2(350,400), glm::vec2(350,350) }, 30);
-				path->AddCurve({ glm::vec2(350,350) , glm::vec2(350,320), glm::vec2(350,300) ,endPos }, 10);
-			}
-			else//third bee wave of first level
-			{
-				startPos = glm::vec2(425, 0);
-
-				path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(screenWidth - 100,100),glm::vec2(screenWidth - 100,300) }, 30);
-				path->AddCurve({ glm::vec2(screenWidth - 100,300) , glm::vec2(screenWidth - 100,500) ,glm::vec2(screenWidth - 350,400), glm::vec2(screenWidth - 350,350) }, 30);
-				path->AddCurve({ glm::vec2(screenWidth - 350,350) , glm::vec2(screenWidth - 350,350), endPos ,endPos }, 10);
-			}
+			path->AddCurve({ startPos, glm::vec2(385,screenWidth - 615), glm::vec2(90,screenWidth - 690),glm::vec2(75,screenWidth - 400) }, 30);
+			path->AddCurve({ glm::vec2(75,screenWidth - 400), glm::vec2(70,screenWidth - 230) ,glm::vec2(600,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
+			path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x + 30,endPos.y) }, 10);
 		}
-		else if (enemyType == EnemyType::Butterfly)
+		else if (formationPosIndex == 2 || formationPosIndex == 3 || formationPosIndex == 6 || formationPosIndex == 7)//second bee wave of first level
 		{
-			if (formationPosIndex == 4 || formationPosIndex == 5)//first butterfly wave of first level
-			{
-				startPos = glm::vec2(350 - 50, -10);
+			startPos = glm::vec2(425, 0);
 
-				path->AddCurve({ startPos, glm::vec2(315,screenWidth - 615), glm::vec2(610,screenWidth - 690),glm::vec2(625,screenWidth - 400) }, 30);
-				path->AddCurve({ glm::vec2(625,screenWidth - 400), glm::vec2(620,screenWidth - 230) ,glm::vec2(100,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
-				path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x - 30,endPos.y) }, 10);
-			}
-			else if (formationPosIndex == 3 || formationPosIndex == 6)//second butterfly wave of first level
-			{
-				startPos = glm::vec2(-50, 560);
-
-				path->AddCurve({ startPos, glm::vec2(680,420), glm::vec2(60,0),glm::vec2(63,350) }, 30);
-				path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, 30);
-				path->AddCurve({ glm::vec2(425,300), glm::vec2(425,250), glm::vec2(425,170),endPos }, 10);
-			}
-			else//third butterfly wave of first level
-			{
-				startPos = glm::vec2(900, 560);
-
-				path->AddCurve({ startPos, glm::vec2(screenWidth - 680,420), glm::vec2(screenWidth - 60,0),glm::vec2(screenWidth - 63,350) }, 30);
-				path->AddCurve({ glm::vec2(screenWidth - 63,350), glm::vec2(screenWidth - 60,screenWidth) ,glm::vec2(screenWidth - 410,500), glm::vec2(screenWidth - 425,300) }, 30);
-				path->AddCurve({ glm::vec2(screenWidth - 425,300), glm::vec2(screenWidth - 425,250), glm::vec2(screenWidth - 425,170),endPos }, 10);
-			}
+			path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(100,100),glm::vec2(100,300) }, 30);
+			path->AddCurve({ glm::vec2(100,300) , glm::vec2(100,500) ,glm::vec2(350,400), glm::vec2(350,350) }, 30);
+			path->AddCurve({ glm::vec2(350,350) , glm::vec2(350,320), glm::vec2(350,300) ,endPos }, 10);
 		}
-		else//Boss path first level
+		else//third bee wave of first level
+		{
+			startPos = glm::vec2(425, 0);
+
+			path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(screenWidth - 100,100),glm::vec2(screenWidth - 100,300) }, 30);
+			path->AddCurve({ glm::vec2(screenWidth - 100,300) , glm::vec2(screenWidth - 100,500) ,glm::vec2(screenWidth - 350,400), glm::vec2(screenWidth - 350,350) }, 30);
+			path->AddCurve({ glm::vec2(screenWidth - 350,350) , glm::vec2(screenWidth - 350,350), endPos ,endPos }, 10);
+		}
+	}
+	else if (enemyType == EnemyType::Butterfly)
+	{
+		if (formationPosIndex == 3 || formationPosIndex == 4)//first butterfly wave of first level
+		{
+			startPos = glm::vec2(350 - 50, -10);
+
+			path->AddCurve({ startPos, glm::vec2(315,screenWidth - 615), glm::vec2(610,screenWidth - 690),glm::vec2(625,screenWidth - 400) }, 30);
+			path->AddCurve({ glm::vec2(625,screenWidth - 400), glm::vec2(620,screenWidth - 230) ,glm::vec2(100,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
+			path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x - 30,endPos.y) }, 10);
+		}
+		else if (formationPosIndex == 2 || formationPosIndex == 5)//second butterfly wave of first level
 		{
 			startPos = glm::vec2(-50, 560);
 
@@ -320,34 +299,22 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(StageManager::Stage
 			path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, 30);
 			path->AddCurve({ glm::vec2(425,300), glm::vec2(425,250), glm::vec2(425,170),endPos }, 10);
 		}
-
-		break;
-	case StageManager::Stage::Two:
-
-		switch (enemyType)
+		else//third butterfly wave of first level
 		{
-		case EnemyType::Bee:
-			break;
-		case EnemyType::Butterfly:
-			break;
-		case EnemyType::Boss:
-			break;
+			startPos = glm::vec2(900, 560);
+
+			path->AddCurve({ startPos, glm::vec2(screenWidth - 680,420), glm::vec2(screenWidth - 60,0),glm::vec2(screenWidth - 63,350) }, 30);
+			path->AddCurve({ glm::vec2(screenWidth - 63,350), glm::vec2(screenWidth - 60,screenWidth) ,glm::vec2(screenWidth - 410,500), glm::vec2(screenWidth - 425,300) }, 30);
+			path->AddCurve({ glm::vec2(screenWidth - 425,300), glm::vec2(screenWidth - 425,250), glm::vec2(screenWidth - 425,170),endPos }, 10);
 		}
+	}
+	else//Boss path first level
+	{
+		startPos = glm::vec2(-50, 560);
 
-		break;
-	case StageManager::Stage::Three:
-
-		switch (enemyType)
-		{
-		case EnemyType::Bee:
-			break;
-		case EnemyType::Butterfly:
-			break;
-		case EnemyType::Boss:
-			break;
-		}
-
-		break;
+		path->AddCurve({ startPos, glm::vec2(680,420), glm::vec2(60,0),glm::vec2(63,350) }, 30);
+		path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, 30);
+		path->AddCurve({ glm::vec2(425,300), glm::vec2(425,250), glm::vec2(425,170),endPos }, 10);
 	}
 
 	std::pair<BezierPath*, glm::vec2> pathAndStartPos(path, startPos);

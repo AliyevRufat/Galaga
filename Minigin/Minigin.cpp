@@ -259,7 +259,7 @@ void dae::Minigin::Run()
 	std::thread soundThread(&AudioService::Update, &Locator::GetAudio());
 
 	BindCommands();
-	FormationManager::GetInstance().Init();
+	FormationManager::GetInstance().InitFormation(StageManager::GetInstance().GetCurrentStage());
 	StageManager::GetInstance().InitMenuScreen();
 
 	while (doContinue)

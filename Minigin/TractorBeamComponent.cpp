@@ -73,7 +73,7 @@ void TractorBeamComponent::CreateTractorBeam()
 	m_pTractorBeam = std::make_shared<GameObject>("TractorBeam", m_pGameObject);
 	m_pTractorBeam->AddComponent(new TransformComponent(glm::vec2(parentPos.x - offset, parentPos.y), tractorBeamScale));
 	m_pTractorBeam->AddComponent(new Texture2DComponent("TractorBeam.png", 1, true));
-	m_pTractorBeam->AddComponent(new AnimationComponent(0.2f, 10, 3, false));
+	m_pTractorBeam->AddComponent(new AnimationComponent(0.1f, 10, 3, false));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(m_pTractorBeam);
 	m_IsFinished = false;
 }

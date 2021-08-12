@@ -34,7 +34,7 @@ public:
 
 	void DeleteAllEnemies();
 
-	std::pair<BezierPath*, glm::vec2> GetSpawnPath(StageManager::Stage stage, EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos);
+	std::pair<BezierPath*, glm::vec2> GetSpawnPath(EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos);
 
 	void ClearEnemies();
 private:
@@ -45,7 +45,7 @@ private:
 	//
 	void SpawnBee(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void SpawnButterfly(EnemyType enemyType, int formationRowIndex, int formationIndex);
-	void SpawnBoss(EnemyType enemyType, int formationIndex);
+	void SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	//Datamembers
 	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
 	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_SecondQueuedEnemies;
