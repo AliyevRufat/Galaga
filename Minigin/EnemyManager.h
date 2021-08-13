@@ -4,6 +4,7 @@
 #include "ComponentIncludes.h"
 #include "StageManager.h"
 #include <vector>
+#include <deque>
 
 class BezierPath;
 class TransformComponent;
@@ -21,7 +22,7 @@ public:
 
 	void Update();
 
-	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex, bool secondQueue = false);
+	void SpawnAllEnemies(StageManager::Stage stage);
 
 	void IncreaseDifficulty();
 	void IncreaseAmountOfDivingEnemies(EnemyType enemyType);
@@ -29,31 +30,31 @@ public:
 
 	int GetEnemyChanceToShoot() const;
 	bool GetAllEnemiesAreSpawned() const;
+	bool GetAllEnemiesAreDead()const;
 	bool CanDive(EnemyType enemyType) const;
-	void Wait();
 
 	void DeleteAllEnemies();
+	void DeleteSpecificEnemy(const std::shared_ptr<GameObject>& enemy);
 
 	std::pair<BezierPath*, glm::vec2> GetSpawnPath(EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos);
 
-	void ClearEnemies();
 private:
 	friend class dae::Singleton<EnemyManager>;
 	EnemyManager() = default;
 	//Methods
+	void Wait();
+	void QueueEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex, bool secondQueue = false);
 	void SpawnEnemy(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	//
 	void SpawnBee(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void SpawnButterfly(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	void SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex);
 	//Datamembers
-	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
-	std::vector<std::pair<EnemyType, std::pair<int, int>>> m_SecondQueuedEnemies;
+	std::deque<std::pair<EnemyType, std::pair<int, int>>> m_QueuedEnemies;
+	std::deque<std::pair<EnemyType, std::pair<int, int>>> m_SecondQueuedEnemies;
 	//
 	std::vector<std::shared_ptr<GameObject>> m_SpEnemies;
 	//
-	int m_IndexBees = 0;
-	int m_IndexButterfliesAndBosses = 0;
 	float m_SpawnTimeBee = 0.0f;
 	float m_SpawnTimeButterfly = 0.0f;
 	const float m_SpawnTimer = 0.05f;
@@ -67,6 +68,9 @@ private:
 	//
 	int m_EnemyChanceToShoot = 1;//10%
 	bool m_AllEnemiesAreSpawned = false;
+	bool m_StageStarted = false;
+	//
+	int m_EnemyMovementSpeed = 500;
 	//
 	const int m_WaitTimer = 1;
 	float m_WaitTime = 0.0f;

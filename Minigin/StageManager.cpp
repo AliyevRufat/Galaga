@@ -17,13 +17,19 @@
 #include "FPSTextComponent.h"
 #include "PlayerWeaponComponent.h"
 #include "GyaragaMovementComponent.h"
+#include "FormationManager.h"
 
 using namespace dae;
 
 void StageManager::Update()
 {
+	//updating formation movement, enemies and collisions
+	FormationManager::GetInstance().Update();
+	EnemyManager::GetInstance().Update();
+	CollisionDetectionManager::GetInstance().Update();
+	//
 	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
-
+	//restart player if dead or show game over screen of lost
 	if (m_IsGameOver)
 	{
 		m_GameOverTimer += deltaTime;
@@ -51,6 +57,30 @@ void StageManager::Update()
 			m_IsPlayerDead = false;
 		}
 	}
+	//
+	if (EnemyManager::GetInstance().GetAllEnemiesAreDead())
+	{
+		LoadNextStage();
+	}
+}
+
+void StageManager::LoadNextStage()
+{
+	m_CurrentStage = Stage(int(m_CurrentStage) + 1);
+	CollisionDetectionManager::GetInstance().ClearCollisions();
+	FormationManager::GetInstance().InitFormation(m_CurrentStage);
+	EnemyManager::GetInstance().DeleteAllEnemies();
+	EnemyManager::GetInstance().IncreaseDifficulty();
+	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
+	//
+	const int offset = 60;
+	auto pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2 - offset * 2);
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
+	auto stageText = std::make_shared<GameObject>("STAGE " + std::to_string(int(m_CurrentStage) + 1));
+	stageText->AddComponent(new TransformComponent(pos));
+	stageText->AddComponent(new TextComponent("STAGE " + std::to_string(int(m_CurrentStage)), font, SDL_Color{ 255,0,0 }, false));
+	stageText->GetComponent<TextComponent>()->SetIsVisible(true, 3);
+	SceneManager::GetInstance().GetCurrentScene()->Add(stageText);
 }
 
 void StageManager::LoadGameMode(GameMode gameMode)
@@ -140,168 +170,33 @@ void StageManager::LoadSinglePlayerMode()
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
 	SceneManager::GetInstance().GetCurrentScene()->AddPlayer(gyaraga);
 	//player died text
-	const int offset = 40;
+	int offset = 50;
 	auto pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2);
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
 	//
 	auto readyText = std::make_shared<GameObject>("READY");
 	readyText->AddComponent(new TransformComponent(pos));
 	readyText->AddComponent(new TextComponent("READY", font, SDL_Color{ 255,0,0 }, false));
+	readyText->GetComponent<TextComponent>()->SetIsVisible(true, 4.0f);
 	scene->Add(readyText);
 	//
+	offset = 90;
+	pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2);
 	auto gameOver = std::make_shared<GameObject>("GAMEOVER");
 	gameOver->AddComponent(new TransformComponent(pos));
 	gameOver->AddComponent(new TextComponent("GAMEOVER", font, SDL_Color{ 255,0,0 }, false));
 	scene->Add(gameOver);
+	//
+	offset = 60;
+	pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2 - offset * 2);
+	auto stageText = std::make_shared<GameObject>("STAGE " + std::to_string(int(m_CurrentStage) + 1));
+	stageText->AddComponent(new TransformComponent(pos));
+	stageText->AddComponent(new TextComponent("STAGE " + std::to_string(int(m_CurrentStage)), font, SDL_Color{ 255,0,0 }, false));
+	stageText->GetComponent<TextComponent>()->SetIsVisible(true, 3);
+	scene->Add(stageText);
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
-	//{
-	//	{
-	//		//first wave
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 4);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 4);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 5);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 5);
-	//		//
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 3, true);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3, true);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 4, true);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 4, true);
-	//
-	//		EnemyManager::GetInstance().Wait();
-	//	}
-	//
-	//	{
-	//		//second wave
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 1);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 2);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 2);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 5);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 3);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 5);
-	//		//
-	//		EnemyManager::GetInstance().Wait();
-	//	}
-	//
-	//	{
-	//		//third wave
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 0);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 0);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 1);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 6);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 6);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 7);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 7);
-	//		//
-	//		EnemyManager::GetInstance().Wait();
-	//	}
-	//
-	//	{
-	//		//forth wave
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 2);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 2);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 3);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 3);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 6);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 6);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 7);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 7);
-	//		//
-	//		EnemyManager::GetInstance().Wait();
-	//	}
-	//
-	//	{
-	//		//five wave
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 0);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 0);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 1);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 1);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 8);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 8);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 9);
-	//		EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 9);
-	//		//
-	//		EnemyManager::GetInstance().Wait();
-	//	}
-	//}
-	//-----------------------------------------------SECOND STAGE ENEMY QUEUES----------------------------------------
-	{
-		{
-			//first wave
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 4);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 4);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 4);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 5);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 5);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 5);
-
-			EnemyManager::GetInstance().Wait();
-		}
-
-		{
-			//second wave
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 0, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 0, 3);
-			//
-			EnemyManager::GetInstance().Wait();
-		}
-
-		{
-			//third wave
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Boss, 1, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Butterfly, 1, 3);
-			//
-			EnemyManager::GetInstance().Wait();
-		}
-
-		{
-			//forth wave
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 2);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 3);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 3);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 3);
-
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 6);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 6);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 6);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 7);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 7);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 7);
-			//
-			EnemyManager::GetInstance().Wait();
-		}
-
-		{
-			//five wave
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 0);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 1);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 1);
-
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 8);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 8);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 8);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 0, 9);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 1, 9);
-			EnemyManager::GetInstance().QueueEnemy(EnemyType::Bee, 2, 9);
-			//
-			EnemyManager::GetInstance().Wait();
-		}
-	}
+	FormationManager::GetInstance().InitFormation(m_CurrentStage);
+	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
 }
 
 void StageManager::LoadCoopMode()
@@ -321,6 +216,7 @@ void StageManager::InitMenuScreen()
 	m_IsPlayerDead = false;
 	m_RestartTimer = 0.0f;
 	m_GameOverTimer = 0.0f;
+	m_CurrentStage = Stage::One;
 	//
 	SceneManager::GetInstance().ClearScene(SceneManager::GetInstance().GetCurrentScene());
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -373,28 +269,23 @@ void StageManager::InitGameOverScreen()
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	//png
 	auto losePng = std::make_shared<GameObject>("GameOverScreen");
-	losePng->AddComponent(new TransformComponent(glm::vec2(-350, -200)));
+	losePng->AddComponent(new TransformComponent(glm::vec2(0, 0)));
 	losePng->AddComponent(new Texture2DComponent("GameOverScreen.png"));
 	scene.Add(losePng);
 	//
 	auto textDisplay = std::make_shared<GameObject>("Text");
-	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f + 100)));
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 200, m_WindowSurface->h / 2.0f + 100)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	auto text = new TextComponent("Controller : Press START to go to main menu.", font, SDL_Color{ 255,255,0 });
+	auto text = new TextComponent("Controller : Press START to go to main menu.", font, SDL_Color{ 255,0,0 });
 	textDisplay->AddComponent(text);
 	scene.Add(textDisplay);
 	//
 	textDisplay = std::make_shared<GameObject>("Text");
-	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f + 150)));
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 200, m_WindowSurface->h / 2.0f + 150)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,255,0 });
+	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,0,0 });
 	textDisplay->AddComponent(text);
 	scene.Add(textDisplay);
-}
-
-StageManager::Stage StageManager::GetCurrentStage() const
-{
-	return m_CurrentStage;
 }
 
 bool StageManager::GetIsInMenu() const

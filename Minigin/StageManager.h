@@ -17,9 +17,9 @@ public:
 
 	enum class Stage
 	{
-		One,
-		Two,
-		Three
+		One = 0,
+		Two = 1,
+		Three = 2
 	};
 
 	void Update();
@@ -34,7 +34,6 @@ public:
 	void InitWinScreen();
 	void InitGameOverScreen();
 	//
-	Stage GetCurrentStage() const;
 	bool GetIsInMenu() const;
 	void SetWindowSurface(SDL_Surface* windowSurface) { m_WindowSurface = windowSurface; };
 	//
@@ -43,6 +42,8 @@ public:
 private:
 	friend class dae::Singleton<StageManager>;
 	StageManager() = default;
+	//
+	void LoadNextStage();
 	//
 	void LoadSinglePlayerMode();
 	void LoadCoopMode();

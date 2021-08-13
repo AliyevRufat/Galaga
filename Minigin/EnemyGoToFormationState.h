@@ -4,7 +4,7 @@
 class EnemyGoToFormationState final : public EnemyState
 {
 public:
-	EnemyGoToFormationState();
+	EnemyGoToFormationState(EnemyStateManager& enemyStateMngr);
 	//
 	void Update(EnemyStateManager& enemyStateMngr) override;
 	void Enter(EnemyStateManager& enemyStateMngr) override;

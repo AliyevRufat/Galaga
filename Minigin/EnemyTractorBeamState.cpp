@@ -8,10 +8,10 @@
 #include "TractorBeamComponent.h"
 #include "SceneManager.h"
 
-EnemyTractorBeamState::EnemyTractorBeamState()
+EnemyTractorBeamState::EnemyTractorBeamState(EnemyStateManager& enemyStateMngr)
 {
 	m_SwitchState = false;
-	m_pBezierPathManager = new BezierPathManager(700);
+	m_pBezierPathManager = new BezierPathManager(enemyStateMngr.GetEnemySpeed());
 }
 
 void EnemyTractorBeamState::Update(EnemyStateManager& enemyStateManager)
@@ -51,5 +51,5 @@ EnemyState* EnemyTractorBeamState::StateSwitch(EnemyStateManager& enemyStateMngr
 {
 	EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 	//
-	return new EnemyGoToFormationState();
+	return new EnemyGoToFormationState(enemyStateMngr);
 }

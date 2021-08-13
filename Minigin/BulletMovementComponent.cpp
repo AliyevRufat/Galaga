@@ -5,8 +5,9 @@
 #include "EngineTime.h"
 #include "LerpComponent.h"
 
-BulletMovementComponent::BulletMovementComponent(const glm::vec2& target)
+BulletMovementComponent::BulletMovementComponent(const glm::vec2& target, int speed)
 	:m_Target{ target }
+	, m_Speed{ speed }
 {
 }
 
@@ -34,7 +35,6 @@ void BulletMovementComponent::Update()
 	//shoot straight up
 	auto transformComponent = m_pGameObject->GetComponent<TransformComponent>();
 	auto currentPos = transformComponent->GetTransform().GetPosition();
-	const int speed = 1500;
 	//
-	transformComponent->SetPosition(glm::vec2{ currentPos.x, currentPos.y - speed * EngineTime::GetInstance().GetDeltaTime() });
+	transformComponent->SetPosition(glm::vec2{ currentPos.x, currentPos.y - m_Speed * EngineTime::GetInstance().GetDeltaTime() });
 }

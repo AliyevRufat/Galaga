@@ -11,7 +11,7 @@
 EnemyDivingState::EnemyDivingState(EnemyStateManager& enemyStateMngr)
 {
 	m_SwitchState = { false };
-	m_pBezierPathManager = new BezierPathManager(700);
+	m_pBezierPathManager = new BezierPathManager(enemyStateMngr.GetEnemySpeed());
 	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 	//
 	m_SwitchState = { false };
@@ -60,7 +60,7 @@ EnemyState* EnemyDivingState::StateSwitch(EnemyStateManager& enemyStateMngr)
 	//
 	if (enemyStateMngr.GetEnemyType() == EnemyType::Butterfly || enemyStateMngr.GetEnemyType() == EnemyType::Boss)
 	{
-		return new EnemyGoToFormationState();
+		return new EnemyGoToFormationState(enemyStateMngr);
 	}
 	return new EnemyFormationState();
 }

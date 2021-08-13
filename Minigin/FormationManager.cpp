@@ -6,6 +6,10 @@
 
 void FormationManager::InitFormation(StageManager::Stage stage)
 {
+	m_BeePositions.clear();
+	m_ButterflyPositions.clear();
+	m_BossPositions.clear();
+
 	if (stage == StageManager::Stage::One)
 	{
 		const int posYBees = 300;
@@ -98,6 +102,74 @@ void FormationManager::InitFormation(StageManager::Stage stage)
 	}
 	else
 	{
+		const int posYBees = 100;
+		const int posYButterfliesUp = 150;
+		const int posYButterfliesDown = 300;
+		const int posYBossUp = 80;
+		const int posYBossMid = 190;
+		const int posYBossDown = 350;
+
+		//make formation positions for the bees and the butterflies
+
+		for (size_t i = 0; i < 2; i++)
+		{
+			int posY = 0;
+			int posX = 100;
+			if (i == 0)
+			{
+				posY = posYButterfliesUp;
+			}
+			else
+			{
+				posY = posYButterfliesDown;
+			}
+			std::vector<glm::vec2> tempPosButterflies;
+
+			for (size_t j = 0; j < 8; j++)
+			{
+				tempPosButterflies.push_back(glm::vec2{ posX + j * 50 ,posY });
+
+				if (j >= 7)
+				{
+					m_ButterflyPositions.push_back(tempPosButterflies);
+				}
+				else if (j == 3)
+				{
+					posX += 100;
+				}
+			}
+		}
+		//for (size_t i = 0; i < 3; i++)
+		//{
+		//	std::vector<glm::vec2> tempPosBees;
+		//
+		//	for (size_t j = 0; j < 10; j++)
+		//	{
+		//		tempPosBees.push_back(glm::vec2{ 100 + j * 50 ,posYBees + i * 50 });
+		//		if (j >= 9)
+		//		{
+		//			m_BeePositions.push_back(tempPosBees);
+		//		}
+		//	}
+		//}
+		//make formation positions for the bosses
+		m_BossPositions.push_back(std::vector<glm::vec2>());
+		m_BossPositions.push_back(std::vector<glm::vec2>());
+		m_BossPositions.push_back(std::vector<glm::vec2>());
+		const int offset = 24;
+		//
+		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][1].x ,posYBossUp });
+		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][2].x ,posYBossUp });
+		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][5].x ,posYBossUp });
+		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][6].x ,posYBossUp });
+
+		m_BossPositions[1].push_back(glm::vec2{ m_ButterflyPositions[0][2].x - offset ,posYBossMid });
+		m_BossPositions[1].push_back(glm::vec2{ m_ButterflyPositions[0][6].x - offset ,posYBossMid });
+
+		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][1].x ,posYBossDown });
+		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][2].x ,posYBossDown });
+		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][5].x ,posYBossDown });
+		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][6].x ,posYBossDown });
 	}
 }
 

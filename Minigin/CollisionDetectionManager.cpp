@@ -163,6 +163,7 @@ void CollisionDetectionManager::DeleteCollidedObjects()
 	{
 		if (m_pOtherEntities[i].second)
 		{
+			EnemyManager::GetInstance().DeleteSpecificEnemy(m_pOtherEntities[i].first);
 			m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
 			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		}
@@ -195,7 +196,6 @@ void CollisionDetectionManager::ClearCollisions()
 		m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		--i;
 	}
-	m_pGyaragaTransform = nullptr;
 	for (size_t i = 0; i < m_pOtherEntityTransforms.size(); i++)
 	{
 		m_pOtherEntityTransforms[i] = nullptr;

@@ -19,7 +19,7 @@ void LerpComponent::Update()
 	//
 	auto currentPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	//
-	const int speed = 30;
+	const int speed = 50;
 	float newX = currentPos.x + m_LerpT * (m_EndPos.x - currentPos.x);
 	float newY = currentPos.y + m_LerpT * (m_EndPos.y - currentPos.y);
 	//

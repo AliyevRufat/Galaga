@@ -5,10 +5,10 @@
 #include "TransformComponent.h"
 #include "FormationManager.h"
 
-EnemyGoToFormationState::EnemyGoToFormationState()
+EnemyGoToFormationState::EnemyGoToFormationState(EnemyStateManager& enemyStateMngr)
 {
 	m_SwitchState = false;
-	m_pBezierPathManager = new BezierPathManager(700);
+	m_pBezierPathManager = new BezierPathManager(enemyStateMngr.GetEnemySpeed());
 }
 
 void EnemyGoToFormationState::Update(EnemyStateManager& enemyStateMngr)

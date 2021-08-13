@@ -39,22 +39,245 @@ void EnemyManager::Update()
 	m_SpawnTimeBee += deltaTime;
 	m_SpawnTimeButterfly += deltaTime;
 	//
-	if (m_SpawnTimeBee >= m_SpawnTimer && m_IndexBees < m_QueuedEnemies.size())
+	if (m_SpawnTimeBee >= m_SpawnTimer && m_QueuedEnemies.size() != 0)
 	{
 		m_SpawnTimeBee = 0.0f;
-		SpawnEnemy(m_QueuedEnemies[m_IndexBees].first, m_QueuedEnemies[m_IndexBees].second.first, m_QueuedEnemies[m_IndexBees].second.second);
-		++m_IndexBees;
+		SpawnEnemy(m_QueuedEnemies[0].first, m_QueuedEnemies[0].second.first, m_QueuedEnemies[0].second.second);
+		m_QueuedEnemies.pop_front();
 	}
-	if (m_SpawnTimeButterfly >= m_SpawnTimer && m_IndexButterfliesAndBosses < m_SecondQueuedEnemies.size())
+	if (m_SpawnTimeButterfly >= m_SpawnTimer && m_SecondQueuedEnemies.size() != 0)
 	{
 		m_SpawnTimeButterfly = 0.0f;
-		SpawnEnemy(m_SecondQueuedEnemies[m_IndexButterfliesAndBosses].first, m_SecondQueuedEnemies[m_IndexButterfliesAndBosses].second.first, m_SecondQueuedEnemies[m_IndexButterfliesAndBosses].second.second);
-		++m_IndexButterfliesAndBosses;
+		SpawnEnemy(m_SecondQueuedEnemies[0].first, m_SecondQueuedEnemies[0].second.first, m_SecondQueuedEnemies[0].second.second);
+		m_SecondQueuedEnemies.pop_front();
 	}
 	//
-	if (m_IndexBees == m_QueuedEnemies.size() && m_IndexButterfliesAndBosses == m_SecondQueuedEnemies.size())
+	if (m_QueuedEnemies.size() == 0 && m_SecondQueuedEnemies.size() == 0)
 	{
 		m_AllEnemiesAreSpawned = true;
+	}
+}
+
+void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
+{
+	m_StageStarted = true;
+	//
+	Wait();
+
+	if (stage == StageManager::Stage::One)
+	{
+		{
+			//first wave
+			QueueEnemy(EnemyType::Bee, 0, 4);
+			QueueEnemy(EnemyType::Bee, 1, 4);
+			QueueEnemy(EnemyType::Bee, 0, 5);
+			QueueEnemy(EnemyType::Bee, 1, 5);
+
+			QueueEnemy(EnemyType::Butterfly, 0, 3, true);
+			QueueEnemy(EnemyType::Butterfly, 1, 3, true);
+			QueueEnemy(EnemyType::Butterfly, 0, 4, true);
+			QueueEnemy(EnemyType::Butterfly, 1, 4, true);
+
+			//
+			Wait();
+		}
+
+		{
+			//second wave
+			QueueEnemy(EnemyType::Boss, 0, 0);
+			QueueEnemy(EnemyType::Butterfly, 0, 2);
+			QueueEnemy(EnemyType::Boss, 0, 1);
+			QueueEnemy(EnemyType::Butterfly, 1, 2);
+			QueueEnemy(EnemyType::Boss, 0, 2);
+			QueueEnemy(EnemyType::Butterfly, 0, 5);
+			QueueEnemy(EnemyType::Boss, 0, 3);
+			QueueEnemy(EnemyType::Butterfly, 1, 5);
+			//
+			Wait();
+		}
+
+		{
+			//third wave
+			QueueEnemy(EnemyType::Butterfly, 0, 0);
+			QueueEnemy(EnemyType::Butterfly, 1, 0);
+			QueueEnemy(EnemyType::Butterfly, 0, 1);
+			QueueEnemy(EnemyType::Butterfly, 1, 1);
+			QueueEnemy(EnemyType::Butterfly, 0, 6);
+			QueueEnemy(EnemyType::Butterfly, 1, 6);
+			QueueEnemy(EnemyType::Butterfly, 0, 7);
+			QueueEnemy(EnemyType::Butterfly, 1, 7);
+			//
+			Wait();
+		}
+
+		{
+			//forth wave
+			QueueEnemy(EnemyType::Bee, 0, 2);
+			QueueEnemy(EnemyType::Bee, 1, 2);
+			QueueEnemy(EnemyType::Bee, 0, 3);
+			QueueEnemy(EnemyType::Bee, 1, 3);
+			QueueEnemy(EnemyType::Bee, 0, 6);
+			QueueEnemy(EnemyType::Bee, 1, 6);
+			QueueEnemy(EnemyType::Bee, 0, 7);
+			QueueEnemy(EnemyType::Bee, 1, 7);
+			//
+			Wait();
+		}
+
+		{
+			//five wave
+			QueueEnemy(EnemyType::Bee, 0, 0);
+			QueueEnemy(EnemyType::Bee, 1, 0);
+			QueueEnemy(EnemyType::Bee, 0, 1);
+			QueueEnemy(EnemyType::Bee, 1, 1);
+			QueueEnemy(EnemyType::Bee, 0, 8);
+			QueueEnemy(EnemyType::Bee, 1, 8);
+			QueueEnemy(EnemyType::Bee, 0, 9);
+			QueueEnemy(EnemyType::Bee, 1, 9);
+			//
+			Wait();
+		}
+	}
+	if (stage == StageManager::Stage::Two)
+	{
+		{
+			//first wave
+			QueueEnemy(EnemyType::Bee, 0, 4);
+			QueueEnemy(EnemyType::Bee, 1, 4);
+			QueueEnemy(EnemyType::Bee, 2, 4);
+			QueueEnemy(EnemyType::Bee, 0, 5);
+			QueueEnemy(EnemyType::Bee, 1, 5);
+			QueueEnemy(EnemyType::Bee, 2, 5);
+
+			//
+			Wait();
+		}
+
+		{
+			//second wave
+			QueueEnemy(EnemyType::Boss, 0, 0);
+			QueueEnemy(EnemyType::Boss, 0, 1);
+			QueueEnemy(EnemyType::Butterfly, 0, 0);
+			QueueEnemy(EnemyType::Butterfly, 0, 1);
+			QueueEnemy(EnemyType::Butterfly, 0, 2);
+			QueueEnemy(EnemyType::Butterfly, 0, 3);
+			//
+			Wait();
+		}
+
+		{
+			//third wave
+			QueueEnemy(EnemyType::Boss, 1, 0);
+			QueueEnemy(EnemyType::Boss, 1, 1);
+			QueueEnemy(EnemyType::Butterfly, 1, 0);
+			QueueEnemy(EnemyType::Butterfly, 1, 1);
+			QueueEnemy(EnemyType::Butterfly, 1, 2);
+			QueueEnemy(EnemyType::Butterfly, 1, 3);
+			//
+			Wait();
+		}
+
+		{
+			//forth wave
+			QueueEnemy(EnemyType::Bee, 0, 2);
+			QueueEnemy(EnemyType::Bee, 1, 2);
+			QueueEnemy(EnemyType::Bee, 2, 2);
+			QueueEnemy(EnemyType::Bee, 0, 3);
+			QueueEnemy(EnemyType::Bee, 1, 3);
+			QueueEnemy(EnemyType::Bee, 2, 3);
+
+			QueueEnemy(EnemyType::Bee, 0, 6);
+			QueueEnemy(EnemyType::Bee, 1, 6);
+			QueueEnemy(EnemyType::Bee, 2, 6);
+			QueueEnemy(EnemyType::Bee, 0, 7);
+			QueueEnemy(EnemyType::Bee, 1, 7);
+			QueueEnemy(EnemyType::Bee, 2, 7);
+			//
+			Wait();
+		}
+
+		{
+			//five wave
+			QueueEnemy(EnemyType::Bee, 0, 0);
+			QueueEnemy(EnemyType::Bee, 1, 0);
+			QueueEnemy(EnemyType::Bee, 2, 0);
+			QueueEnemy(EnemyType::Bee, 0, 1);
+			QueueEnemy(EnemyType::Bee, 1, 1);
+			QueueEnemy(EnemyType::Bee, 2, 1);
+
+			QueueEnemy(EnemyType::Bee, 0, 8);
+			QueueEnemy(EnemyType::Bee, 1, 8);
+			QueueEnemy(EnemyType::Bee, 2, 8);
+			QueueEnemy(EnemyType::Bee, 0, 9);
+			QueueEnemy(EnemyType::Bee, 1, 9);
+			QueueEnemy(EnemyType::Bee, 2, 9);
+			//
+			Wait();
+		}
+	}
+	else
+	{
+		{
+			//first wave
+			QueueEnemy(EnemyType::Boss, 0, 0);
+			QueueEnemy(EnemyType::Boss, 0, 1);
+			QueueEnemy(EnemyType::Boss, 0, 2);
+			QueueEnemy(EnemyType::Boss, 0, 3);
+
+			//
+			Wait();
+		}
+
+		{
+			//second wave
+			QueueEnemy(EnemyType::Butterfly, 0, 0);
+			QueueEnemy(EnemyType::Butterfly, 0, 1);
+			QueueEnemy(EnemyType::Butterfly, 0, 2);
+			QueueEnemy(EnemyType::Butterfly, 0, 3);
+
+			QueueEnemy(EnemyType::Butterfly, 1, 0);
+			QueueEnemy(EnemyType::Butterfly, 1, 1);
+			QueueEnemy(EnemyType::Butterfly, 1, 2);
+			QueueEnemy(EnemyType::Butterfly, 1, 3);
+
+			//
+			Wait();
+		}
+
+		{
+			//third wave
+			QueueEnemy(EnemyType::Butterfly, 0, 4);
+			QueueEnemy(EnemyType::Butterfly, 0, 5);
+			QueueEnemy(EnemyType::Butterfly, 0, 6);
+			QueueEnemy(EnemyType::Butterfly, 0, 7);
+
+			QueueEnemy(EnemyType::Butterfly, 1, 4);
+			QueueEnemy(EnemyType::Butterfly, 1, 5);
+			QueueEnemy(EnemyType::Butterfly, 1, 6);
+			QueueEnemy(EnemyType::Butterfly, 1, 7);
+
+			//
+			Wait();
+		}
+
+		{
+			//forth wave
+			QueueEnemy(EnemyType::Boss, 1, 0);
+			QueueEnemy(EnemyType::Boss, 1, 1);
+
+			//
+			Wait();
+		}
+
+		{
+			//five wave
+			QueueEnemy(EnemyType::Boss, 2, 0);
+			QueueEnemy(EnemyType::Boss, 2, 1);
+			QueueEnemy(EnemyType::Boss, 2, 2);
+			QueueEnemy(EnemyType::Boss, 2, 3);
+			//
+			Wait();
+		}
 	}
 }
 
@@ -96,7 +319,7 @@ void EnemyManager::SpawnBee(EnemyType enemyType, int formationRowIndex, int form
 	beeEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(beeWidth, beeHeight)));
 	beeEnemy->AddComponent(new Texture2DComponent("Bee.png", 1, true));
 	beeEnemy->AddComponent(new AnimationComponent(0.2f, 2, 1, true));
-	beeEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
+	beeEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex, m_EnemyMovementSpeed));
 	beeEnemy->AddComponent(new EnemyWeaponComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(beeEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(beeEnemy);
@@ -112,7 +335,7 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 	butterflyEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(butterflyWidth, butterflyHeight)));
 	butterflyEnemy->AddComponent(new Texture2DComponent("Butterfly.png", 1, true));
 	butterflyEnemy->AddComponent(new AnimationComponent(0.2f, 2, 1, true));
-	butterflyEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
+	butterflyEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex, m_EnemyMovementSpeed));
 	butterflyEnemy->AddComponent(new EnemyWeaponComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(butterflyEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(butterflyEnemy);
@@ -128,23 +351,13 @@ void EnemyManager::SpawnBoss(EnemyType enemyType, int formationRowIndex, int for
 	bossEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(bossWidth, bossHeight)));
 	bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
 	bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
-	bossEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex));
+	bossEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex, m_EnemyMovementSpeed));
 	bossEnemy->AddComponent(new EnemyWeaponComponent());
 	bossEnemy->AddComponent(new HealthComponent(2));
 	bossEnemy->AddComponent(new TractorBeamComponent());
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
 	m_SpEnemies.push_back(bossEnemy);
-}
-
-void EnemyManager::ClearEnemies()
-{
-	m_IndexBees = 0;
-	m_IndexButterfliesAndBosses = 0;
-	m_SpawnTimeBee = 0.0f;
-	m_SpawnTimeButterfly = 0.0f;
-	m_QueuedEnemies.clear();
-	m_SecondQueuedEnemies.clear();
 }
 
 bool EnemyManager::CanDive(EnemyType enemyType) const
@@ -198,6 +411,7 @@ void EnemyManager::DecreaseAmountOfDivingEnemies(EnemyType enemyType)
 
 void EnemyManager::IncreaseDifficulty()
 {
+	m_EnemyMovementSpeed += 100;//increase speed
 	++m_EnemyChanceToShoot; // +10%
 	++m_MaxAmountOfDivingEnemies; // 1 extra enemy per type can dive at the same time
 }
@@ -210,6 +424,15 @@ int EnemyManager::GetEnemyChanceToShoot() const
 bool EnemyManager::GetAllEnemiesAreSpawned() const
 {
 	return m_AllEnemiesAreSpawned;
+}
+
+bool EnemyManager::GetAllEnemiesAreDead() const
+{
+	if (m_SpEnemies.size() == 0 && m_AllEnemiesAreSpawned && m_StageStarted)
+	{
+		return true;
+	}
+	return false;
 }
 
 void EnemyManager::Wait()
@@ -225,8 +448,6 @@ void EnemyManager::DeleteAllEnemies()
 		CollisionDetectionManager::GetInstance().DeleteSpecificObject(spEnemy);
 	}
 	//
-	m_IndexBees = 0;
-	m_IndexButterfliesAndBosses = 0;
 	m_SpawnTimeBee = 0.0f;
 	m_SpawnTimeButterfly = 0.0f;
 	//
@@ -239,6 +460,7 @@ void EnemyManager::DeleteAllEnemies()
 	//
 	m_EnemyChanceToShoot = 1;//10%
 	m_AllEnemiesAreSpawned = false;
+	m_StageStarted = false;
 	//
 	m_WaitTime = 0.0f;
 	//
@@ -246,6 +468,16 @@ void EnemyManager::DeleteAllEnemies()
 	m_SpEnemies.clear();
 	m_QueuedEnemies.clear();
 	m_SecondQueuedEnemies.clear();
+}
+
+void EnemyManager::DeleteSpecificEnemy(const std::shared_ptr<GameObject>& enemy)
+{
+	auto it = std::find(m_SpEnemies.begin(), m_SpEnemies.end(), enemy);
+
+	if (it != m_SpEnemies.end())
+	{
+		m_SpEnemies.erase(it);
+	}
 }
 
 std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)

@@ -12,7 +12,8 @@
 EnemySpawnState::EnemySpawnState()
 {
 	m_SwitchState = false;
-	m_pBezierPathManager = new BezierPathManager(1200);
+	const int speed = 1200;
+	m_pBezierPathManager = new BezierPathManager(speed);
 	//if can shoot
 	const int randNr = rand() % 10 + 1;
 	if (randNr == EnemyManager::GetInstance().GetEnemyChanceToShoot())

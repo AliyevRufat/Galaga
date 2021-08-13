@@ -4,7 +4,7 @@
 class EnemyTractorBeamState final : public EnemyState
 {
 public:
-	EnemyTractorBeamState();
+	EnemyTractorBeamState(EnemyStateManager& enemyStateManager);
 	//
 	void Update(EnemyStateManager& enemyStateMngr) override;
 	void Enter(EnemyStateManager& enemyStateMngr) override;

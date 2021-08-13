@@ -9,7 +9,7 @@ class EnemyState;
 class EnemyStateManager final : public BaseComponent
 {
 public:
-	EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex);
+	EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex, int enemySpeed);
 	~EnemyStateManager();
 	EnemyStateManager(const EnemyStateManager& other) = delete;
 	EnemyStateManager(EnemyStateManager&& other) = delete;
@@ -20,6 +20,7 @@ public:
 	GameObject* GetGameObject();
 	EnemyType GetEnemyType() const;
 	EnemyState* GetState()const;
+	int GetEnemySpeed() const { return m_Speed; }
 private:
 
 	void StateSwitch();
@@ -30,4 +31,5 @@ private:
 	bool m_IsInit;
 	int m_FormationIndex;
 	int m_FormationRowIndex;
+	int m_Speed;
 };

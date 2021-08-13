@@ -12,7 +12,7 @@
 EnemyGoToBeamState::EnemyGoToBeamState(EnemyStateManager& enemyStateMngr)
 {
 	m_SwitchState = false;
-	m_pBezierPathManager = new BezierPathManager(700);
+	m_pBezierPathManager = new BezierPathManager(enemyStateMngr.GetEnemySpeed());
 	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
 }
 
@@ -31,9 +31,9 @@ void EnemyGoToBeamState::Update(EnemyStateManager& enemyStateMngr)
 	}
 }
 
-EnemyState* EnemyGoToBeamState::StateSwitch(EnemyStateManager&)
+EnemyState* EnemyGoToBeamState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
-	return new EnemyTractorBeamState();
+	return new EnemyTractorBeamState(enemyStateMngr);
 }
 
 void EnemyGoToBeamState::Enter(EnemyStateManager& enemyStateManager)

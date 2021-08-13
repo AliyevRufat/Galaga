@@ -4,11 +4,12 @@
 #include "EnemySpawnState.h"
 #include "EngineTime.h"
 
-EnemyStateManager::EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex)
+EnemyStateManager::EnemyStateManager(EnemyType enemyType, int formationRowIndex, int formationPositionIndex, int speed)
 	:m_IsInit{ false }
 	, m_EnemyType{ enemyType }
 	, m_FormationIndex{ formationPositionIndex }
 	, m_FormationRowIndex{ formationRowIndex }
+	, m_Speed{ speed }
 {
 	m_pEnemyState = new EnemySpawnState();
 	m_pEnemyState->SetFormationIndex(formationRowIndex, formationPositionIndex);
