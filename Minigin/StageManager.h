@@ -48,6 +48,7 @@ private:
 	void LoadSinglePlayerMode();
 	void LoadCoopMode();
 	void LoadVersusMode();
+	void DisplayResults(int score, int shotsFired, int numberOfHits, int accuracy);
 	//
 	SDL_Surface* m_WindowSurface = nullptr;
 	Stage m_CurrentStage = Stage::One;

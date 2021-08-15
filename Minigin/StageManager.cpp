@@ -50,15 +50,19 @@ void StageManager::Update()
 		if (m_RestartTimer >= m_RestartTime)
 		{
 			auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
-			player->SetIsActive(true);
-			CollisionDetectionManager::GetInstance().AddCollisionGameObject(player);
+			//
+			if (player)
+			{
+				player->SetIsActive(true);
+				CollisionDetectionManager::GetInstance().AddCollisionGameObject(player);
+			}
 			//
 			m_RestartTimer -= m_RestartTimer;
 			m_IsPlayerDead = false;
 		}
 	}
 	//
-	if (m_HasWon)
+	if (m_HasWon && !m_IsGameOver)
 	{
 		m_WinTimer += deltaTime;
 
@@ -71,7 +75,7 @@ void StageManager::Update()
 		}
 	}
 	//
-	if (EnemyManager::GetInstance().GetAllEnemiesAreDead())
+	if (EnemyManager::GetInstance().GetAllEnemiesAreDead() && !m_IsGameOver)
 	{
 		LoadNextStage();
 	}
@@ -297,6 +301,86 @@ void StageManager::InitWinScreen()
 	winPng->AddComponent(new Texture2DComponent("WinScreen.png"));
 	scene.Add(winPng);
 
+	//
+	auto textDisplay = std::make_shared<GameObject>("Text");
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 170, m_WindowSurface->h / 2.0f + 250)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	auto text = new TextComponent("Controller : Press Y to go to main menu.", font, SDL_Color{ 255,255,0 });
+	textDisplay->AddComponent(text);
+	scene.Add(textDisplay);
+	//
+	textDisplay = std::make_shared<GameObject>("Text");
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 170, m_WindowSurface->h / 2.0f + 300)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,255,0 });
+	textDisplay->AddComponent(text);
+	scene.Add(textDisplay);
+
+	DisplayResults(score, shotsFired, numberOfHits, accuracy);
+}
+
+void StageManager::InitGameOverScreen()
+{
+	m_IsInMenu = false;
+
+	auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+	auto playerWeaponComp = player->GetComponent<PlayerWeaponComponent>();
+	//
+	const int score = player->GetComponent<ScoreComponent>()->GetScore();
+	const int shotsFired = playerWeaponComp->GetAmountOfShotBullets();
+	const int numberOfHits = playerWeaponComp->GetAmountOfHits();
+	const int accuracy = playerWeaponComp->GetAccuracy();
+
+	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
+	EnemyManager::GetInstance().DeleteAllEnemies();
+	CollisionDetectionManager::GetInstance().ClearCollisions();
+	//
+	auto& scene = SceneManager::GetInstance().CreateScene("Galaga");
+
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	//png
+	auto losePng = std::make_shared<GameObject>("GameOverScreen");
+	losePng->AddComponent(new TransformComponent(glm::vec2(0, 0)));
+	losePng->AddComponent(new Texture2DComponent("GameOverScreen.png"));
+	scene.Add(losePng);
+	//
+	DisplayResults(score, shotsFired, numberOfHits, accuracy);
+	//
+	auto textDisplay = std::make_shared<GameObject>("Text");
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 200, m_WindowSurface->h / 2.0f + 100)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	auto text = new TextComponent("Controller : Press START to go to main menu.", font, SDL_Color{ 255,0,0 });
+	textDisplay->AddComponent(text);
+	scene.Add(textDisplay);
+	//
+	textDisplay = std::make_shared<GameObject>("Text");
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 200, m_WindowSurface->h / 2.0f + 150)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,0,0 });
+	textDisplay->AddComponent(text);
+	scene.Add(textDisplay);
+}
+
+bool StageManager::GetIsInMenu() const
+{
+	return m_IsInMenu;
+}
+
+void StageManager::SetIsGameOver(bool isGameOver)
+{
+	m_IsGameOver = isGameOver;
+}
+
+void StageManager::SetIsPlayerDead(bool isPlayerDead)
+{
+	m_IsPlayerDead = isPlayerDead;
+}
+
+void StageManager::DisplayResults(int score, int shotsFired, int numberOfHits, int accuracy)
+{
+	auto& scene = SceneManager::GetInstance().CreateScene("Galaga");
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+
 	//results text
 	auto resultsText = std::make_shared<GameObject>("Score");
 	resultsText->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 20, m_WindowSurface->h / 2.0f - 150)));
@@ -336,65 +420,4 @@ void StageManager::InitWinScreen()
 	text = new TextComponent("HIT MISS RATIO	 : %" + std::to_string(accuracy), font, SDL_Color{ 255,255,255 });
 	accuracyDisplay->AddComponent(text);
 	scene.Add(accuracyDisplay);
-
-	//
-	auto textDisplay = std::make_shared<GameObject>("Text");
-	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 170, m_WindowSurface->h / 2.0f + 250)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	text = new TextComponent("Controller : Press Y to go to main menu.", font, SDL_Color{ 255,255,0 });
-	textDisplay->AddComponent(text);
-	scene.Add(textDisplay);
-	//
-	textDisplay = std::make_shared<GameObject>("Text");
-	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 170, m_WindowSurface->h / 2.0f + 300)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,255,0 });
-	textDisplay->AddComponent(text);
-	scene.Add(textDisplay);
-}
-
-void StageManager::InitGameOverScreen()
-{
-	m_IsInMenu = false;
-	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
-	EnemyManager::GetInstance().DeleteAllEnemies();
-	CollisionDetectionManager::GetInstance().ClearCollisions();
-	//
-	auto& scene = SceneManager::GetInstance().CreateScene("Galaga");
-
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	//png
-	auto losePng = std::make_shared<GameObject>("GameOverScreen");
-	losePng->AddComponent(new TransformComponent(glm::vec2(0, 0)));
-	losePng->AddComponent(new Texture2DComponent("GameOverScreen.png"));
-	scene.Add(losePng);
-	//
-	auto textDisplay = std::make_shared<GameObject>("Text");
-	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 200, m_WindowSurface->h / 2.0f + 100)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	auto text = new TextComponent("Controller : Press START to go to main menu.", font, SDL_Color{ 255,0,0 });
-	textDisplay->AddComponent(text);
-	scene.Add(textDisplay);
-	//
-	textDisplay = std::make_shared<GameObject>("Text");
-	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 200, m_WindowSurface->h / 2.0f + 150)));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,0,0 });
-	textDisplay->AddComponent(text);
-	scene.Add(textDisplay);
-}
-
-bool StageManager::GetIsInMenu() const
-{
-	return m_IsInMenu;
-}
-
-void StageManager::SetIsGameOver(bool isGameOver)
-{
-	m_IsGameOver = isGameOver;
-}
-
-void StageManager::SetIsPlayerDead(bool isPlayerDead)
-{
-	m_IsPlayerDead = isPlayerDead;
 }
