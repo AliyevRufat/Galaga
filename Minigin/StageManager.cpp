@@ -34,7 +34,7 @@ void StageManager::Update()
 	{
 		m_GameOverTimer += deltaTime;
 
-		if (m_GameOverTimer >= m_GameOverTime)
+		if (m_GameOverTimer >= m_ActionTime)
 		{
 			InitGameOverScreen();
 			//
@@ -58,6 +58,19 @@ void StageManager::Update()
 		}
 	}
 	//
+	if (m_HasWon)
+	{
+		m_WinTimer += deltaTime;
+
+		if (m_WinTimer >= m_ActionTime)
+		{
+			InitWinScreen();
+			//
+			m_WinTimer -= m_WinTimer;
+			m_HasWon = false;
+		}
+	}
+	//
 	if (EnemyManager::GetInstance().GetAllEnemiesAreDead())
 	{
 		LoadNextStage();
@@ -66,6 +79,12 @@ void StageManager::Update()
 
 void StageManager::LoadNextStage()
 {
+	if (m_CurrentStage == Stage::Three)
+	{
+		m_HasWon = true;
+		return;
+	}
+	//
 	m_CurrentStage = Stage(int(m_CurrentStage) + 1);
 	CollisionDetectionManager::GetInstance().ClearCollisions();
 	FormationManager::GetInstance().InitFormation(m_CurrentStage);
@@ -216,7 +235,7 @@ void StageManager::InitMenuScreen()
 	m_IsPlayerDead = false;
 	m_RestartTimer = 0.0f;
 	m_GameOverTimer = 0.0f;
-	m_CurrentStage = Stage::One;
+	m_CurrentStage = Stage::Three;
 	//
 	SceneManager::GetInstance().ClearScene(SceneManager::GetInstance().GetCurrentScene());
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -255,6 +274,83 @@ void StageManager::InitMenuScreen()
 
 void StageManager::InitWinScreen()
 {
+	m_IsInMenu = false;
+
+	auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+	auto playerWeaponComp = player->GetComponent<PlayerWeaponComponent>();
+	//
+	const int score = player->GetComponent<ScoreComponent>()->GetScore();
+	const int shotsFired = playerWeaponComp->GetAmountOfShotBullets();
+	const int numberOfHits = playerWeaponComp->GetAmountOfHits();
+	const int accuracy = playerWeaponComp->GetAccuracy();
+
+	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
+	EnemyManager::GetInstance().DeleteAllEnemies();
+	CollisionDetectionManager::GetInstance().ClearCollisions();
+	//
+	auto& scene = SceneManager::GetInstance().CreateScene("Qbert");
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+
+	//png
+	auto winPng = std::make_shared<GameObject>("WinScreen");
+	winPng->AddComponent(new TransformComponent(glm::vec2(0, -200)));
+	winPng->AddComponent(new Texture2DComponent("WinScreen.png"));
+	scene.Add(winPng);
+
+	//results text
+	auto resultsText = std::make_shared<GameObject>("Score");
+	resultsText->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 20, m_WindowSurface->h / 2.0f - 150)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	auto text = new TextComponent("-RESULTS-", font, SDL_Color{ 255,0,0 });
+	resultsText->AddComponent(text);
+	scene.Add(resultsText);
+
+	//display score
+	auto scoreDisplay = std::make_shared<GameObject>("Score");
+	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 80, m_WindowSurface->h / 2.0f - 100)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("SCORE : " + std::to_string(score), font, SDL_Color{ 255,255,0 });
+	scoreDisplay->AddComponent(text);
+	scene.Add(scoreDisplay);
+
+	//display fired shots
+	auto firedShotsDisplay = std::make_shared<GameObject>("FiredShots");
+	firedShotsDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 80, m_WindowSurface->h / 2.0f - 50)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("SHOTS FIRED : " + std::to_string(shotsFired), font, SDL_Color{ 255,255,0 });
+	firedShotsDisplay->AddComponent(text);
+	scene.Add(firedShotsDisplay);
+
+	//display number of hits
+	auto numberOfHitsDisplay = std::make_shared<GameObject>("NumberOfHits");
+	numberOfHitsDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 80, m_WindowSurface->h / 2.0f)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("NUMBER OF HITS : " + std::to_string(numberOfHits), font, SDL_Color{ 255,255,0 });
+	numberOfHitsDisplay->AddComponent(text);
+	scene.Add(numberOfHitsDisplay);
+
+	//display accuracy
+	auto accuracyDisplay = std::make_shared<GameObject>("HitMissRatio");
+	accuracyDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 80, m_WindowSurface->h / 2.0f + 50)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("HIT MISS RATIO	 : %" + std::to_string(accuracy), font, SDL_Color{ 255,255,255 });
+	accuracyDisplay->AddComponent(text);
+	scene.Add(accuracyDisplay);
+
+	//
+	auto textDisplay = std::make_shared<GameObject>("Text");
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 170, m_WindowSurface->h / 2.0f + 250)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("Controller : Press Y to go to main menu.", font, SDL_Color{ 255,255,0 });
+	textDisplay->AddComponent(text);
+	scene.Add(textDisplay);
+	//
+	textDisplay = std::make_shared<GameObject>("Text");
+	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 170, m_WindowSurface->h / 2.0f + 300)));
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	text = new TextComponent("Keyboard : Press U to go to main menu.", font, SDL_Color{ 255,255,0 });
+	textDisplay->AddComponent(text);
+	scene.Add(textDisplay);
 }
 
 void StageManager::InitGameOverScreen()

@@ -138,7 +138,7 @@ void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
 			Wait();
 		}
 	}
-	if (stage == StageManager::Stage::Two)
+	else	if (stage == StageManager::Stage::Two)
 	{
 		{
 			//first wave
@@ -223,6 +223,8 @@ void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
 			QueueEnemy(EnemyType::Boss, 0, 1);
 			QueueEnemy(EnemyType::Boss, 0, 2);
 			QueueEnemy(EnemyType::Boss, 0, 3);
+			QueueEnemy(EnemyType::Bee, 0, 0);
+			QueueEnemy(EnemyType::Bee, 0, 1);
 
 			//
 			Wait();
@@ -230,6 +232,21 @@ void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
 
 		{
 			//second wave
+			QueueEnemy(EnemyType::Bee, 1, 0);
+			QueueEnemy(EnemyType::Bee, 1, 1);
+			QueueEnemy(EnemyType::Bee, 2, 0);
+			QueueEnemy(EnemyType::Bee, 2, 1);
+			QueueEnemy(EnemyType::Bee, 3, 0);
+			QueueEnemy(EnemyType::Bee, 3, 1);
+			QueueEnemy(EnemyType::Bee, 4, 4);
+			QueueEnemy(EnemyType::Bee, 4, 5);
+
+			//
+			Wait();
+		}
+
+		{
+			//third wave
 			QueueEnemy(EnemyType::Butterfly, 0, 0);
 			QueueEnemy(EnemyType::Butterfly, 0, 1);
 			QueueEnemy(EnemyType::Butterfly, 0, 2);
@@ -240,12 +257,14 @@ void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
 			QueueEnemy(EnemyType::Butterfly, 1, 2);
 			QueueEnemy(EnemyType::Butterfly, 1, 3);
 
+			QueueEnemy(EnemyType::Boss, 1, 0);
+
 			//
 			Wait();
 		}
 
 		{
-			//third wave
+			//forth wave
 			QueueEnemy(EnemyType::Butterfly, 0, 4);
 			QueueEnemy(EnemyType::Butterfly, 0, 5);
 			QueueEnemy(EnemyType::Butterfly, 0, 6);
@@ -256,13 +275,6 @@ void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
 			QueueEnemy(EnemyType::Butterfly, 1, 6);
 			QueueEnemy(EnemyType::Butterfly, 1, 7);
 
-			//
-			Wait();
-		}
-
-		{
-			//forth wave
-			QueueEnemy(EnemyType::Boss, 1, 0);
 			QueueEnemy(EnemyType::Boss, 1, 1);
 
 			//
@@ -271,10 +283,28 @@ void EnemyManager::SpawnAllEnemies(StageManager::Stage stage)
 
 		{
 			//five wave
+			QueueEnemy(EnemyType::Bee, 4, 0);
+			QueueEnemy(EnemyType::Bee, 4, 1);
+			QueueEnemy(EnemyType::Bee, 4, 2);
+			QueueEnemy(EnemyType::Bee, 4, 3);
+
 			QueueEnemy(EnemyType::Boss, 2, 0);
 			QueueEnemy(EnemyType::Boss, 2, 1);
+
+			//
+			Wait();
+		}
+
+		{
+			//sixth wave
+			QueueEnemy(EnemyType::Bee, 4, 6);
+			QueueEnemy(EnemyType::Bee, 4, 7);
+			QueueEnemy(EnemyType::Bee, 4, 8);
+			QueueEnemy(EnemyType::Bee, 4, 9);
+
 			QueueEnemy(EnemyType::Boss, 2, 2);
 			QueueEnemy(EnemyType::Boss, 2, 3);
+
 			//
 			Wait();
 		}
@@ -371,7 +401,8 @@ bool EnemyManager::CanDive(EnemyType enemyType) const
 		return m_AmountOfDivingButterflies < m_MaxAmountOfDivingEnemies;
 		break;
 	case EnemyType::Boss:
-		return m_AmountOfDivingBosses < m_MaxAmountOfDivingEnemies;
+		const int maxAmountOfBossEnemies = 1;
+		return m_AmountOfDivingBosses < maxAmountOfBossEnemies;
 		break;
 	}
 	return false;
@@ -455,6 +486,8 @@ void EnemyManager::DeleteAllEnemies()
 	m_AmountOfDivingButterflies = 0;
 	m_AmountOfDivingBosses = 0;
 	m_AmountOfSpawnedEnemies = 0;
+	m_MaxAmountOfDivingEnemies = 1;
+	m_EnemyMovementSpeed = 500;
 	//
 	m_MaxAmountOfDivingEnemies = 1;
 	//
@@ -482,6 +515,7 @@ void EnemyManager::DeleteSpecificEnemy(const std::shared_ptr<GameObject>& enemy)
 
 std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(EnemyType enemyType, int formationPosIndex, const glm::vec2& endPos)
 {
+	const int amountOfSamples = 30;
 	BezierPath* path = new BezierPath();
 	glm::vec2 startPos = glm::vec2(0, 0);
 	auto screenWidth = dae::SceneManager::GetInstance().GetScreenDimensions().x;
@@ -492,24 +526,24 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(EnemyType enemyType
 		{
 			startPos = glm::vec2(350 + 50, -10);
 
-			path->AddCurve({ startPos, glm::vec2(385,screenWidth - 615), glm::vec2(90,screenWidth - 690),glm::vec2(75,screenWidth - 400) }, 30);
-			path->AddCurve({ glm::vec2(75,screenWidth - 400), glm::vec2(70,screenWidth - 230) ,glm::vec2(600,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
+			path->AddCurve({ startPos, glm::vec2(385,screenWidth - 615), glm::vec2(90,screenWidth - 690),glm::vec2(75,screenWidth - 400) }, amountOfSamples);
+			path->AddCurve({ glm::vec2(75,screenWidth - 400), glm::vec2(70,screenWidth - 230) ,glm::vec2(600,750), glm::vec2(endPos.x,endPos.y + 50) }, amountOfSamples);
 			path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x + 30,endPos.y) }, 10);
 		}
 		else if (formationPosIndex == 2 || formationPosIndex == 3 || formationPosIndex == 6 || formationPosIndex == 7)//second bee wave of first level
 		{
 			startPos = glm::vec2(425, 0);
 
-			path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(100,100),glm::vec2(100,300) }, 30);
-			path->AddCurve({ glm::vec2(100,300) , glm::vec2(100,500) ,glm::vec2(350,400), glm::vec2(350,350) }, 30);
+			path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(100,100),glm::vec2(100,300) }, amountOfSamples);
+			path->AddCurve({ glm::vec2(100,300) , glm::vec2(100,500) ,glm::vec2(350,400), glm::vec2(350,350) }, amountOfSamples);
 			path->AddCurve({ glm::vec2(350,350) , glm::vec2(350,320), glm::vec2(350,300) ,endPos }, 10);
 		}
 		else//third bee wave of first level
 		{
 			startPos = glm::vec2(425, 0);
 
-			path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(screenWidth - 100,100),glm::vec2(screenWidth - 100,300) }, 30);
-			path->AddCurve({ glm::vec2(screenWidth - 100,300) , glm::vec2(screenWidth - 100,500) ,glm::vec2(screenWidth - 350,400), glm::vec2(screenWidth - 350,350) }, 30);
+			path->AddCurve({ startPos, glm::vec2(425,300), glm::vec2(screenWidth - 100,100),glm::vec2(screenWidth - 100,300) }, amountOfSamples);
+			path->AddCurve({ glm::vec2(screenWidth - 100,300) , glm::vec2(screenWidth - 100,500) ,glm::vec2(screenWidth - 350,400), glm::vec2(screenWidth - 350,350) }, amountOfSamples);
 			path->AddCurve({ glm::vec2(screenWidth - 350,350) , glm::vec2(screenWidth - 350,350), endPos ,endPos }, 10);
 		}
 	}
@@ -519,24 +553,24 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(EnemyType enemyType
 		{
 			startPos = glm::vec2(350 - 50, -10);
 
-			path->AddCurve({ startPos, glm::vec2(315,screenWidth - 615), glm::vec2(610,screenWidth - 690),glm::vec2(625,screenWidth - 400) }, 30);
-			path->AddCurve({ glm::vec2(625,screenWidth - 400), glm::vec2(620,screenWidth - 230) ,glm::vec2(100,750), glm::vec2(endPos.x,endPos.y + 50) }, 30);
+			path->AddCurve({ startPos, glm::vec2(315,screenWidth - 615), glm::vec2(610,screenWidth - 690),glm::vec2(625,screenWidth - 400) }, amountOfSamples);
+			path->AddCurve({ glm::vec2(625,screenWidth - 400), glm::vec2(620,screenWidth - 230) ,glm::vec2(100,750), glm::vec2(endPos.x,endPos.y + 50) }, amountOfSamples);
 			path->AddCurve({ glm::vec2(endPos.x,endPos.y + 50), glm::vec2(endPos.x,endPos.y + 50), endPos,glm::vec2(endPos.x - 30,endPos.y) }, 10);
 		}
 		else if (formationPosIndex == 2 || formationPosIndex == 5)//second butterfly wave of first level
 		{
 			startPos = glm::vec2(-50, 560);
 
-			path->AddCurve({ startPos, glm::vec2(680,420), glm::vec2(60,0),glm::vec2(63,350) }, 30);
-			path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, 30);
+			path->AddCurve({ startPos, glm::vec2(680,420), glm::vec2(60,0),glm::vec2(63,350) }, amountOfSamples);
+			path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, amountOfSamples);
 			path->AddCurve({ glm::vec2(425,300), glm::vec2(425,250), glm::vec2(425,170),endPos }, 10);
 		}
 		else//third butterfly wave of first level
 		{
 			startPos = glm::vec2(900, 560);
 
-			path->AddCurve({ startPos, glm::vec2(screenWidth - 680,420), glm::vec2(screenWidth - 60,0),glm::vec2(screenWidth - 63,350) }, 30);
-			path->AddCurve({ glm::vec2(screenWidth - 63,350), glm::vec2(screenWidth - 60,screenWidth) ,glm::vec2(screenWidth - 410,500), glm::vec2(screenWidth - 425,300) }, 30);
+			path->AddCurve({ startPos, glm::vec2(screenWidth - 680,420), glm::vec2(screenWidth - 60,0),glm::vec2(screenWidth - 63,350) }, amountOfSamples);
+			path->AddCurve({ glm::vec2(screenWidth - 63,350), glm::vec2(screenWidth - 60,screenWidth) ,glm::vec2(screenWidth - 410,500), glm::vec2(screenWidth - 425,300) }, amountOfSamples);
 			path->AddCurve({ glm::vec2(screenWidth - 425,300), glm::vec2(screenWidth - 425,250), glm::vec2(screenWidth - 425,170),endPos }, 10);
 		}
 	}
@@ -544,8 +578,8 @@ std::pair<BezierPath*, glm::vec2> EnemyManager::GetSpawnPath(EnemyType enemyType
 	{
 		startPos = glm::vec2(-50, 560);
 
-		path->AddCurve({ startPos, glm::vec2(680,420), glm::vec2(60,0),glm::vec2(63,350) }, 30);
-		path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, 30);
+		path->AddCurve({ startPos, glm::vec2(680,420), glm::vec2(60,0),glm::vec2(63,350) }, amountOfSamples);
+		path->AddCurve({ glm::vec2(63,350), glm::vec2(60,screenWidth) ,glm::vec2(410,500), glm::vec2(425,300) }, amountOfSamples);
 		path->AddCurve({ glm::vec2(425,300), glm::vec2(425,250), glm::vec2(425,170),endPos }, 10);
 	}
 

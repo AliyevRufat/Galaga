@@ -11,6 +11,8 @@ public:
 	void Update() override;
 	void Shoot();
 	int GetAccuracy() const;
+	int GetAmountOfShotBullets() const;
+	int GetAmountOfHits() const;
 private:
 	void CreateBullet();
 	//

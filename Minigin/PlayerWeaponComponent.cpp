@@ -75,3 +75,13 @@ int PlayerWeaponComponent::GetAccuracy() const
 {
 	return int((float(m_AmountOfShotBullets - m_AmountOfMissedBullets) / float(m_AmountOfShotBullets)) * 100);
 }
+
+int PlayerWeaponComponent::GetAmountOfShotBullets() const
+{
+	return m_AmountOfShotBullets;
+}
+
+int PlayerWeaponComponent::GetAmountOfHits() const
+{
+	return m_AmountOfShotBullets - m_AmountOfMissedBullets;
+}

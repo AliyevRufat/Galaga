@@ -104,13 +104,12 @@ void FormationManager::InitFormation(StageManager::Stage stage)
 	{
 		const int posYBees = 100;
 		const int posYButterfliesUp = 150;
-		const int posYButterfliesDown = 300;
+		const int posYButterfliesDown = 250;
 		const int posYBossUp = 80;
 		const int posYBossMid = 190;
 		const int posYBossDown = 350;
 
 		//make formation positions for the bees and the butterflies
-
 		for (size_t i = 0; i < 2; i++)
 		{
 			int posY = 0;
@@ -139,19 +138,28 @@ void FormationManager::InitFormation(StageManager::Stage stage)
 				}
 			}
 		}
-		//for (size_t i = 0; i < 3; i++)
-		//{
-		//	std::vector<glm::vec2> tempPosBees;
-		//
-		//	for (size_t j = 0; j < 10; j++)
-		//	{
-		//		tempPosBees.push_back(glm::vec2{ 100 + j * 50 ,posYBees + i * 50 });
-		//		if (j >= 9)
-		//		{
-		//			m_BeePositions.push_back(tempPosBees);
-		//		}
-		//	}
-		//}
+		//bees
+		for (size_t i = 0; i < 5; i++)
+		{
+			int posX = 300;
+
+			m_BeePositions.push_back(std::vector<glm::vec2>());
+
+			if (i == 4)
+			{
+				posX = 100;
+			}
+			//
+			for (size_t j = 0; j < 10; j++)
+			{
+				if (j == 2 && i != 4)
+				{
+					break;
+				}
+				//
+				m_BeePositions[i].push_back(glm::vec2{ posX + j * 50 ,posYBees + i * 50 });
+			}
+		}
 		//make formation positions for the bosses
 		m_BossPositions.push_back(std::vector<glm::vec2>());
 		m_BossPositions.push_back(std::vector<glm::vec2>());

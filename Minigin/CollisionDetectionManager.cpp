@@ -13,6 +13,7 @@
 #include "EnemyTractorBeamState.h"
 #include "ScoreComponent.h"
 #include "EnemyFormationState.h"
+#include "EnemyGoToBeamState.h"
 
 void CollisionDetectionManager::Update()
 {
@@ -71,7 +72,7 @@ void CollisionDetectionManager::Update()
 							{
 								auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
 
-								if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState))
+								if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState) || dynamic_cast<EnemyGoToBeamState*>(enemyState))
 								{
 									EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
 								}

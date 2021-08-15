@@ -55,11 +55,13 @@ private:
 	//
 	bool m_IsInMenu = true;
 	bool m_IsGameOver = false;
+	bool m_HasWon = false;
 	bool m_IsPlayerDead = false;
 	//
 	float m_RestartTimer = 0.0f;
 	const int m_RestartTime = 5;
 	//
 	float m_GameOverTimer = 0.0f;
-	const int m_GameOverTime = 4;
+	const int m_ActionTime = 4;
+	float m_WinTimer = 0.0f;
 };
