@@ -10,10 +10,12 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "StageManager.h"
+#include "VersusControllerComponent.h"
 
 EnemyFormationState::EnemyFormationState()
 	:m_TimerBeforeDiving{ rand() % 7 + 2 }
 	, m_TimeBeforeDiving{ 0.0f }
+	, m_pBossState{ nullptr }
 {
 	m_SwitchState = { false };
 	//if can shoot
@@ -38,6 +40,35 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 	{
 		return;
 	}
+	//
+	ShootBullet(enemyStateMngr);
+	//
+	if (enemyStateMngr.GetEnemyType() == EnemyType::Boss && StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Versus)
+	{
+		auto versusControlllerComp = enemyStateMngr.GetGameObject()->GetComponent<VersusControllerComponent>();
+		if (versusControlllerComp)
+		{
+			if (versusControlllerComp->GetIsTractorBeamActivated())
+			{
+				m_pBossState = new EnemyGoToBeamState(enemyStateMngr);
+				versusControlllerComp->SetIsTractorBeamActivated(false);
+				m_SwitchState = true;
+			}
+			else if (versusControlllerComp->GetIsDivingActivated())
+			{
+				m_pBossState = new EnemyDivingState(enemyStateMngr);
+				versusControlllerComp->SetIsDivingActivated(false);
+				m_SwitchState = true;
+			}
+			else if (versusControlllerComp->GetIsShootingActivated())
+			{
+				m_CanShoot = true;
+				m_ShootTimer = 1;
+				versusControlllerComp->SetIsShootingActivated(false);
+			}
+		}
+		return;
+	}
 	//timer before getting out of the formation
 	m_TimeBeforeDiving += EngineTime::GetInstance().GetDeltaTime();
 
@@ -46,15 +77,17 @@ void EnemyFormationState::Update(EnemyStateManager& enemyStateMngr)
 		m_TimeBeforeDiving -= m_TimeBeforeDiving;
 		m_SwitchState = true;
 	}
-	//
-	ShootBullet(enemyStateMngr);
 }
 
 EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 {
-	if (!EnemyManager::GetInstance().CanDive(enemyStateMngr.GetEnemyType()))
+	auto currGameMode = StageManager::GetInstance().GetCurrentGameMode();
+	if ((currGameMode == StageManager::GameMode::Versus && enemyStateMngr.GetEnemyType() != EnemyType::Boss) || currGameMode == StageManager::GameMode::Coop || currGameMode == StageManager::GameMode::SinglePlayer)
 	{
-		return nullptr;
+		if (!EnemyManager::GetInstance().CanDive(enemyStateMngr.GetEnemyType()))
+		{
+			return nullptr;
+		}
 	}
 	//if player is dead don't dive
 	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
@@ -77,19 +110,26 @@ EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 	//
 	if (enemyStateMngr.GetEnemyType() == EnemyType::Boss)
 	{
-		if (enemyStateMngr.GetGameObject()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())//if boss has caught a player it can't go tractor beam again
+		if (m_pBossState)
 		{
-			return new EnemyDivingState(enemyStateMngr);
-		}
-		const int randNr = rand() % 2;
-		//
-		if (randNr == 0)
-		{
-			return new EnemyGoToBeamState(enemyStateMngr);
+			return m_pBossState;
 		}
 		else
 		{
-			return new EnemyDivingState(enemyStateMngr);
+			if (enemyStateMngr.GetGameObject()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())//if boss has caught a player it can't go tractor beam again
+			{
+				return new EnemyDivingState(enemyStateMngr);
+			}
+			const int randNr = rand() % 2;
+			//
+			if (randNr == 0)
+			{
+				return new EnemyGoToBeamState(enemyStateMngr);
+			}
+			else
+			{
+				return new EnemyDivingState(enemyStateMngr);
+			}
 		}
 	}
 	//

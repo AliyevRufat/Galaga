@@ -111,7 +111,7 @@ void TractorBeamComponent::SpawnAFighter(const glm::vec2& playerPos)
 	m_pCaughtPlayer->AddComponent(new TransformComponent(playerPos, glm::vec2(caughtPlayerWidth, caughtPlayerHeight)));
 	m_pCaughtPlayer->AddComponent(new Texture2DComponent("CaughtGyaraga.png", 1, false));
 	m_pCaughtPlayer->AddComponent(new EnemyWeaponComponent(true));
-	m_pCaughtPlayer->AddComponent(new LerpComponent(glm::vec2(parentPos.x + widthOffset, parentPos.y - caughtPlayerHeight), 20));
+	m_pCaughtPlayer->AddComponent(new LerpComponent(glm::vec2(parentPos.x + widthOffset, parentPos.y - caughtPlayerHeight), 2));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(m_pCaughtPlayer);
 	//
 	m_IsPlayerCaught = true;

@@ -2,7 +2,6 @@
 #include "AccuracyObserver.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "HealthComponent.h"
 #include "FPSTextComponent.h"
 #include "PlayerWeaponComponent.h"
 #include "TextComponent.h"

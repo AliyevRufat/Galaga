@@ -7,7 +7,7 @@
 #include "TransformComponent.h"
 #include "ResourceManager.h"
 #include "TextComponent.h"
-#include "HealthComponent.h"
+#include "PlayerHealthComponent.h"
 #include "ComponentIncludes.h"
 #include "LivesObserver.h"
 #include "ScoreObserver.h"
@@ -30,10 +30,7 @@ void StageManager::Update()
 	//
 	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	//restart player if dead or show game over screen of lost
-	if (m_CurrentGameMode != GameMode::Coop)
-	{
-		m_HasPlayer2Lost = true;
-	}
+
 	if (m_HasPlayerLost && m_HasPlayer2Lost)
 	{
 		m_GameOverTimer += deltaTime;
@@ -159,12 +156,15 @@ void StageManager::LoadGameMode(GameMode gameMode)
 	{
 	case GameMode::SinglePlayer:
 		LoadSinglePlayerMode();
+		m_HasPlayer2Lost = true;
 		break;
 	case GameMode::Coop:
 		LoadCoopMode();
+		m_HasPlayer2Lost = false;
 		break;
 	case GameMode::Versus:
 		LoadVersusMode();
+		m_HasPlayer2Lost = true;
 		break;
 	}
 	m_IsInMenu = false;
@@ -204,7 +204,7 @@ void StageManager::LoadSinglePlayerMode()
 	auto gyaraga = std::make_shared<GameObject>("Gyaraga", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
-	gyaraga->AddComponent(new HealthComponent(3));
+	gyaraga->AddComponent(new PlayerHealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
 	gyaraga->AddComponent(new GyaragaMovementComponent());
@@ -271,7 +271,7 @@ void StageManager::LoadCoopMode()
 	auto gyaraga = std::make_shared<GameObject>("Gyaraga", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2 - spawnOffset, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
-	gyaraga->AddComponent(new HealthComponent(3));
+	gyaraga->AddComponent(new PlayerHealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
 	gyaraga->AddComponent(new GyaragaMovementComponent());
@@ -288,7 +288,7 @@ void StageManager::LoadCoopMode()
 	auto gyaraga2 = std::make_shared<GameObject>("Gyaraga2", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga2->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2 + spawnOffset, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
-	gyaraga2->AddComponent(new HealthComponent(3));
+	gyaraga2->AddComponent(new PlayerHealthComponent(3));
 	gyaraga2->AddComponent(new ScoreComponent(0));
 	gyaraga2->AddComponent(new Texture2DComponent("Gyaraga2.png", playerScale, false));
 	gyaraga2->AddComponent(new GyaragaMovementComponent());
@@ -319,6 +319,59 @@ void StageManager::LoadCoopMode()
 
 void StageManager::LoadVersusMode()
 {
+	auto scene = SceneManager::GetInstance().GetCurrentScene();
+	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
+	auto go = std::make_shared<GameObject>("FPSCounter");
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
+	go->AddComponent(new FPSTextComponent(font));
+	scene->Add(go);
+	//---------------------------------------------------------------------SCORE DISPLAY--------------------------------------------------
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
+	DisplayText("ScoreDisplay", font, "Score: 0", glm::vec2(500, 780), glm::vec3(255, 255, 255));
+	//---------------------------------------------------------------------LIVES DISPLAY--------------------------------------------------
+	DisplayText("LivesDisplay", font, "Lives: 2", glm::vec2(350, 780), glm::vec3(255, 255, 255));
+	//---------------------------------------------------------------------ACCURACY DISPLAY--------------------------------------------------
+	DisplayText("AccuracyDisplay", font, "Accuracy: 100 %", glm::vec2(50, 780), glm::vec3(255, 255, 255));
+	//---------------------------------------------------------------------PLAYER--------------------------------------------------
+	const int playerScale = 1;
+	const int playerWidth = 45 * playerScale;
+	const int playerHeight = 43 * playerScale;
+	auto gyaraga = std::make_shared<GameObject>("Gyaraga", nullptr, glm::vec2(playerWidth, playerHeight));
+	//Components
+	gyaraga->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
+	gyaraga->AddComponent(new PlayerHealthComponent(3));
+	gyaraga->AddComponent(new ScoreComponent(0));
+	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
+	gyaraga->AddComponent(new GyaragaMovementComponent());
+	gyaraga->AddComponent(new PlayerWeaponComponent());
+	//watchers
+	gyaraga->AddWatcher(new ScoreObserver());
+	gyaraga->AddWatcher(new LivesObserver());
+	gyaraga->AddWatcher(new AccuracyObserver());
+	//Adds
+	scene->Add(gyaraga);
+	scene->AddPlayer(gyaraga);
+	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
+	SceneManager::GetInstance().GetCurrentScene()->AddPlayer(gyaraga);
+	//Texts
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
+	//ready text
+	int offset = 50;
+	auto pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2);
+	go = DisplayText("READY", font, "READY", pos, glm::vec3(255, 0, 0), false);
+	go->GetComponent<TextComponent>()->SetIsVisible(true, 4.0f);
+	//gameover text
+	offset = 90;
+	pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2);
+	DisplayText("GAMEOVER", font, "GAMEOVER", pos, glm::vec3(255, 0, 0), false);
+	//
+	offset = 60;
+	pos = glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2 - offset * 2);
+	go = DisplayText("STAGE " + std::to_string(int(m_CurrentStage) + 1), font, "STAGE " + std::to_string(int(m_CurrentStage) + 1), pos, glm::vec3(255, 0, 0));
+	go->GetComponent<TextComponent>()->SetIsVisible(true, 3);
+	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
+	FormationManager::GetInstance().InitFormation(m_CurrentStage);
+	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
 }
 
 void StageManager::InitMenuScreen()
@@ -343,12 +396,24 @@ void StageManager::InitMenuScreen()
 	//
 	SceneManager::GetInstance().SetScreenDimensions(glm::vec2{ m_WindowSurface->w,m_WindowSurface->h });
 
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 16);
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
 	//info text
-	DisplayText("Text", font, "Controller : Press X for singleplayer, Y for Coop and B for Versus Mode. Press Select to QUIT.", glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "Keyboard : Press I for singleplayer, O for Coop and P for Versus Mode. Press ESCAPE to QUIT.", glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f + 50), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "Controller : D pad for movement , A to shoot (xbox controller).", glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f + 150), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "Keyboard :A , D for movement, SPACE to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f + 200), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "GALAGA", glm::vec2(m_WindowSurface->w / 2.0f - 70, m_WindowSurface->h / 2.0f - 400), glm::vec3(255, 0, 0));
+	//
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 17);
+	const int offsetX = 300;
+	DisplayText("Text", font, "MODES : ", glm::vec2(m_WindowSurface->w / 2.0f - 30, m_WindowSurface->h / 2.0f - 300), glm::vec3(255, 0, 0));
+	DisplayText("Text", font, "Controller : ", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f - 270), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "Press X for singleplayer, Y for Coopand B for Versus Mode.Press Select to QUIT.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f - 240), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "Keyboard : ", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f - 210), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "Press I for singleplayer, O for Coop and P for Versus Mode. Press ESCAPE to QUIT.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f - 180), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "GAMEPLAY", glm::vec2(m_WindowSurface->w / 2.0f - 30, m_WindowSurface->h / 2.0f), glm::vec3(255, 0, 0));
+	DisplayText("Text", font, "Controller : ", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f + 30), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "D pad for movement, A to shoot(xbox controller).", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 60), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "Keyboard :", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f + 90), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "LeftArrow , RightArrow for movement, SPACE to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 120), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "COOP : A , D for movement, S to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 150), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "VERSUS : Z to use TractorBeam, X to dive , C to shoot", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 180), glm::vec3(255, 255, 0));
 }
 
 void StageManager::InitWinScreen()

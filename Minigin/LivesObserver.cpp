@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-#include "HealthComponent.h"
+#include "PlayerHealthComponent.h"
 #include "FPSTextComponent.h"
 #include "ScoreComponent.h"
 #include "TextComponent.h"
@@ -43,26 +43,33 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 		return;
 	}
 
-	auto healthComp = actor->GetComponent<HealthComponent>();
+	auto healthComp = actor->GetComponent<PlayerHealthComponent>();
 
 	if (!healthComp) {
 		std::cout << "WARNING: HealthComp of Player0 not found after player death" << std::endl;
 		return;
 	}
+	//
+	int amountOfLives = healthComp->GetLives();
+	if (amountOfLives != 0)
+	{
+		--amountOfLives;
+	}
+
 	if (currentGameMode == StageManager::GameMode::Coop)
 	{
 		if (actor->GetName() == "Gyaraga")
 		{
-			textComp->UpdateText("Lives P1 : " + std::to_string(healthComp->GetLives() - 1));
+			textComp->UpdateText("Lives P1 : " + std::to_string(amountOfLives));
 		}
 		else
 		{
-			textComp->UpdateText("Lives P2 : " + std::to_string(healthComp->GetLives() - 1));
+			textComp->UpdateText("Lives P2 : " + std::to_string(amountOfLives));
 		}
 	}
 	else
 	{
-		textComp->UpdateText("Lives: " + std::to_string(healthComp->GetLives()));
+		textComp->UpdateText("Lives: " + std::to_string(amountOfLives));
 	}
 
 	//player died text
@@ -73,7 +80,7 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 
 	if (currentGameMode == StageManager::GameMode::Coop)
 	{
-		if (((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetIsDead()) && (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetIsDead())) || (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetIsDead()))
+		if (((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<PlayerHealthComponent>()->GetIsDead()) && (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<PlayerHealthComponent>()->GetIsDead())) || (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<PlayerHealthComponent>()->GetIsDead()))
 		{
 			text = "GAMEOVER";
 		}
@@ -84,7 +91,7 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 	}
 	else
 	{
-		if ((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetIsDead()))
+		if ((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<PlayerHealthComponent>()->GetIsDead()))
 		{
 			text = "GAMEOVER";
 		}

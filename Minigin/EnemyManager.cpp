@@ -6,7 +6,7 @@
 #include "TransformComponent.h"
 #include "Scene.h"
 #include "CollisionDetectionManager.h"
-#include "HealthComponent.h"
+#include "BossHealthComponent.h"
 #include "EnemyWeaponComponent.h"
 #include "AnimationComponent.h"
 #include "SceneManager.h"
@@ -14,6 +14,7 @@
 #include "EnemyState.h"
 #include "EnemyGoToFormationState.h"
 #include "BezierPath.h"
+#include "VersusControllerComponent.h"
 
 void EnemyManager::Update()
 {
@@ -374,20 +375,43 @@ void EnemyManager::SpawnButterfly(EnemyType enemyType, int formationRowIndex, in
 
 void EnemyManager::SpawnBoss(EnemyType enemyType, int formationRowIndex, int formationIndex)
 {
-	const int bossWidth = 55;
-	const int bossHeight = 59;
-	//
-	auto bossEnemy = std::make_shared<GameObject>("Boss", nullptr, glm::vec2(bossWidth, bossHeight));
-	bossEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(bossWidth, bossHeight)));
-	bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
-	bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
-	bossEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex, m_EnemyMovementSpeed));
-	bossEnemy->AddComponent(new EnemyWeaponComponent());
-	bossEnemy->AddComponent(new HealthComponent(2));
-	bossEnemy->AddComponent(new TractorBeamComponent());
-	dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
-	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
-	m_SpEnemies.push_back(bossEnemy);
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Versus)
+	{
+		const int bossWidth = 55;
+		const int bossHeight = 59;
+		//
+		auto bossEnemy = std::make_shared<GameObject>("Boss" + std::to_string(m_spBosses.size()), nullptr, glm::vec2(bossWidth, bossHeight));
+		bossEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(bossWidth, bossHeight)));
+		bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
+		bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
+		bossEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex, m_EnemyMovementSpeed));
+		bossEnemy->AddComponent(new EnemyWeaponComponent());
+		bossEnemy->AddComponent(new BossHealthComponent(2));
+		bossEnemy->AddComponent(new TractorBeamComponent());
+		bossEnemy->AddComponent(new VersusControllerComponent());
+		dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
+		CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
+		m_spBosses.push_back(bossEnemy);
+		m_SpEnemies.push_back(bossEnemy);
+	}
+	else
+	{
+		const int bossWidth = 55;
+		const int bossHeight = 59;
+		//
+		auto bossEnemy = std::make_shared<GameObject>("Boss", nullptr, glm::vec2(bossWidth, bossHeight));
+		bossEnemy->AddComponent(new TransformComponent(glm::vec2(0, 0), glm::vec2(bossWidth, bossHeight)));
+		bossEnemy->AddComponent(new Texture2DComponent("Boss.png", 1, true));
+		bossEnemy->AddComponent(new AnimationComponent(0.2f, 2, 2, true));
+		bossEnemy->AddComponent(new EnemyStateManager(enemyType, formationRowIndex, formationIndex, m_EnemyMovementSpeed));
+		bossEnemy->AddComponent(new EnemyWeaponComponent());
+		bossEnemy->AddComponent(new BossHealthComponent(2));
+		bossEnemy->AddComponent(new TractorBeamComponent());
+		dae::SceneManager::GetInstance().GetCurrentScene()->Add(bossEnemy);
+		CollisionDetectionManager::GetInstance().AddCollisionGameObject(bossEnemy);
+		m_spBosses.push_back(bossEnemy);
+		m_SpEnemies.push_back(bossEnemy);
+	}
 }
 
 bool EnemyManager::CanDive(EnemyType enemyType) const
@@ -466,6 +490,21 @@ bool EnemyManager::GetAllEnemiesAreDead() const
 	return false;
 }
 
+std::shared_ptr<GameObject> EnemyManager::GetAvailableBoss() const
+{
+	if (m_spBosses.size() == 0)
+	{
+		return nullptr;
+	}
+
+	if (!m_spBosses[0]->GetMarkForDelete())
+	{
+		return m_spBosses[0];
+	}
+
+	return nullptr;
+}
+
 void EnemyManager::Wait()
 {
 	m_WaitIndices.push_back(int(m_QueuedEnemies.size() + m_SecondQueuedEnemies.size()));
@@ -499,6 +538,7 @@ void EnemyManager::DeleteAllEnemies()
 	//
 	m_WaitIndices.clear();
 	m_SpEnemies.clear();
+	m_spBosses.clear();
 	m_QueuedEnemies.clear();
 	m_SecondQueuedEnemies.clear();
 }
@@ -510,6 +550,16 @@ void EnemyManager::DeleteSpecificEnemy(const std::shared_ptr<GameObject>& enemy)
 	if (it != m_SpEnemies.end())
 	{
 		m_SpEnemies.erase(it);
+	}
+	//if boss
+	if (enemy->GetName()[0] == 'B' || enemy->GetName()[1] == 'o')
+	{
+		it = std::find(m_spBosses.begin(), m_spBosses.end(), enemy);
+
+		if (it != m_spBosses.end())
+		{
+			m_spBosses.erase(it);
+		}
 	}
 }
 

@@ -13,6 +13,7 @@ public:
 
 private:
 	std::vector<std::vector<glm::vec2>> m_Paths;
+	//
 	int m_CurrentPath;
 	int m_CurrentWayPoint;
 	const float EPSILON;

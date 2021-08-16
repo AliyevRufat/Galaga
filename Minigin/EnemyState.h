@@ -23,8 +23,16 @@ public:
 	bool GetSwitchState() const { return m_SwitchState; }
 	void ShootBullet(EnemyStateManager& enemyStateMngr)
 	{
-		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
-		if (m_CanShoot && player && player->GetIsActive())
+		if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::SinglePlayer || StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Versus)
+		{
+			auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+			if (!player || !player->GetIsActive())
+			{
+				return;
+			}
+		}
+
+		if (m_CanShoot)
 		{
 			m_ShootTime += EngineTime::GetInstance().GetDeltaTime();
 			if (m_ShootTime >= m_ShootTimer)

@@ -3,7 +3,6 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-#include "HealthComponent.h"
 #include "FPSTextComponent.h"
 #include "ScoreComponent.h"
 #include "TextComponent.h"

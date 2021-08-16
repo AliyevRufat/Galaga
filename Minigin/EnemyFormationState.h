@@ -14,4 +14,5 @@ private:
 	//
 	const int m_TimerBeforeDiving;
 	float m_TimeBeforeDiving;
+	EnemyState* m_pBossState;
 };

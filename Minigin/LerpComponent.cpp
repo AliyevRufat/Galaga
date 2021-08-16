@@ -27,7 +27,7 @@ void LerpComponent::Update()
 	//
 	m_LerpT += EngineTime::GetInstance().GetDeltaTime() / (float)m_Speed;
 	//
-	if (abs(currentPos.x - m_EndPos.x) <= 5 && abs(currentPos.y - m_EndPos.y) <= 0.1f)
+	if (abs(currentPos.x - m_EndPos.x) <= 1 && abs(currentPos.y - m_EndPos.y) <= 1)
 	{
 		m_IsAtEndPos = true;
 	}

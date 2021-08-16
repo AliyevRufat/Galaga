@@ -31,6 +31,7 @@ public:
 	int GetEnemyChanceToShoot() const;
 	bool GetAllEnemiesAreSpawned() const;
 	bool GetAllEnemiesAreDead()const;
+	std::shared_ptr<GameObject> GetAvailableBoss() const;
 	bool CanDive(EnemyType enemyType) const;
 
 	void DeleteAllEnemies();
@@ -54,6 +55,7 @@ private:
 	std::deque<std::pair<EnemyType, std::pair<int, int>>> m_SecondQueuedEnemies;
 	//
 	std::vector<std::shared_ptr<GameObject>> m_SpEnemies;
+	std::vector<std::shared_ptr<GameObject>> m_spBosses;
 	//
 	float m_SpawnTimeBee = 0.0f;
 	float m_SpawnTimeButterfly = 0.0f;

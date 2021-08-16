@@ -6,9 +6,6 @@
     <ClInclude Include="AnimationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="HealthComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -87,15 +84,21 @@
     <ClInclude Include="StageManager.h">
       <Filter>LevelManager</Filter>
     </ClInclude>
+    <ClInclude Include="VersusControllerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerHealthComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHealthComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MiniginPCH.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="AnimationComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
@@ -163,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="StageManager.cpp">
       <Filter>LevelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="VersusControllerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHealthComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHealthComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

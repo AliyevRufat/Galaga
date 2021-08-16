@@ -98,6 +98,11 @@ void dae::Minigin::BindCommands()
 	inputManager.AssignKey<SteerLeft>(KeyboardButton::A, 1);
 	inputManager.AssignKey<SteerRight>(KeyboardButton::D, 1);
 	inputManager.AssignKey<Fire>(KeyboardButton::S, 1);
+
+	//Versus
+	inputManager.AssignKey<BossTractorBeam>(KeyboardButton::Z, 1);
+	inputManager.AssignKey<BossDive>(KeyboardButton::X, 1);
+	inputManager.AssignKey<BossShoot>(KeyboardButton::C, 1);
 }
 
 void dae::Minigin::Cleanup()

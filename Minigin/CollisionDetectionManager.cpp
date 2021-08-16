@@ -2,7 +2,8 @@
 #include "CollisionDetectionManager.h"
 #include "../AliEngine/TransformComponent.h"
 #include "../AliEngine/SceneManager.h"
-#include "HealthComponent.h"
+#include "PlayerHealthComponent.h"
+#include "BossHealthComponent.h"
 #include "../AliEngine/Scene.h"
 #include "../AliEngine/Locator.h"
 #include "EnemyStateManager.h"
@@ -66,10 +67,10 @@ void CollisionDetectionManager::Update()
 						//explosion
 						AddExplosionEffect(int(i));
 					}
-					else if (m_pOtherEntities[i].first->GetName() == "Boss")
+					else if (m_pOtherEntities[i].first->GetName() != "TractorBeam" && m_pOtherEntities[i].first->GetName() != "Gyaraga" && m_pOtherEntities[i].first->GetName() != "Gyaraga2" && m_pOtherEntities[i].first->GetName() != "Bullet")
 					{
 						//decrease 1 life of the boss
-						auto healthComponent = m_pOtherEntities[i].first->GetComponent<HealthComponent>();
+						auto healthComponent = m_pOtherEntities[i].first->GetComponent<BossHealthComponent>();
 						healthComponent->Die();
 						//set destroy for the bullet
 						m_pOtherEntities[j].first->SetMarkForDelete(true);
@@ -108,18 +109,18 @@ void CollisionDetectionManager::Update()
 				if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
 				{
 					m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform->GetTransform().GetPosition());//boss gets the fighter of the player
-					m_pGyaraga->GetComponent<HealthComponent>()->Die();
+					m_pGyaraga->GetComponent<PlayerHealthComponent>()->Die();
 				}
 				else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
 				{
-					if (m_pOtherEntities[i].first->GetName() == "Boss")
+					if (m_pOtherEntities[i].first->GetName() != "Bee" && m_pOtherEntities[i].first->GetName() != "Butterfly" && m_pOtherEntities[i].first->GetName() != "EnemyBullet" && m_pOtherEntities[i].first->GetName() != "Gyaraga" && m_pOtherEntities[i].first->GetName() != "Gyaraga2")
 					{
 						m_pOtherEntities[i].first->GetComponent<TractorBeamComponent>()->Clean();//destroy the fighter of the boss if it has one
 					}
 					//
 					AddExplosionEffect(int(i));
 					//decrease 1 life of the player and destroy whatever collided with the player
-					m_pGyaraga->GetComponent<HealthComponent>()->Die(true);
+					m_pGyaraga->GetComponent<PlayerHealthComponent>()->Die(true);
 					m_pOtherEntities[i].first->SetMarkForDelete(true);
 					m_pOtherEntities[i].second = true;
 					//check if enemy was diving
@@ -148,7 +149,7 @@ void CollisionDetectionManager::Update()
 					if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
 					{
 						m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform2->GetTransform().GetPosition());//boss gets the fighter of the player
-						m_pGyaraga2->GetComponent<HealthComponent>()->Die();
+						m_pGyaraga2->GetComponent<PlayerHealthComponent>()->Die();
 					}
 					else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
 					{
@@ -159,7 +160,7 @@ void CollisionDetectionManager::Update()
 						//
 						AddExplosionEffect(int(i));
 						//decrease 1 life of the player and destroy whatever collided with the player
-						m_pGyaraga2->GetComponent<HealthComponent>()->Die(true);
+						m_pGyaraga2->GetComponent<PlayerHealthComponent>()->Die(true);
 						m_pOtherEntities[i].first->SetMarkForDelete(true);
 						m_pOtherEntities[i].second = true;
 						//check if enemy was diving
@@ -300,7 +301,7 @@ void CollisionDetectionManager::IncreasePlayerScore(const std::shared_ptr<GameOb
 		}
 		else
 		{
-			if (gameObject->GetComponent<HealthComponent>()->GetLives() == 1)
+			if (gameObject->GetComponent<BossHealthComponent>()->GetLives() == 1)
 			{
 				playerSoreComp->IncreaseScore(150);
 			}
@@ -318,7 +319,7 @@ void CollisionDetectionManager::IncreasePlayerScore(const std::shared_ptr<GameOb
 		}
 		else
 		{
-			if (gameObject->GetComponent<HealthComponent>()->GetLives() == 1)
+			if (gameObject->GetComponent<BossHealthComponent>()->GetLives() == 1)
 			{
 				playerSoreComp->IncreaseScore(400);
 			}

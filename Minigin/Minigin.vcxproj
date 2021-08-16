@@ -207,6 +207,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   <ItemGroup>
     <ClInclude Include="AccuracyObserver.h" />
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="BossHealthComponent.h" />
     <ClInclude Include="EnemyGoToBeamState.h" />
     <ClInclude Include="EnemySpawnState.h" />
     <ClInclude Include="EnemyStateManager.h" />
@@ -223,7 +224,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="FormationManager.h" />
     <ClInclude Include="EnemyGoToFormationState.h" />
     <ClInclude Include="GyaragaMovementComponent.h" />
-    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="PlayerHealthComponent.h" />
     <ClInclude Include="ComponentIncludes.h" />
     <ClInclude Include="LerpComponent.h" />
     <ClInclude Include="StageManager.h" />
@@ -235,10 +236,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="PlayerWeaponComponent.h" />
     <ClInclude Include="BezierPath.h" />
     <ClInclude Include="TractorBeamComponent.h" />
+    <ClInclude Include="VersusControllerComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccuracyObserver.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="BossHealthComponent.cpp" />
     <ClCompile Include="EnemyGoToBeamState.cpp" />
     <ClCompile Include="EnemySpawnState.cpp" />
     <ClCompile Include="EnemyStateManager.cpp" />
@@ -253,7 +256,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="FormationManager.cpp" />
     <ClCompile Include="EnemyGoToFormationState.cpp" />
     <ClCompile Include="GyaragaMovementComponent.cpp" />
-    <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="PlayerHealthComponent.cpp" />
     <ClCompile Include="LerpComponent.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="LivesObserver.cpp" />
@@ -270,6 +273,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="ScoreObserver.cpp" />
     <ClCompile Include="PlayerWeaponComponent.cpp" />
     <ClCompile Include="TractorBeamComponent.cpp" />
+    <ClCompile Include="VersusControllerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AliEngine\AliEngine.vcxproj">

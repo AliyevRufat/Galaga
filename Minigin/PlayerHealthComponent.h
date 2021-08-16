@@ -1,10 +1,10 @@
 #pragma once
 #include "ComponentIncludes.h"
 
-class HealthComponent : public BaseComponent
+class PlayerHealthComponent : public BaseComponent
 {
 public:
-	HealthComponent(const unsigned int& health);
+	PlayerHealthComponent(const unsigned int& health);
 	//
 	const unsigned int& GetLives() const;
 	bool GetIsDead() const;

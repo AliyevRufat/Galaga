@@ -9,9 +9,13 @@ glm::vec2 Normalize(const glm::vec2& vector)
 {
 	float length = sqrt((vector.x * vector.x) + (vector.y * vector.y));
 	if (length != 0)
+	{
 		return glm::vec2(vector.x / length, vector.y / length);
+	}
 	else
+	{
 		return vector;
+	}
 }
 
 BezierPathManager::BezierPathManager(int speed)

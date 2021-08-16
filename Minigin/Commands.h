@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include "BaseCommand.h"
-#include "HealthComponent.h"
 #include "FPSTextComponent.h"
 #include "ScoreComponent.h"
 #include "TextComponent.h"
@@ -14,6 +13,8 @@
 #include "GyaragaMovementComponent.h"
 #include "PlayerWeaponComponent.h"
 #include "StageManager.h"
+#include "VersusControllerComponent.h"
+#include "EnemyManager.h"
 
 class ExitCommand final : public Command
 {
@@ -25,7 +26,7 @@ public:
 	void Undo() override {};
 };
 
-//-------------------------------------------------------------------------------------------------------JUMP MOVEMENT-------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------PLAYER MOVEMENT-------------------------------------------------------
 class SteerLeft final : public Command
 {
 public:
@@ -103,7 +104,79 @@ public:
 
 	void Undo() override {};
 };
-//-------------------------------------------------------------------------------------------------------------GAMEMODES AND MENU
+//-------------------------------------------------------------------------------------------------------VERSUS CONTROLS-------------------------------------------------------
+class BossTractorBeam final : public Command
+{
+public:
+	BossTractorBeam(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		auto versusBoss = EnemyManager::GetInstance().GetAvailableBoss();
+
+		if (versusBoss)
+		{
+			auto versusControlllerComp = versusBoss->GetComponent<VersusControllerComponent>();
+			if (versusControlllerComp)
+			{
+				versusControlllerComp->SetIsTractorBeamActivated(true);
+			}
+		}
+	}
+
+	void Release() const override {};
+
+	void Undo() override {};
+};
+
+class BossDive final : public Command
+{
+public:
+	BossDive(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		auto versusBoss = EnemyManager::GetInstance().GetAvailableBoss();
+
+		if (versusBoss)
+		{
+			auto versusControlllerComp = versusBoss->GetComponent<VersusControllerComponent>();
+			if (versusControlllerComp)
+			{
+				versusControlllerComp->SetIsDivingActivated(true);
+			}
+		}
+	}
+
+	void Release() const override {};
+
+	void Undo() override {};
+};
+
+class BossShoot final : public Command
+{
+public:
+	BossShoot(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		auto versusBoss = EnemyManager::GetInstance().GetAvailableBoss();
+
+		if (versusBoss)
+		{
+			auto versusControlllerComp = versusBoss->GetComponent<VersusControllerComponent>();
+			if (versusControlllerComp)
+			{
+				versusControlllerComp->SetIsShootingActivated(true);
+			}
+		}
+	}
+
+	void Release() const override {};
+
+	void Undo() override {};
+};
+//-------------------------------------------------------------------------------------------------------------GAMEMODES AND MENU--------------------------------------------------------
 class ChooseSinglePlayerGameMode final : public Command
 {
 public:

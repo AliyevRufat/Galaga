@@ -55,19 +55,23 @@ void EnemyWeaponComponent::CreateBullet()
 	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
 	{
 		const int randNr = rand() % 2;
-
+		int playerIndex = 0;
 		if (randNr == 1)
 		{
-			bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+			playerIndex = 0;
 		}
 		else
 		{
-			bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+			playerIndex = 1;
 		}
+
+		auto pos = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(playerIndex)->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+		bullet->AddComponent(new BulletMovementComponent(glm::vec2(pos.x + dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(playerIndex)->GetDimensions().x / 2, pos.y)));
 	}
 	else
 	{
-		bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+		auto pos = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+		bullet->AddComponent(new BulletMovementComponent(glm::vec2(pos.x + dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetDimensions().x / 2, pos.y)));
 	}
 	bullet->GetComponent<BulletMovementComponent>()->Init();
 	//Collision
