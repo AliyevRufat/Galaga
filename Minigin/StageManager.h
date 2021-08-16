@@ -38,7 +38,7 @@ public:
 	GameMode GetCurrentGameMode() const;
 	void SetWindowSurface(SDL_Surface* windowSurface) { m_WindowSurface = windowSurface; };
 	//
-	void SetIsGameOver(bool isGameOver);
+	void SetIsGameOver(bool hasPlayerLost, const std::string& playerName);
 	void SetIsPlayerDead(bool isPlayerDead, const std::string& playerName);
 private:
 	friend class dae::Singleton<StageManager>;
@@ -57,7 +57,8 @@ private:
 	GameMode m_CurrentGameMode = GameMode::SinglePlayer;
 	//
 	bool m_IsInMenu = true;
-	bool m_IsGameOver = false;
+	bool m_HasPlayerLost = false;
+	bool m_HasPlayer2Lost = false;
 	bool m_HasWon = false;
 	bool m_IsPlayerDead = false;
 	bool m_IsPlayer2Dead = false;
@@ -67,7 +68,6 @@ private:
 	const int m_RestartTime = 5;
 	//
 	float m_GameOverTimer = 0.0f;
-	int m_CoopPlayerDeathCount = 0;
 	const int m_ActionTime = 4;
 	float m_WinTimer = 0.0f;
 };

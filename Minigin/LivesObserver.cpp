@@ -53,11 +53,11 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 	{
 		if (actor->GetName() == "Gyaraga")
 		{
-			textComp->UpdateText("Lives P1 : " + std::to_string(healthComp->GetLives()));
+			textComp->UpdateText("Lives P1 : " + std::to_string(healthComp->GetLives() - 1));
 		}
 		else
 		{
-			textComp->UpdateText("Lives P2 : " + std::to_string(healthComp->GetLives()));
+			textComp->UpdateText("Lives P2 : " + std::to_string(healthComp->GetLives() - 1));
 		}
 	}
 	else

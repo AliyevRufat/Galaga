@@ -22,10 +22,10 @@ void HealthComponent::Die(bool explode)
 	if (m_Lives > 0)
 	{
 		m_Lives--;
-	}
-	else
-	{
-		m_IsGameOver = true;
+		if (m_Lives == 0)
+		{
+			m_IsGameOver = true;
+		}
 	}
 	//
 	if (m_pGameObject->GetName() == "Gyaraga" || m_pGameObject->GetName() == "Gyaraga2")
@@ -53,7 +53,7 @@ void HealthComponent::Die(bool explode)
 		//
 		if (m_IsGameOver)
 		{
-			StageManager::GetInstance().SetIsGameOver(true);
+			StageManager::GetInstance().SetIsGameOver(true, m_pGameObject->GetName());
 		}
 		else
 		{

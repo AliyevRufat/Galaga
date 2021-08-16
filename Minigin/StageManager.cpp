@@ -30,7 +30,11 @@ void StageManager::Update()
 	//
 	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	//restart player if dead or show game over screen of lost
-	if (m_IsGameOver)
+	if (m_CurrentGameMode != GameMode::Coop)
+	{
+		m_HasPlayer2Lost = true;
+	}
+	if (m_HasPlayerLost && m_HasPlayer2Lost)
 	{
 		m_GameOverTimer += deltaTime;
 
@@ -39,7 +43,8 @@ void StageManager::Update()
 			InitGameOverScreen();
 			//
 			m_GameOverTimer -= m_GameOverTimer;
-			m_IsGameOver = false;
+			m_HasPlayerLost = false;
+			m_HasPlayer2Lost = false;
 		}
 	}
 	//
@@ -86,7 +91,7 @@ void StageManager::Update()
 		}
 	}
 	//
-	if (m_HasWon && !m_IsGameOver)
+	if (m_HasWon && (!m_HasPlayerLost || !m_HasPlayer2Lost))
 	{
 		m_WinTimer += deltaTime;
 
@@ -99,9 +104,22 @@ void StageManager::Update()
 		}
 	}
 	//
-	if (EnemyManager::GetInstance().GetAllEnemiesAreDead() && !m_IsGameOver)
+	if (EnemyManager::GetInstance().GetAllEnemiesAreDead())
 	{
-		LoadNextStage();
+		if (m_CurrentGameMode == GameMode::Coop)
+		{
+			if (!m_HasPlayer2Lost || !m_HasPlayerLost)
+			{
+				LoadNextStage();
+			}
+		}
+		else
+		{
+			if (!m_HasPlayerLost)
+			{
+				LoadNextStage();
+			}
+		}
 	}
 }
 
@@ -186,7 +204,7 @@ void StageManager::LoadSinglePlayerMode()
 	auto gyaraga = std::make_shared<GameObject>("Gyaraga", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
-	gyaraga->AddComponent(new HealthComponent(2));
+	gyaraga->AddComponent(new HealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
 	gyaraga->AddComponent(new GyaragaMovementComponent());
@@ -239,7 +257,7 @@ void StageManager::LoadCoopMode()
 	//player 1
 	DisplayText("LivesDisplay", font, "Lives P1 : 2", glm::vec2(350, 780), glm::vec3(255, 255, 255));
 	//player 2
-	DisplayText("LivesDisplay2", font, "Lives P2 : 2", glm::vec2(350, 780), glm::vec3(255, 255, 255));
+	DisplayText("LivesDisplay2", font, "Lives P2 : 2", glm::vec2(350, 820), glm::vec3(255, 255, 255));
 	//---------------------------------------------------------------------ACCURACY DISPLAY--------------------------------------------------
 	//player 1
 	DisplayText("AccuracyDisplay", font, "Accuracy P1 : 100 %", glm::vec2(50, 780), glm::vec3(255, 255, 255));
@@ -253,7 +271,7 @@ void StageManager::LoadCoopMode()
 	auto gyaraga = std::make_shared<GameObject>("Gyaraga", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2 - spawnOffset, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
-	gyaraga->AddComponent(new HealthComponent(2));
+	gyaraga->AddComponent(new HealthComponent(3));
 	gyaraga->AddComponent(new ScoreComponent(0));
 	gyaraga->AddComponent(new Texture2DComponent("Gyaraga.png", playerScale, false));
 	gyaraga->AddComponent(new GyaragaMovementComponent());
@@ -270,7 +288,7 @@ void StageManager::LoadCoopMode()
 	auto gyaraga2 = std::make_shared<GameObject>("Gyaraga2", nullptr, glm::vec2(playerWidth, playerHeight));
 	//Components
 	gyaraga2->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2 - playerWidth / 2 + spawnOffset, m_WindowSurface->h - m_WindowSurface->h / 8 - playerHeight / 2), glm::vec2(playerWidth, playerHeight)));
-	gyaraga2->AddComponent(new HealthComponent(2));
+	gyaraga2->AddComponent(new HealthComponent(3));
 	gyaraga2->AddComponent(new ScoreComponent(0));
 	gyaraga2->AddComponent(new Texture2DComponent("Gyaraga2.png", playerScale, false));
 	gyaraga2->AddComponent(new GyaragaMovementComponent());
@@ -309,14 +327,14 @@ void StageManager::InitMenuScreen()
 	//
 	m_HasWon = false;
 	m_IsInMenu = true;
-	m_IsGameOver = false;
+	m_HasPlayerLost = false;
+	m_HasPlayer2Lost = false;
 	m_IsPlayerDead = false;
 	m_IsPlayer2Dead = false;
 	m_WinTimer = 0.0f;
 	m_RestartTimer = 0.0f;
 	m_RestartTimerPlayer2 = 0.0f;
 	m_GameOverTimer = 0.0f;
-	m_CoopPlayerDeathCount = 0;
 	m_CurrentStage = Stage::One;
 	//
 	SceneManager::GetInstance().ClearScene(SceneManager::GetInstance().GetCurrentScene());
@@ -439,19 +457,15 @@ bool StageManager::GetIsInMenu() const
 	return m_IsInMenu;
 }
 
-void StageManager::SetIsGameOver(bool isGameOver)
+void StageManager::SetIsGameOver(bool hasPlayerLost, const std::string& playerName)
 {
-	if (m_CurrentGameMode == GameMode::Coop)
+	if (playerName == "Gyaraga2")
 	{
-		++m_CoopPlayerDeathCount;
-		if (m_CoopPlayerDeathCount >= 2)
-		{
-			m_IsGameOver = isGameOver;
-		}
+		m_HasPlayer2Lost = hasPlayerLost;
 	}
 	else
 	{
-		m_IsGameOver = isGameOver;
+		m_HasPlayerLost = hasPlayerLost;
 	}
 }
 
