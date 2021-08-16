@@ -9,6 +9,7 @@
 #include "TextComponent.h"
 #include "Texture2DComponent.h"
 #include "TransformComponent.h"
+#include "StageManager.h"
 
 void ScoreObserver::OnNotify(const GameObject* actor, const std::string& event)
 {
@@ -47,5 +48,20 @@ void ScoreObserver::ChangeScore(const GameObject* actor)
 		std::cout << "WARNING: ScoreComp not found after player death" << std::endl;
 		return;
 	}
-	textComp->UpdateText("Score: " + std::to_string(scoreComp->GetScore()));
+	//
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
+	{
+		if (actor->GetName() == "Gyaraga")
+		{
+			textComp->UpdateText("Score P1 : " + std::to_string(scoreComp->GetScore()));
+		}
+		else
+		{
+			textComp->UpdateText("Score P2 : " + std::to_string(scoreComp->GetScore()));
+		}
+	}
+	else
+	{
+		textComp->UpdateText("Score: " + std::to_string(scoreComp->GetScore()));
+	}
 }

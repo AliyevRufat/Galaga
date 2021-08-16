@@ -9,6 +9,7 @@
 #include "TractorBeamComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "StageManager.h"
 
 EnemyFormationState::EnemyFormationState()
 	:m_TimerBeforeDiving{ rand() % 7 + 2 }
@@ -56,10 +57,22 @@ EnemyState* EnemyFormationState::StateSwitch(EnemyStateManager& enemyStateMngr)
 		return nullptr;
 	}
 	//if player is dead don't dive
-	auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
-	if (player && player->GetIsActive() == false)
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
 	{
-		return nullptr;
+		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+		auto player2 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1);
+		if (player && !player->GetIsActive() && player2 && !player2->GetIsActive())
+		{
+			return nullptr;
+		}
+	}
+	else
+	{
+		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+		if (player && !player->GetIsActive())
+		{
+			return nullptr;
+		}
 	}
 	//
 	if (enemyStateMngr.GetEnemyType() == EnemyType::Boss)

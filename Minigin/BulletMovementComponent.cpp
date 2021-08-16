@@ -22,7 +22,7 @@ void BulletMovementComponent::Init()
 		auto furtherTarget = glm::vec2(BA.x * targetOffset, BA.y * targetOffset);
 		auto newTarget = glm::vec2(furtherTarget.x + currentPos.x, furtherTarget.y + currentPos.y);
 		//
-		m_pGameObject->AddComponent(new LerpComponent(newTarget));
+		m_pGameObject->AddComponent(new LerpComponent(newTarget, 50));
 	}
 }
 

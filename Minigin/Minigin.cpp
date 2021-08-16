@@ -94,6 +94,10 @@ void dae::Minigin::BindCommands()
 	inputManager.AssignKey<SteerLeft>(KeyboardButton::ArrowLeft, 0);
 	inputManager.AssignKey<SteerRight>(KeyboardButton::ArrowRight, 0);
 	inputManager.AssignKey<Fire>(KeyboardButton::SPACE, 0);
+	//
+	inputManager.AssignKey<SteerLeft>(KeyboardButton::A, 1);
+	inputManager.AssignKey<SteerRight>(KeyboardButton::D, 1);
+	inputManager.AssignKey<Fire>(KeyboardButton::S, 1);
 }
 
 void dae::Minigin::Cleanup()

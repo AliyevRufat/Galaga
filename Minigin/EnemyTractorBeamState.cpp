@@ -27,7 +27,7 @@ void EnemyTractorBeamState::Update(EnemyStateManager& enemyStateManager)
 		else //go straight down if player is not caught
 		{
 			auto transformComp = enemyStateManager.GetGameObject()->GetComponent<TransformComponent>();
-			const float speed = 300;
+			const float speed = 600;
 			int newPosY = int(transformComp->GetTransform().GetPosition().y + speed * EngineTime::GetInstance().GetDeltaTime());
 			//
 			if (transformComp->GetTransform().GetPosition().y >= dae::SceneManager::GetInstance().GetScreenDimensions().y)

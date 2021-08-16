@@ -73,7 +73,7 @@ void TractorBeamComponent::CreateTractorBeam()
 	m_pTractorBeam = std::make_shared<GameObject>("TractorBeam", m_pGameObject);
 	m_pTractorBeam->AddComponent(new TransformComponent(glm::vec2(parentPos.x - offset, parentPos.y), tractorBeamScale));
 	m_pTractorBeam->AddComponent(new Texture2DComponent("TractorBeam.png", 1, true));
-	m_pTractorBeam->AddComponent(new AnimationComponent(0.1f, 10, 3, false));
+	m_pTractorBeam->AddComponent(new AnimationComponent(0.05f, 10, 3, false));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(m_pTractorBeam);
 	m_IsFinished = false;
 }
@@ -111,7 +111,7 @@ void TractorBeamComponent::SpawnAFighter(const glm::vec2& playerPos)
 	m_pCaughtPlayer->AddComponent(new TransformComponent(playerPos, glm::vec2(caughtPlayerWidth, caughtPlayerHeight)));
 	m_pCaughtPlayer->AddComponent(new Texture2DComponent("CaughtGyaraga.png", 1, false));
 	m_pCaughtPlayer->AddComponent(new EnemyWeaponComponent(true));
-	m_pCaughtPlayer->AddComponent(new LerpComponent(glm::vec2(parentPos.x + widthOffset, parentPos.y - caughtPlayerHeight)));
+	m_pCaughtPlayer->AddComponent(new LerpComponent(glm::vec2(parentPos.x + widthOffset, parentPos.y - caughtPlayerHeight), 20));
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(m_pCaughtPlayer);
 	//
 	m_IsPlayerCaught = true;

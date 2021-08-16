@@ -9,6 +9,7 @@
 #include "TextComponent.h"
 #include "Texture2DComponent.h"
 #include "TransformComponent.h"
+#include "StageManager.h"
 
 void LivesObserver::OnNotify(const GameObject* actor, const std::string& event)
 {
@@ -20,6 +21,7 @@ void LivesObserver::OnNotify(const GameObject* actor, const std::string& event)
 
 void LivesObserver::ChangeLives(const GameObject* actor)
 {
+	auto currentGameMode = StageManager::GetInstance().GetCurrentGameMode();
 	std::shared_ptr<GameObject> spLivesDisplay = nullptr;
 	if (actor->GetName() == "Gyaraga")
 	{
@@ -47,15 +49,42 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 		std::cout << "WARNING: HealthComp of Player0 not found after player death" << std::endl;
 		return;
 	}
-	textComp->UpdateText("Lives: " + std::to_string(healthComp->GetLives()));
-	//player died text
-	std::shared_ptr<GameObject> spPlayerDiedGO = nullptr;
-	if (actor->GetName() == "Gyaraga")
+	if (currentGameMode == StageManager::GameMode::Coop)
 	{
-		std::string text;
-		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+		if (actor->GetName() == "Gyaraga")
+		{
+			textComp->UpdateText("Lives P1 : " + std::to_string(healthComp->GetLives()));
+		}
+		else
+		{
+			textComp->UpdateText("Lives P2 : " + std::to_string(healthComp->GetLives()));
+		}
+	}
+	else
+	{
+		textComp->UpdateText("Lives: " + std::to_string(healthComp->GetLives()));
+	}
 
-		if ((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetIsDead()) || (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetIsDead()))
+	//player died text
+	std::shared_ptr<GameObject> spPlayerEvent = nullptr;
+
+	std::string text;
+	auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+
+	if (currentGameMode == StageManager::GameMode::Coop)
+	{
+		if (((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetIsDead()) && (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetIsDead())) || (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetIsDead()))
+		{
+			text = "GAMEOVER";
+		}
+		else
+		{
+			return;
+		}
+	}
+	else
+	{
+		if ((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetIsDead()))
 		{
 			text = "GAMEOVER";
 		}
@@ -63,8 +92,9 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 		{
 			text = "READY";
 		}
-		spPlayerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName(text);
 	}
-	auto textCompPlayerDied = std::static_pointer_cast<GameObject>(spPlayerDiedGO).get()->GetComponent<TextComponent>();
+	//
+	spPlayerEvent = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName(text);
+	auto textCompPlayerDied = std::static_pointer_cast<GameObject>(spPlayerEvent).get()->GetComponent<TextComponent>();
 	textCompPlayerDied->SetIsVisible(true, 5.0f);
 }

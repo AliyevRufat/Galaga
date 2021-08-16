@@ -28,11 +28,18 @@ void HealthComponent::Die(bool explode)
 		m_IsGameOver = true;
 	}
 	//
-	if (m_pGameObject->GetName() == "Gyaraga")
+	if (m_pGameObject->GetName() == "Gyaraga" || m_pGameObject->GetName() == "Gyaraga2")
 	{
 		m_pGameObject->Notify("PlayerDied");
 		m_pGameObject->SetIsActive(false);
-		CollisionDetectionManager::GetInstance().DeleteSpecificObject(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0));
+		if (m_pGameObject->GetName() == "Gyaraga")
+		{
+			CollisionDetectionManager::GetInstance().DeleteSpecificObject(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0));
+		}
+		else
+		{
+			CollisionDetectionManager::GetInstance().DeleteSpecificObject(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1));
+		}
 		if (explode)
 		{
 			//death animation
@@ -50,7 +57,7 @@ void HealthComponent::Die(bool explode)
 		}
 		else
 		{
-			StageManager::GetInstance().SetIsPlayerDead(true);
+			StageManager::GetInstance().SetIsPlayerDead(true, m_pGameObject->GetName());
 		}
 	}
 	else if (m_pGameObject->GetName() == "Boss")

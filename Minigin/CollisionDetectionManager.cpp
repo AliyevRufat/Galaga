@@ -17,11 +17,24 @@
 
 void CollisionDetectionManager::Update()
 {
-	auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
-	if (StageManager::GetInstance().GetIsInMenu() || (player && !player->GetIsActive()))
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
 	{
-		return;
+		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+		auto player2 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1);
+		if (StageManager::GetInstance().GetIsInMenu() || (player && !player->GetIsActive() && player2 && !player2->GetIsActive()))
+		{
+			return;
+		}
 	}
+	else
+	{
+		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+		if (StageManager::GetInstance().GetIsInMenu() || (player && !player->GetIsActive()))
+		{
+			return;
+		}
+	}
+
 	//if player bullet collides with the enemy
 	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
@@ -31,7 +44,7 @@ void CollisionDetectionManager::Update()
 			{
 				if (m_pOtherEntities[j].first->GetName() == "Bullet")
 				{
-					IncreasePlayerScore(m_pOtherEntities[i].first);
+					IncreasePlayerScore(m_pOtherEntities[j].first, m_pOtherEntities[i].first);
 					//
 					if ((m_pOtherEntities[i].first->GetName() == "Bee" || m_pOtherEntities[i].first->GetName() == "Butterfly"))
 					{
@@ -123,6 +136,47 @@ void CollisionDetectionManager::Update()
 			}
 		}
 	}
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
+	{
+		//if enemy or enemy bullet collides with the player
+		for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+		{
+			if (m_pGyaraga2 && m_pGyaraga2->GetIsActive())
+			{
+				if (IsOverlapping(m_pGyaragaTransform2->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
+				{
+					if (m_pOtherEntities[i].first->GetName() == "TractorBeam" && !m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->GetIsPlayerCaught())
+					{
+						m_pOtherEntities[i].first->GetParent()->GetComponent<TractorBeamComponent>()->SpawnAFighter(m_pGyaragaTransform2->GetTransform().GetPosition());//boss gets the fighter of the player
+						m_pGyaraga2->GetComponent<HealthComponent>()->Die();
+					}
+					else if (m_pOtherEntities[i].first->GetName() != "Bullet" && m_pOtherEntities[i].first->GetName() != "TractorBeam") //everything else except the players bullet and the tractor beam
+					{
+						if (m_pOtherEntities[i].first->GetName() == "Boss")
+						{
+							m_pOtherEntities[i].first->GetComponent<TractorBeamComponent>()->Clean();//destroy the fighter of the boss if it has one
+						}
+						//
+						AddExplosionEffect(int(i));
+						//decrease 1 life of the player and destroy whatever collided with the player
+						m_pGyaraga2->GetComponent<HealthComponent>()->Die(true);
+						m_pOtherEntities[i].first->SetMarkForDelete(true);
+						m_pOtherEntities[i].second = true;
+						//check if enemy was diving
+						if (m_pOtherEntities[i].first->GetComponent<EnemyStateManager>())
+						{
+							auto enemyState = m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetState();
+
+							if (dynamic_cast<EnemyDivingState*>(enemyState) || dynamic_cast<EnemyTractorBeamState*>(enemyState))
+							{
+								EnemyManager::GetInstance().DecreaseAmountOfDivingEnemies(m_pOtherEntities[i].first->GetComponent<EnemyStateManager>()->GetEnemyType());
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	DeleteCollidedObjects();
 }
@@ -135,6 +189,11 @@ void CollisionDetectionManager::AddCollisionGameObject(const std::shared_ptr<Gam
 	{
 		m_pGyaragaTransform = transform;
 		m_pGyaraga = gameObject;
+	}
+	else if (gameObject->GetName() == "Gyaraga2")
+	{
+		m_pGyaragaTransform2 = transform;
+		m_pGyaraga2 = gameObject;
 	}
 	else
 	{
@@ -214,9 +273,9 @@ void CollisionDetectionManager::AddExplosionEffect(int enemyIndex) const
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(explosion);
 }
 
-void CollisionDetectionManager::IncreasePlayerScore(const std::shared_ptr<GameObject>& gameObject)
+void CollisionDetectionManager::IncreasePlayerScore(const std::shared_ptr<GameObject>& bullet, const std::shared_ptr<GameObject>& gameObject)
 {
-	auto playerSoreComp = m_pGyaraga->GetComponent<ScoreComponent>();
+	auto playerSoreComp = bullet->GetParent()->GetComponent<ScoreComponent>();
 	auto enemyStateManager = gameObject->GetComponent<EnemyStateManager>();
 	EnemyState* enemyState = nullptr;
 	//

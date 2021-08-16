@@ -8,6 +8,7 @@
 #include "TextComponent.h"
 #include "Texture2DComponent.h"
 #include "TransformComponent.h"
+#include "StageManager.h"
 
 void AccuracyObserver::OnNotify(const GameObject* actor, const std::string& event)
 {
@@ -46,5 +47,19 @@ void AccuracyObserver::ChangeAccuracy(const GameObject* actor)
 		std::cout << "WARNING: weaponComp not found after player death" << std::endl;
 		return;
 	}
-	textComp->UpdateText("Accuracy: " + std::to_string(weaponComp->GetAccuracy()) + " %");
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
+	{
+		if (actor->GetName() == "Gyaraga")
+		{
+			textComp->UpdateText("Accuracy P1 : " + std::to_string(weaponComp->GetAccuracy()) + " %");
+		}
+		else
+		{
+			textComp->UpdateText("Accuracy P2 : " + std::to_string(weaponComp->GetAccuracy()) + " %");
+		}
+	}
+	else
+	{
+		textComp->UpdateText("Accuracy: " + std::to_string(weaponComp->GetAccuracy()) + " %");
+	}
 }

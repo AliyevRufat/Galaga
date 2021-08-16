@@ -46,12 +46,29 @@ void EnemyWeaponComponent::CreateBullet()
 {
 	auto position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	const float bulletWidth = 7.0f;
-	//
+	//choosing which player to shoot at
+
 	std::shared_ptr<GameObject> bullet = std::make_shared<GameObject>("EnemyBullet");
 	//add components
 	bullet->AddComponent(new TransformComponent(glm::vec2{ position.x + m_pGameObject->GetDimensions().x / 2 - bulletWidth / 2.0f , position.y }));
 	bullet->AddComponent(new Texture2DComponent("EnemyBullet.png", 1, false));
-	bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+	if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
+	{
+		const int randNr = rand() % 2;
+
+		if (randNr == 1)
+		{
+			bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+		}
+		else
+		{
+			bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+		}
+	}
+	else
+	{
+		bullet->AddComponent(new BulletMovementComponent(dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
+	}
 	bullet->GetComponent<BulletMovementComponent>()->Init();
 	//Collision
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(bullet);
