@@ -9,6 +9,7 @@
 #include "CollisionDetectionManager.h"
 #include "EnemyWeaponComponent.h"
 #include "LerpComponent.h"
+#include "Locator.h"
 
 TractorBeamComponent::TractorBeamComponent()
 	:m_pTractorBeam{ nullptr }
@@ -66,6 +67,8 @@ void TractorBeamComponent::UpdateCaughtPlayer()
 
 void TractorBeamComponent::CreateTractorBeam()
 {
+	Locator::GetAudio().PlaySound("TractorBeam", true);
+
 	const int offset = 28;
 	auto parentPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	glm::vec2 tractorBeamScale = glm::vec2(110, 260);
@@ -102,6 +105,8 @@ bool TractorBeamComponent::GetIsPlayerCaught() const
 
 void TractorBeamComponent::SpawnAFighter(const glm::vec2& playerPos)
 {
+	Locator::GetAudio().PlaySound("FighterCaptured", true);
+
 	const int caughtPlayerWidth = 45;
 	const int caughtPlayerHeight = 43;
 	const int widthOffset = 5;

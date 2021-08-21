@@ -13,8 +13,6 @@ EnemyDivingState::EnemyDivingState(EnemyStateManager& enemyStateMngr)
 	m_SwitchState = { false };
 	m_pBezierPathManager = new BezierPathManager(enemyStateMngr.GetEnemySpeed());
 	EnemyManager::GetInstance().IncreaseAmountOfDivingEnemies(enemyStateMngr.GetEnemyType());
-	//
-	m_SwitchState = { false };
 	//if can shoot
 	const int randNr = rand() % 10 + 1;
 	if (randNr <= EnemyManager::GetInstance().GetEnemyChanceToShoot())

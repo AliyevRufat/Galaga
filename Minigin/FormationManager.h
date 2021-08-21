@@ -18,6 +18,9 @@ private:
 	friend class dae::Singleton<FormationManager>;
 	FormationManager() = default;
 	//
+	std::string m_FilePath;
+	void ReadFormationFromFile();
+	//
 	std::vector<std::vector<glm::vec2>> m_BeePositions;
 	std::vector<std::vector<glm::vec2>> m_ButterflyPositions;
 	std::vector<std::vector<glm::vec2>> m_BossPositions;

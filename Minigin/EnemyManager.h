@@ -72,7 +72,7 @@ private:
 	bool m_AllEnemiesAreSpawned = false;
 	bool m_StageStarted = false;
 	//
-	int m_EnemyMovementSpeed = 50; // start with 500
+	int m_EnemyMovementSpeed = 300; // start with 300
 	//
 	const int m_WaitTimer = 1;
 	float m_WaitTime = 0.0f;

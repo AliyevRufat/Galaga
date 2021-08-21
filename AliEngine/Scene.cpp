@@ -10,7 +10,6 @@ unsigned int Scene::m_IdCounter = 0;
 
 Scene::Scene(const std::string& name)
 	: m_Name(name)
-	, m_SpCurrentLevel{}
 	, m_SpLevels{}
 	, m_SpObjects{}
 	, m_SpPlayers{}
@@ -71,27 +70,6 @@ std::shared_ptr<GameObject> Scene::GetPlayer(int index)
 	return m_SpPlayers[index];
 }
 
-void Scene::SetCurrentLevel(const std::shared_ptr<GameObject>& level)
-{
-	m_SpCurrentLevel = level;
-}
-
-std::shared_ptr<GameObject> Scene::GetCurrentLevel() const
-{
-	return m_SpCurrentLevel;
-}
-
-void Scene::AddLevel(const std::shared_ptr<GameObject>& level)
-{
-	m_SpLevels.push_back(level);
-	m_SpCurrentLevel = level;
-}
-
-std::shared_ptr<GameObject> Scene::GetLevel(int index) const
-{
-	return m_SpLevels[index];
-}
-
 float dae::Scene::GetSceneScale() const
 {
 	return m_SceneScale;
@@ -119,5 +97,4 @@ void dae::Scene::ClearScene()
 	m_SpObjects.clear();
 	m_SpPlayers.clear();
 	m_SpLevels.clear();
-	m_SpCurrentLevel = nullptr;
 }

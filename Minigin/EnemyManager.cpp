@@ -526,7 +526,7 @@ void EnemyManager::DeleteAllEnemies()
 	m_AmountOfDivingBosses = 0;
 	m_AmountOfSpawnedEnemies = 0;
 	m_MaxAmountOfDivingEnemies = 1;
-	m_EnemyMovementSpeed = 500;
+	m_EnemyMovementSpeed = 300;
 	//
 	m_MaxAmountOfDivingEnemies = 1;
 	//

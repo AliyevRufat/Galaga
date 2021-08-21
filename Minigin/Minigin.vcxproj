@@ -224,6 +224,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="FormationManager.h" />
     <ClInclude Include="EnemyGoToFormationState.h" />
     <ClInclude Include="GyaragaMovementComponent.h" />
+    <ClInclude Include="ParallaxBackgroundComponent.h" />
     <ClInclude Include="PlayerHealthComponent.h" />
     <ClInclude Include="ComponentIncludes.h" />
     <ClInclude Include="LerpComponent.h" />
@@ -256,6 +257,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="FormationManager.cpp" />
     <ClCompile Include="EnemyGoToFormationState.cpp" />
     <ClCompile Include="GyaragaMovementComponent.cpp" />
+    <ClCompile Include="ParallaxBackgroundComponent.cpp" />
     <ClCompile Include="PlayerHealthComponent.cpp" />
     <ClCompile Include="LerpComponent.cpp" />
     <ClCompile Include="StageManager.cpp" />

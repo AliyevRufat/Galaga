@@ -25,11 +25,6 @@ namespace dae
 		void AddPlayer(const std::shared_ptr<GameObject>& spPlayer);
 		std::shared_ptr<GameObject> GetPlayer(int index);
 		//
-		void SetCurrentLevel(const std::shared_ptr<GameObject>& level);
-		std::shared_ptr<GameObject> GetCurrentLevel() const;
-		void AddLevel(const std::shared_ptr<GameObject>& level);
-		std::shared_ptr<GameObject> GetLevel(int index) const;
-		//
 		float  GetSceneScale() const;
 		//
 		bool AreAllObjectsActive() const;
@@ -43,7 +38,6 @@ namespace dae
 		std::vector<std::shared_ptr<GameObject>> m_SpObjects;
 		std::vector<std::shared_ptr<GameObject>> m_SpPlayers;
 		std::vector< std::shared_ptr<GameObject>> m_SpLevels;
-		std::shared_ptr<GameObject> m_SpCurrentLevel;
 
 		static unsigned int m_IdCounter;
 		const float m_SceneScale = 2.0f;

@@ -19,6 +19,8 @@ PlayerHealthComponent::PlayerHealthComponent(const unsigned int& health)
 
 void PlayerHealthComponent::Die(bool explode)
 {
+	Locator::GetAudio().PlaySound("PlayerDeath", true);
+
 	if (m_Lives > 0)
 	{
 		m_Lives--;

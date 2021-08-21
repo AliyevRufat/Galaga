@@ -93,6 +93,9 @@
     <ClInclude Include="BossHealthComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="ParallaxBackgroundComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -174,6 +177,9 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="BossHealthComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ParallaxBackgroundComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>

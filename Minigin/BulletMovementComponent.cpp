@@ -4,11 +4,12 @@
 #include "GameObject.h"
 #include "EngineTime.h"
 #include "LerpComponent.h"
+#include "Locator.h"
 
-BulletMovementComponent::BulletMovementComponent(const glm::vec2& target, int speed)
+BulletMovementComponent::BulletMovementComponent(const glm::vec2& target)
 	:m_Target{ target }
-	, m_Speed{ speed }
 {
+	Locator::GetAudio().PlaySound("Fire", true);
 }
 
 void BulletMovementComponent::Init()
@@ -22,7 +23,7 @@ void BulletMovementComponent::Init()
 		auto furtherTarget = glm::vec2(BA.x * targetOffset, BA.y * targetOffset);
 		auto newTarget = glm::vec2(furtherTarget.x + currentPos.x, furtherTarget.y + currentPos.y);
 		//
-		m_pGameObject->AddComponent(new LerpComponent(newTarget, 50));
+		m_pGameObject->AddComponent(new LerpComponent(newTarget, 150));
 	}
 }
 
@@ -36,5 +37,6 @@ void BulletMovementComponent::Update()
 	auto transformComponent = m_pGameObject->GetComponent<TransformComponent>();
 	auto currentPos = transformComponent->GetTransform().GetPosition();
 	//
-	transformComponent->SetPosition(glm::vec2{ currentPos.x, currentPos.y - m_Speed * EngineTime::GetInstance().GetDeltaTime() });
+	const int speed = 1000;
+	transformComponent->SetPosition(glm::vec2{ currentPos.x, currentPos.y - speed * EngineTime::GetInstance().GetDeltaTime() });
 }

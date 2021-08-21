@@ -18,6 +18,8 @@
 #include "PlayerWeaponComponent.h"
 #include "GyaragaMovementComponent.h"
 #include "FormationManager.h"
+#include "ParallaxBackgroundComponent.h"
+#include "Locator.h"
 
 using namespace dae;
 
@@ -122,9 +124,14 @@ void StageManager::Update()
 
 void StageManager::LoadNextStage()
 {
+	if (m_HasWon)
+	{
+		return;
+	}
 	if (m_CurrentStage == Stage::Three)
 	{
 		m_HasWon = true;
+		Locator::GetAudio().PlaySound("Win", true);
 		return;
 	}
 	//
@@ -139,6 +146,7 @@ void StageManager::LoadNextStage()
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
 	auto go = DisplayText("STAGE " + std::to_string(int(m_CurrentStage) + 1), font, "STAGE " + std::to_string(int(m_CurrentStage) + 1), glm::vec2(m_WindowSurface->w / 2 - offset, m_WindowSurface->h / 2 - offset * 2), glm::vec3(255, 0, 0), false);
 	go->GetComponent<TextComponent>()->SetIsVisible(true, 3);
+	Locator::GetAudio().PlaySound("LevelStart", true);
 }
 
 void StageManager::LoadGameMode(GameMode gameMode)
@@ -147,6 +155,9 @@ void StageManager::LoadGameMode(GameMode gameMode)
 	{
 		return;
 	}
+
+	Locator::GetAudio().StopSound("ThemeSong", false);
+
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -185,6 +196,9 @@ void StageManager::InitStageThree()
 void StageManager::LoadSinglePlayerMode()
 {
 	auto scene = SceneManager::GetInstance().GetCurrentScene();
+	//
+	DisplayParallaxBackground("BackgroundLayer1.png", 100);
+	DisplayParallaxBackground("BackgroundLayer2.png", 50);
 	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
 	auto go = std::make_shared<GameObject>("FPSCounter");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
@@ -217,7 +231,6 @@ void StageManager::LoadSinglePlayerMode()
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
-	SceneManager::GetInstance().GetCurrentScene()->AddPlayer(gyaraga);
 	//Texts
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
 	//ready text
@@ -237,11 +250,15 @@ void StageManager::LoadSinglePlayerMode()
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
 	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
+	Locator::GetAudio().PlaySound("LevelStart", true);
 }
 
 void StageManager::LoadCoopMode()
 {
 	auto scene = SceneManager::GetInstance().GetCurrentScene();
+	//
+	DisplayParallaxBackground("BackgroundLayer1.png", 100);
+	DisplayParallaxBackground("BackgroundLayer2.png", 50);
 	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
 	auto go = std::make_shared<GameObject>("FPSCounter");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
@@ -315,11 +332,15 @@ void StageManager::LoadCoopMode()
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
 	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
+	Locator::GetAudio().PlaySound("LevelStart", true);
 }
 
 void StageManager::LoadVersusMode()
 {
 	auto scene = SceneManager::GetInstance().GetCurrentScene();
+	//
+	DisplayParallaxBackground("BackgroundLayer1.png", 100);
+	DisplayParallaxBackground("BackgroundLayer2.png", 50);
 	//---------------------------------------------------------------------FPS COUNTER--------------------------------------------------
 	auto go = std::make_shared<GameObject>("FPSCounter");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
@@ -352,7 +373,6 @@ void StageManager::LoadVersusMode()
 	scene->Add(gyaraga);
 	scene->AddPlayer(gyaraga);
 	CollisionDetectionManager::GetInstance().AddCollisionGameObject(gyaraga);
-	SceneManager::GetInstance().GetCurrentScene()->AddPlayer(gyaraga);
 	//Texts
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
 	//ready text
@@ -372,11 +392,13 @@ void StageManager::LoadVersusMode()
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
 	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
+	Locator::GetAudio().PlaySound("LevelStart", true);
 }
 
 void StageManager::InitMenuScreen()
 {
 	SceneManager::GetInstance().CreateScene("Galaga");
+	SceneManager::GetInstance().SetScreenDimensions(glm::vec2{ m_WindowSurface->w,m_WindowSurface->h });
 	//
 	m_HasWon = false;
 	m_IsInMenu = true;
@@ -394,8 +416,9 @@ void StageManager::InitMenuScreen()
 	CollisionDetectionManager::GetInstance().ClearCollisions();
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	//
-	SceneManager::GetInstance().SetScreenDimensions(glm::vec2{ m_WindowSurface->w,m_WindowSurface->h });
-
+	DisplayParallaxBackground("BackgroundLayer1.png", 10);
+	DisplayParallaxBackground("BackgroundLayer2.png", 5);
+	//
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
 	//info text
 	DisplayText("Text", font, "GALAGA", glm::vec2(m_WindowSurface->w / 2.0f - 70, m_WindowSurface->h / 2.0f - 400), glm::vec3(255, 0, 0));
@@ -403,17 +426,26 @@ void StageManager::InitMenuScreen()
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 17);
 	const int offsetX = 300;
 	DisplayText("Text", font, "MODES : ", glm::vec2(m_WindowSurface->w / 2.0f - 30, m_WindowSurface->h / 2.0f - 300), glm::vec3(255, 0, 0));
+	//
 	DisplayText("Text", font, "Controller : ", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f - 270), glm::vec3(255, 255, 0));
 	DisplayText("Text", font, "Press X for singleplayer, Y for Coopand B for Versus Mode.Press Select to QUIT.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f - 240), glm::vec3(255, 255, 0));
+	//
 	DisplayText("Text", font, "Keyboard : ", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f - 210), glm::vec3(255, 255, 0));
 	DisplayText("Text", font, "Press I for singleplayer, O for Coop and P for Versus Mode. Press ESCAPE to QUIT.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f - 180), glm::vec3(255, 255, 0));
+	//
 	DisplayText("Text", font, "GAMEPLAY", glm::vec2(m_WindowSurface->w / 2.0f - 30, m_WindowSurface->h / 2.0f), glm::vec3(255, 0, 0));
+	//
 	DisplayText("Text", font, "Controller : ", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f + 30), glm::vec3(255, 255, 0));
 	DisplayText("Text", font, "D pad for movement, A to shoot(xbox controller).", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 60), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "Keyboard :", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f + 90), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "LeftArrow , RightArrow for movement, SPACE to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 120), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "COOP : A , D for movement, S to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 150), glm::vec3(255, 255, 0));
-	DisplayText("Text", font, "VERSUS : Z to use TractorBeam, X to dive , C to shoot", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 180), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "COOP : Same controls as above", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 90), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "VERSUS : R1 to use TractorBeam, L1 to dive , ArrowUp to shoot", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 120), glm::vec3(255, 255, 0));
+	//
+	DisplayText("Text", font, "Keyboard :", glm::vec2(m_WindowSurface->w / 2.0f - offsetX - 30, m_WindowSurface->h / 2.0f + 150), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "LeftArrow , RightArrow for movement, SPACE to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 180), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "COOP : A , D for movement, S to shoot.", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 210), glm::vec3(255, 255, 0));
+	DisplayText("Text", font, "VERSUS : Z to use TractorBeam, X to dive , C to shoot", glm::vec2(m_WindowSurface->w / 2.0f - offsetX, m_WindowSurface->h / 2.0f + 240), glm::vec3(255, 255, 0));
+
+	Locator::GetAudio().PlaySound("ThemeSong", false);
 }
 
 void StageManager::InitWinScreen()
@@ -443,6 +475,9 @@ void StageManager::InitWinScreen()
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
+	//
+	DisplayParallaxBackground("BackgroundLayer1.png", 1);
+	DisplayParallaxBackground("BackgroundLayer2.png", 1);
 	//
 	auto& scene = SceneManager::GetInstance().CreateScene("Qbert");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
@@ -494,6 +529,9 @@ void StageManager::InitGameOverScreen()
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
+	//
+	DisplayParallaxBackground("BackgroundLayer1.png", 1);
+	DisplayParallaxBackground("BackgroundLayer2.png", 1);
 	//
 	auto& scene = SceneManager::GetInstance().CreateScene("Galaga");
 
@@ -555,6 +593,8 @@ void StageManager::DisplayResults(int score, int shotsFired, int numberOfHits, i
 		const int posOffsetP2 = 100;
 		//results text
 		DisplayText("Results", font, "-RESULTS-", glm::vec2(m_WindowSurface->w / 2.0f - 100, m_WindowSurface->h / 2.0f - 150), glm::vec3(255, 0, 0));
+		//p1
+		DisplayText("PLAYER1", font, "Player1 :", glm::vec2(m_WindowSurface->w / 2.0f - posOffsetP1, m_WindowSurface->h / 2.0f - 140), glm::vec3(255, 0, 0));
 		//display score
 		DisplayText("Score", font, "SCORE : " + std::to_string(score), glm::vec2(m_WindowSurface->w / 2.0f - posOffsetP1, m_WindowSurface->h / 2.0f - 100), glm::vec3(255, 255, 0));
 		//fired shots
@@ -563,6 +603,8 @@ void StageManager::DisplayResults(int score, int shotsFired, int numberOfHits, i
 		DisplayText("NumberOfHits", font, "NUMBER OF HITS : " + std::to_string(numberOfHits), glm::vec2(m_WindowSurface->w / 2.0f - posOffsetP1, m_WindowSurface->h / 2.0f), glm::vec3(255, 255, 0));
 		//accuracy
 		DisplayText("HitMissRatio", font, "HIT MISS RATIO	 : %" + std::to_string(accuracy), glm::vec2(m_WindowSurface->w / 2.0f - posOffsetP1, m_WindowSurface->h / 2.0f + 50), glm::vec3(255, 255, 255));
+		//p2
+		DisplayText("PLAYER2", font, "Player2 :", glm::vec2(m_WindowSurface->w / 2.0f + posOffsetP2, m_WindowSurface->h / 2.0f - 140), glm::vec3(255, 0, 0));
 		//display score p2
 		DisplayText("Score", font, "SCORE : " + std::to_string(scoreP2), glm::vec2(m_WindowSurface->w / 2.0f + posOffsetP2, m_WindowSurface->h / 2.0f - 100), glm::vec3(255, 255, 0));
 		//fired shots p2
@@ -600,4 +642,12 @@ std::shared_ptr<GameObject> StageManager::DisplayText(const std::string& name, c
 	display->AddComponent(displayText);
 	dae::SceneManager::GetInstance().GetCurrentScene()->Add(display);
 	return display;
+}
+
+void StageManager::DisplayParallaxBackground(const std::string& path, int speed)
+{
+	auto display = std::make_shared<GameObject>("Background");
+	display->AddComponent(new ParallaxBackgroundComponent(path, speed));
+	display->GetComponent<ParallaxBackgroundComponent>()->Init();
+	dae::SceneManager::GetInstance().GetCurrentScene()->Add(display);
 }

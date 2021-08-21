@@ -16,6 +16,6 @@ private:
 	//
 	int m_CurrentPath;
 	int m_CurrentWayPoint;
-	const float EPSILON;
+	const float m_Offset;
 	const int m_Speed;
 };

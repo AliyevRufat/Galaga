@@ -18,6 +18,8 @@ BossHealthComponent::BossHealthComponent(const unsigned int& health)
 
 void BossHealthComponent::Die()
 {
+	Locator::GetAudio().PlaySound("EnemyDeath2", true);
+
 	if (m_Lives > 0)
 	{
 		m_Lives--;

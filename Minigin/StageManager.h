@@ -51,6 +51,7 @@ private:
 	void LoadVersusMode();
 	void DisplayResults(int score, int shotsFired, int numberOfHits, int accuracy, int scoreP2 = 0, int shotsFiredP2 = 0, int numberOfHitsP2 = 0, int accuracyP2 = 0);
 	std::shared_ptr<GameObject> DisplayText(const std::string& name, const std::shared_ptr<dae::Font>& font, const std::string& text, const glm::vec2& pos, const glm::vec3& color, bool isVisible = true);
+	void DisplayParallaxBackground(const std::string& path, int speed);
 	//
 	SDL_Surface* m_WindowSurface = nullptr;
 	Stage m_CurrentStage = Stage::One;

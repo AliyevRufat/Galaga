@@ -50,6 +50,7 @@ void CollisionDetectionManager::Update()
 					if ((m_pOtherEntities[i].first->GetName() == "Bee" || m_pOtherEntities[i].first->GetName() == "Butterfly"))
 					{
 						//set destroy for later for the bullet and the enemy
+						Locator::GetAudio().PlaySound("EnemyDeath", true);
 						m_pOtherEntities[i].first->SetMarkForDelete(true);
 						m_pOtherEntities[j].first->SetMarkForDelete(true);
 						m_pOtherEntities[i].second = true;
@@ -71,7 +72,10 @@ void CollisionDetectionManager::Update()
 					{
 						//decrease 1 life of the boss
 						auto healthComponent = m_pOtherEntities[i].first->GetComponent<BossHealthComponent>();
-						healthComponent->Die();
+						if (healthComponent)
+						{
+							healthComponent->Die();
+						}
 						//set destroy for the bullet
 						m_pOtherEntities[j].first->SetMarkForDelete(true);
 						m_pOtherEntities[j].second = true;

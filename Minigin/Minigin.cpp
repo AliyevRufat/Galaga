@@ -55,14 +55,16 @@ void dae::Minigin::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 	Renderer::GetInstance().Init(m_Window);
-	//Locator::Provide(new ConsoleAudioService());
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::FallEffect, "../Data/Sounds/.wav", true); // TODO : get correct sound/music names
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::JumpEffect, "../Data//Sounds/.wav", true);
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::LiftEffect, "../Data//Sounds/.wav", true);
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::VictoryEffect, "../Data//Sounds/.wav", true);
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::Hurt, "../Data//Sounds/.wav", true);
-
-	//where second parameter = volume
+	Locator::Provide(new ConsoleAudioService());
+	Locator::GetAudio().AddSound("../Data/Sounds/S_ThemeSong.mp3", false);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_EnemyDeath.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_EnemyDeath2.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_FighterCaptured.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_Fire.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_LevelStart.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_Win.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_PlayerDeath.wav", true);
+	Locator::GetAudio().AddSound("../Data/Sounds/S_TractorBeam.wav", true);
 }
 
 void dae::Minigin::BindCommands()
@@ -81,7 +83,12 @@ void dae::Minigin::BindCommands()
 		inputManager.AssignKey<SteerLeft>(ControllerButton::ButtonLeft, i);
 		inputManager.AssignKey<SteerRight>(ControllerButton::ButtonRight, i);
 		inputManager.AssignKey<Fire>(ControllerButton::ButtonA, i);
+		//versus controller
+		inputManager.AssignKey<BossTractorBeam>(ControllerButton::ButtonRightShoulder, i);
+		inputManager.AssignKey<BossDive>(ControllerButton::ButtonLeftShoulder, i);
+		inputManager.AssignKey<BossShoot>(ControllerButton::ButtonUp, i);
 	}
+
 	//keyboard
 
 	//menu

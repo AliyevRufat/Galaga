@@ -112,6 +112,10 @@ public:
 
 	void Execute() const override
 	{
+		if (m_ControllerIndex != 1)
+		{
+			return;
+		}
 		auto versusBoss = EnemyManager::GetInstance().GetAvailableBoss();
 
 		if (versusBoss)
@@ -136,6 +140,11 @@ public:
 
 	void Execute() const override
 	{
+		if (m_ControllerIndex != 1)
+		{
+			return;
+		}
+
 		auto versusBoss = EnemyManager::GetInstance().GetAvailableBoss();
 
 		if (versusBoss)
@@ -160,6 +169,10 @@ public:
 
 	void Execute() const override
 	{
+		if (m_ControllerIndex != 1)
+		{
+			return;
+		}
 		auto versusBoss = EnemyManager::GetInstance().GetAvailableBoss();
 
 		if (versusBoss)

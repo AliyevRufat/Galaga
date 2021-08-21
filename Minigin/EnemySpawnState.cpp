@@ -12,7 +12,7 @@
 EnemySpawnState::EnemySpawnState()
 {
 	m_SwitchState = false;
-	const int speed = 1200;
+	const int speed = 800;
 	m_pBezierPathManager = new BezierPathManager(speed);
 	//if can shoot
 	const int randNr = rand() % 10 + 1;

@@ -3,6 +3,41 @@
 #include "TransformComponent.h"
 #include "EnemyStateManager.h"
 #include <algorithm>
+#include <fstream>
+
+void FormationManager::ReadFormationFromFile()
+{
+	//m_Positions.clear();
+
+	std::ifstream input;
+	std::string stringBuf;
+	std::string currentLine;
+	float bufX = 0;
+	float bufY = 0;
+
+	input.open(m_FilePath, std::ios::in | std::ios::binary);
+	if (input.is_open())
+	{
+		while (std::getline(input, currentLine))
+		{
+			for (size_t i = 0; i < currentLine.size(); i++)
+			{
+				if (currentLine[i] != ',' && currentLine[i] != '\r')
+				{
+					stringBuf += currentLine[i];
+				}
+				else if (currentLine[i] == ',')
+				{
+					bufX = std::stof(stringBuf);
+					stringBuf = "";
+				}
+			}
+			bufY = std::stof(stringBuf);
+			stringBuf = "";
+			//m_Positions.push_back(glm::vec3{ bufX, bufY, 0 });
+		}
+	}
+}
 
 void FormationManager::InitFormation(StageManager::Stage stage)
 {
@@ -12,6 +47,8 @@ void FormationManager::InitFormation(StageManager::Stage stage)
 
 	if (stage == StageManager::Stage::One)
 	{
+		const int startYPosButterfly = 150;
+		const int startYPosBee = 100;
 		const int posYBees = 300;
 		const int posYButterflies = 200;
 		const int posYBoss = 80;
@@ -24,7 +61,7 @@ void FormationManager::InitFormation(StageManager::Stage stage)
 			//
 			for (size_t j = 0; j < 8; j++)
 			{
-				tempPosButterflies.push_back(glm::vec2{ 150 + j * 50 ,posYButterflies - i * 50 });
+				tempPosButterflies.push_back(glm::vec2{ startYPosButterfly + j * 50 ,posYButterflies - i * 50 });
 				if (j >= 7)
 				{
 					m_ButterflyPositions.push_back(tempPosButterflies);
@@ -32,7 +69,7 @@ void FormationManager::InitFormation(StageManager::Stage stage)
 			}
 			for (size_t j = 0; j < 10; j++)
 			{
-				tempPosBees.push_back(glm::vec2{ 100 + j * 50 ,posYBees - i * 50 });
+				tempPosBees.push_back(glm::vec2{ startYPosBee + j * 50 ,posYBees - i * 50 });
 				if (j >= 9)
 				{
 					m_BeePositions.push_back(tempPosBees);
