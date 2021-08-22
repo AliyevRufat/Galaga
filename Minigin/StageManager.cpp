@@ -137,7 +137,6 @@ void StageManager::LoadNextStage()
 	//
 	m_CurrentStage = Stage(int(m_CurrentStage) + 1);
 	CollisionDetectionManager::GetInstance().ClearCollisions();
-	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	EnemyManager::GetInstance().IncreaseDifficulty();
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
@@ -248,7 +247,6 @@ void StageManager::LoadSinglePlayerMode()
 	go = DisplayText("STAGE " + std::to_string(int(m_CurrentStage) + 1), font, "STAGE " + std::to_string(int(m_CurrentStage) + 1), pos, glm::vec3(255, 0, 0));
 	go->GetComponent<TextComponent>()->SetIsVisible(true, 3);
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
-	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
 	Locator::GetAudio().PlaySound("LevelStart", true);
 }
@@ -330,7 +328,6 @@ void StageManager::LoadCoopMode()
 	go = DisplayText("STAGE " + std::to_string(int(m_CurrentStage) + 1), font, "STAGE " + std::to_string(int(m_CurrentStage) + 1), pos, glm::vec3(255, 0, 0), false);
 	go->GetComponent<TextComponent>()->SetIsVisible(true, 3);
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
-	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
 	Locator::GetAudio().PlaySound("LevelStart", true);
 }
@@ -390,7 +387,6 @@ void StageManager::LoadVersusMode()
 	go = DisplayText("STAGE " + std::to_string(int(m_CurrentStage) + 1), font, "STAGE " + std::to_string(int(m_CurrentStage) + 1), pos, glm::vec3(255, 0, 0));
 	go->GetComponent<TextComponent>()->SetIsVisible(true, 3);
 	//-----------------------------------------------FIRST STAGE ENEMY QUEUES----------------------------------------
-	FormationManager::GetInstance().InitFormation(m_CurrentStage);
 	EnemyManager::GetInstance().SpawnAllEnemies(m_CurrentStage);
 	Locator::GetAudio().PlaySound("LevelStart", true);
 }

@@ -2,7 +2,7 @@
 #include "ComponentIncludes.h"
 #include "Texture2DComponent.h"
 
-class ParallaxBackgroundComponent : public BaseComponent
+class ParallaxBackgroundComponent final : public BaseComponent
 {
 public:
 	ParallaxBackgroundComponent(const std::string& pngPath, int speed);

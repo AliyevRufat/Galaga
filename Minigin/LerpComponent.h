@@ -2,7 +2,7 @@
 #include "ComponentIncludes.h"
 #include <glm\vec2.hpp>
 
-class LerpComponent : public BaseComponent
+class LerpComponent final : public BaseComponent
 {
 public:
 	LerpComponent(const glm::vec2& endPos, int speed);

@@ -4,6 +4,7 @@
 #include "EnemyWeaponComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "PlayerHealthComponent.h"
 
 class EnemyState
 {
@@ -23,15 +24,6 @@ public:
 	bool GetSwitchState() const { return m_SwitchState; }
 	void ShootBullet(EnemyStateManager& enemyStateMngr)
 	{
-		if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::SinglePlayer || StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Versus)
-		{
-			auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
-			if (!player || !player->GetIsActive())
-			{
-				return;
-			}
-		}
-
 		if (m_CanShoot)
 		{
 			m_ShootTime += EngineTime::GetInstance().GetDeltaTime();
@@ -39,6 +31,27 @@ public:
 			{
 				m_CanShoot = false;
 				m_ShootTime -= m_ShootTime;
+
+				if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::SinglePlayer || StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Versus)//if player not active don't shoot
+				{
+					auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+					if (!player || !player->GetIsActive())
+					{
+						return;
+					}
+				}
+				else if (StageManager::GetInstance().GetCurrentGameMode() == StageManager::GameMode::Coop)
+				{
+					auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+					auto player2 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1);
+					if (player->GetComponent<PlayerHealthComponent>()->GetLives() != 0 && player2->GetComponent<PlayerHealthComponent>()->GetLives() != 0)
+					{
+						if (!player->GetIsActive() || !player2->GetIsActive())//if player not active don't shoot
+						{
+							return;
+						}
+					}
+				}
 				//shoot
 				enemyStateMngr.GetGameObject()->GetComponent<EnemyWeaponComponent>()->Shoot();
 			}

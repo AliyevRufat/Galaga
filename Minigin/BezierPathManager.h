@@ -4,7 +4,7 @@
 
 class BezierPath;
 
-class BezierPathManager
+class BezierPathManager final
 {
 public:
 	BezierPathManager(int speed);
@@ -15,7 +15,7 @@ private:
 	std::vector<std::vector<glm::vec2>> m_Paths;
 	//
 	int m_CurrentPath;
-	int m_CurrentWayPoint;
+	int m_CurrentDest;
 	const float m_Offset;
 	const int m_Speed;
 };

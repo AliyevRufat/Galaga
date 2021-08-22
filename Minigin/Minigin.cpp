@@ -19,6 +19,7 @@
 #include "EnemyManager.h"
 #include "AccuracyObserver.h"
 #include "StageManager.h"
+#include "FormationManager.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -65,6 +66,7 @@ void dae::Minigin::Initialize()
 	Locator::GetAudio().AddSound("../Data/Sounds/S_Win.wav", true);
 	Locator::GetAudio().AddSound("../Data/Sounds/S_PlayerDeath.wav", true);
 	Locator::GetAudio().AddSound("../Data/Sounds/S_TractorBeam.wav", true);
+	FormationManager::GetInstance().InitFormation();
 }
 
 void dae::Minigin::BindCommands()

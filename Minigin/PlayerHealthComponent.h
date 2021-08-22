@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentIncludes.h"
 
-class PlayerHealthComponent : public BaseComponent
+class PlayerHealthComponent final : public BaseComponent
 {
 public:
 	PlayerHealthComponent(const unsigned int& health);

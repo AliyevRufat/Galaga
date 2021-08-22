@@ -5,243 +5,167 @@
 #include <algorithm>
 #include <fstream>
 
-void FormationManager::ReadFormationFromFile()
+void FormationManager::ParsePosOfEnemy(const std::string& oneLine, int level, char firstLetter, char secondLetter, int row)
 {
-	//m_Positions.clear();
+	std::string posString;
+	const int textOffset = 5;
 
-	std::ifstream input;
-	std::string stringBuf;
-	std::string currentLine;
-	float bufX = 0;
-	float bufY = 0;
-
-	input.open(m_FilePath, std::ios::in | std::ios::binary);
-	if (input.is_open())
+	if (oneLine[0] == std::to_string(level)[0])//level
 	{
-		while (std::getline(input, currentLine))
+		if (oneLine[1] == firstLetter && oneLine[2] == secondLetter) // reading pos of correct enemy
 		{
-			for (size_t i = 0; i < currentLine.size(); i++)
+			if (oneLine[3] == std::to_string(row)[0])//row
 			{
-				if (currentLine[i] != ',' && currentLine[i] != '\r')
+				if (secondLetter == 'E')
 				{
-					stringBuf += currentLine[i];
+					if (m_BeePositions[level - 1].size() < row)
+					{
+						m_BeePositions[level - 1].push_back(std::vector<glm::vec2>());
+					}
 				}
-				else if (currentLine[i] == ',')
+				else if (secondLetter == 'U')
 				{
-					bufX = std::stof(stringBuf);
-					stringBuf = "";
+					if (m_ButterflyPositions[level - 1].size() < row)
+					{
+						m_ButterflyPositions[level - 1].push_back(std::vector<glm::vec2>());
+					}
+				}
+				else if (secondLetter == 'O')
+				{
+					if (m_BossPositions[level - 1].size() < row)
+					{
+						m_BossPositions[level - 1].push_back(std::vector<glm::vec2>());
+					}
+				}
+
+				size_t delimeterIndex = oneLine.find_first_of(',');
+				glm::vec2 beePos;
+				posString.clear();
+				for (size_t i = textOffset; i < oneLine.size(); i++)
+				{
+					if (delimeterIndex == i)
+					{
+						break;
+					}
+					posString += oneLine[i];
+				}
+				beePos.x = std::stof(posString);
+				posString.clear();
+				for (size_t i = delimeterIndex + 1; i < oneLine.size(); i++)
+				{
+					posString += oneLine[i];
+				}
+				beePos.y = std::stof(posString);
+				//
+				if (secondLetter == 'E')
+				{
+					m_BeePositions[level - 1][row - 1].push_back(beePos);
+				}
+				else if (secondLetter == 'U')
+				{
+					m_ButterflyPositions[level - 1][row - 1].push_back(beePos);
+				}
+				else if (secondLetter == 'O')
+				{
+					m_BossPositions[level - 1][row - 1].push_back(beePos);
 				}
 			}
-			bufY = std::stof(stringBuf);
-			stringBuf = "";
-			//m_Positions.push_back(glm::vec3{ bufX, bufY, 0 });
 		}
 	}
 }
 
-void FormationManager::InitFormation(StageManager::Stage stage)
+void FormationManager::ReadFormationFromFile()
 {
 	m_BeePositions.clear();
 	m_ButterflyPositions.clear();
 	m_BossPositions.clear();
-
-	if (stage == StageManager::Stage::One)
+	//
+	for (size_t i = 0; i < 3; i++)
 	{
-		const int startYPosButterfly = 150;
-		const int startYPosBee = 100;
-		const int posYBees = 300;
-		const int posYButterflies = 200;
-		const int posYBoss = 80;
-
-		//make formation positions for the bees and the butterflies
-		for (size_t i = 0; i < 2; i++)
-		{
-			std::vector<glm::vec2> tempPosBees;
-			std::vector<glm::vec2> tempPosButterflies;
-			//
-			for (size_t j = 0; j < 8; j++)
-			{
-				tempPosButterflies.push_back(glm::vec2{ startYPosButterfly + j * 50 ,posYButterflies - i * 50 });
-				if (j >= 7)
-				{
-					m_ButterflyPositions.push_back(tempPosButterflies);
-				}
-			}
-			for (size_t j = 0; j < 10; j++)
-			{
-				tempPosBees.push_back(glm::vec2{ startYPosBee + j * 50 ,posYBees - i * 50 });
-				if (j >= 9)
-				{
-					m_BeePositions.push_back(tempPosBees);
-				}
-			}
-		}
-		//make formation positions for the bosses
-		m_BossPositions.push_back(std::vector<glm::vec2>());
-		for (size_t i = 0; i < 4; i++)
-		{
-			m_BossPositions[0].push_back(glm::vec2{ m_BeePositions[0][3].x + i * 50 ,posYBoss });
-		}
+		m_BeePositions.push_back(std::vector<std::vector<glm::vec2>>());
+		m_ButterflyPositions.push_back(std::vector<std::vector<glm::vec2>>());
+		m_BossPositions.push_back(std::vector<std::vector<glm::vec2>>());
 	}
-	else if (stage == StageManager::Stage::Two)
+
+	std::ifstream input;
+	std::string oneLine;
+
+	input.open("../Data/FormationCoordinates.txt", std::ios::in | std::ios::binary);
+	if (input.is_open())
 	{
-		const int posYBees = 150;
-		const int posYButterfliesUp = 100;
-		const int posYButterfliesDown = 300;
-		const int posYBossUp = 80;
-		const int posYBossDown = 300;
-
-		//make formation positions for the bees and the butterflies
-
-		for (size_t i = 0; i < 2; i++)
+		int nr = 0;
+		while (std::getline(input, oneLine))
 		{
-			int posY = 0;
-			if (i == 0)
+			if (nr == 82)
 			{
-				posY = posYButterfliesUp;
+				const int sdf = 0;
 			}
-			else
-			{
-				posY = posYButterfliesDown;
-			}
-			std::vector<glm::vec2> tempPosButterflies;
-
-			for (size_t j = 0; j < 4; j++)
-			{
-				tempPosButterflies.push_back(glm::vec2{ 250 + j * 50 ,posY });
-				if (j >= 3)
-				{
-					m_ButterflyPositions.push_back(tempPosButterflies);
-				}
-			}
+			//level1
+			ParsePosOfEnemy(oneLine, 1, 'B', 'E', 1);
+			ParsePosOfEnemy(oneLine, 1, 'B', 'E', 2);
+			ParsePosOfEnemy(oneLine, 1, 'B', 'U', 1);
+			ParsePosOfEnemy(oneLine, 1, 'B', 'U', 2);
+			ParsePosOfEnemy(oneLine, 1, 'B', 'O', 1);
+			//level2
+			ParsePosOfEnemy(oneLine, 2, 'B', 'E', 1);
+			ParsePosOfEnemy(oneLine, 2, 'B', 'E', 2);
+			ParsePosOfEnemy(oneLine, 2, 'B', 'E', 3);
+			ParsePosOfEnemy(oneLine, 2, 'B', 'U', 1);
+			ParsePosOfEnemy(oneLine, 2, 'B', 'U', 2);
+			ParsePosOfEnemy(oneLine, 2, 'B', 'O', 1);
+			ParsePosOfEnemy(oneLine, 2, 'B', 'O', 2);
+			//level3
+			ParsePosOfEnemy(oneLine, 3, 'B', 'E', 1);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'E', 2);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'E', 3);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'E', 4);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'E', 5);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'U', 1);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'U', 2);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'O', 1);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'O', 2);
+			ParsePosOfEnemy(oneLine, 3, 'B', 'O', 3);
+			++nr;
 		}
-		for (size_t i = 0; i < 3; i++)
-		{
-			std::vector<glm::vec2> tempPosBees;
-
-			for (size_t j = 0; j < 10; j++)
-			{
-				tempPosBees.push_back(glm::vec2{ 100 + j * 50 ,posYBees + i * 50 });
-				if (j >= 9)
-				{
-					m_BeePositions.push_back(tempPosBees);
-				}
-			}
-		}
-		//make formation positions for the bosses
-		m_BossPositions.push_back(std::vector<glm::vec2>());
-		m_BossPositions.push_back(std::vector<glm::vec2>());
-		//
-		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][0].x - 50 ,posYBossUp });
-		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][3].x + 50 ,posYBossUp });
-		m_BossPositions[1].push_back(glm::vec2{ m_ButterflyPositions[0][0].x - 50 ,posYBossDown });
-		m_BossPositions[1].push_back(glm::vec2{ m_ButterflyPositions[0][3].x + 50 ,posYBossDown });
+		input.close();
 	}
-	else
-	{
-		const int posYBees = 100;
-		const int posYButterfliesUp = 150;
-		const int posYButterfliesDown = 250;
-		const int posYBossUp = 80;
-		const int posYBossMid = 190;
-		const int posYBossDown = 350;
+}
 
-		//make formation positions for the bees and the butterflies
-		for (size_t i = 0; i < 2; i++)
-		{
-			int posY = 0;
-			int posX = 100;
-			if (i == 0)
-			{
-				posY = posYButterfliesUp;
-			}
-			else
-			{
-				posY = posYButterfliesDown;
-			}
-			std::vector<glm::vec2> tempPosButterflies;
-
-			for (size_t j = 0; j < 8; j++)
-			{
-				tempPosButterflies.push_back(glm::vec2{ posX + j * 50 ,posY });
-
-				if (j >= 7)
-				{
-					m_ButterflyPositions.push_back(tempPosButterflies);
-				}
-				else if (j == 3)
-				{
-					posX += 100;
-				}
-			}
-		}
-		//bees
-		for (size_t i = 0; i < 5; i++)
-		{
-			int posX = 300;
-
-			m_BeePositions.push_back(std::vector<glm::vec2>());
-
-			if (i == 4)
-			{
-				posX = 100;
-			}
-			//
-			for (size_t j = 0; j < 10; j++)
-			{
-				if (j == 2 && i != 4)
-				{
-					break;
-				}
-				//
-				m_BeePositions[i].push_back(glm::vec2{ posX + j * 50 ,posYBees + i * 50 });
-			}
-		}
-		//make formation positions for the bosses
-		m_BossPositions.push_back(std::vector<glm::vec2>());
-		m_BossPositions.push_back(std::vector<glm::vec2>());
-		m_BossPositions.push_back(std::vector<glm::vec2>());
-		const int offset = 24;
-		//
-		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][1].x ,posYBossUp });
-		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][2].x ,posYBossUp });
-		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][5].x ,posYBossUp });
-		m_BossPositions[0].push_back(glm::vec2{ m_ButterflyPositions[0][6].x ,posYBossUp });
-
-		m_BossPositions[1].push_back(glm::vec2{ m_ButterflyPositions[0][2].x - offset ,posYBossMid });
-		m_BossPositions[1].push_back(glm::vec2{ m_ButterflyPositions[0][6].x - offset ,posYBossMid });
-
-		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][1].x ,posYBossDown });
-		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][2].x ,posYBossDown });
-		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][5].x ,posYBossDown });
-		m_BossPositions[2].push_back(glm::vec2{ m_ButterflyPositions[0][6].x ,posYBossDown });
-	}
+void FormationManager::InitFormation()
+{
+	ReadFormationFromFile();
+	m_IsInitialized = true;
 }
 
 void FormationManager::Update()
 {
+	if (!m_IsInitialized)
+	{
+		return;
+	}
+	int levelInt = int(StageManager::GetInstance().GetCurrentStage());
 	{ //formation left right movement
-		for (size_t i = 0; i < m_BeePositions.size(); i++)
+		for (size_t i = 0; i < m_BeePositions[levelInt].size(); i++)
 		{
-			for (size_t j = 0; j < m_BeePositions[i].size(); j++)
+			for (size_t j = 0; j < m_BeePositions[levelInt][i].size(); j++)
 			{
-				m_BeePositions[i][j].x = m_BeePositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+				m_BeePositions[levelInt][i][j].x = m_BeePositions[levelInt][i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 			}
 		}
 		//
-		for (size_t i = 0; i < m_ButterflyPositions.size(); i++)
+		for (size_t i = 0; i < m_ButterflyPositions[levelInt].size(); i++)
 		{
-			for (size_t j = 0; j < m_ButterflyPositions[i].size(); j++)
+			for (size_t j = 0; j < m_ButterflyPositions[levelInt][i].size(); j++)
 			{
-				m_ButterflyPositions[i][j].x = m_ButterflyPositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+				m_ButterflyPositions[levelInt][i][j].x = m_ButterflyPositions[levelInt][i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 			}
 		}
 		//
-		for (size_t i = 0; i < m_BossPositions.size(); i++)
+		for (size_t i = 0; i < m_BossPositions[levelInt].size(); i++)
 		{
-			for (size_t j = 0; j < m_BossPositions[i].size(); j++)
+			for (size_t j = 0; j < m_BossPositions[levelInt][i].size(); j++)
 			{
-				m_BossPositions[i][j].x = m_BossPositions[i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
+				m_BossPositions[levelInt][i][j].x = m_BossPositions[levelInt][i][j].x + m_Speed * EngineTime::GetInstance().GetDeltaTime();
 			}
 		}
 	}
@@ -256,16 +180,18 @@ void FormationManager::Update()
 
 glm::vec2 FormationManager::GetSpecificPos(int rowIndex, int posIndex, EnemyType enemyType) const
 {
+	int levelInt = int(StageManager::GetInstance().GetCurrentStage());
+	//
 	if (enemyType == EnemyType::Bee)
 	{
-		return m_BeePositions[rowIndex][posIndex];
+		return m_BeePositions[levelInt][rowIndex][posIndex];
 	}
 	else if (enemyType == EnemyType::Butterfly)
 	{
-		return m_ButterflyPositions[rowIndex][posIndex];
+		return m_ButterflyPositions[levelInt][rowIndex][posIndex];
 	}
 	else
 	{
-		return m_BossPositions[rowIndex][posIndex];
+		return m_BossPositions[levelInt][rowIndex][posIndex];
 	}
 }

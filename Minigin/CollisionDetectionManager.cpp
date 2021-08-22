@@ -80,7 +80,7 @@ void CollisionDetectionManager::Update()
 						m_pOtherEntities[j].first->SetMarkForDelete(true);
 						m_pOtherEntities[j].second = true;
 						//
-						if (healthComponent->GetLives() <= 0)
+						if (healthComponent && healthComponent->GetLives() <= 0)
 						{
 							//set destroy for the boss
 							m_pOtherEntities[i].first->SetMarkForDelete(true);

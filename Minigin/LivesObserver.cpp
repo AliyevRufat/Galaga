@@ -80,7 +80,7 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 
 	if (currentGameMode == StageManager::GameMode::Coop)
 	{
-		if (((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<PlayerHealthComponent>()->GetIsDead()) && (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<PlayerHealthComponent>()->GetIsDead())) || (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<PlayerHealthComponent>()->GetIsDead()))
+		if (((currentScene->GetPlayer(0) && currentScene->GetPlayer(0)->GetComponent<PlayerHealthComponent>()->GetIsDead()) && (currentScene->GetPlayer(1) && currentScene->GetPlayer(1)->GetComponent<PlayerHealthComponent>()->GetIsDead())))
 		{
 			text = "GAMEOVER";
 		}

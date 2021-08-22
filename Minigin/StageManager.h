@@ -36,6 +36,7 @@ public:
 	//
 	bool GetIsInMenu() const;
 	GameMode GetCurrentGameMode() const;
+	Stage GetCurrentStage() const { return m_CurrentStage; }
 	void SetWindowSurface(SDL_Surface* windowSurface) { m_WindowSurface = windowSurface; };
 	//
 	void SetIsGameOver(bool hasPlayerLost, const std::string& playerName);
