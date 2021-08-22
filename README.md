@@ -9,6 +9,7 @@ About engine and design choices :
 
 
 Game Controls:
+
 	Controller:
 		D pad Left and Right buttons for movement
 		Select button to close the game
