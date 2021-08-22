@@ -2,7 +2,7 @@
 #include "EnemyGoToFormationState.h"
 #include "EnemyFormationState.h"
 #include "BezierPath.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "FormationManager.h"
 
 EnemyGoToFormationState::EnemyGoToFormationState(EnemyStateManager& enemyStateMngr)

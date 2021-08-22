@@ -1,6 +1,6 @@
 #pragma once
 #include "ComponentIncludes.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
 
 class ParallaxBackgroundComponent final : public BaseComponent
 {

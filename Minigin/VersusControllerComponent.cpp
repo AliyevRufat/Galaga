@@ -1,9 +1,9 @@
 #include "MiniginPCH.h"
 #include "VersusControllerComponent.h"
-#include "GameObject.h"
-#include "TransformComponent.h"
-#include "SceneManager.h"
-#include "EngineTime.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/EngineTime.h"
 #include "TractorBeamComponent.h"
 
 VersusControllerComponent::VersusControllerComponent()

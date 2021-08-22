@@ -2,11 +2,11 @@
 #include "EnemyTractorBeamState.h"
 #include "EnemyFormationState.h"
 #include "BezierPath.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "FormationManager.h"
 #include "EnemyGoToFormationState.h"
 #include "TractorBeamComponent.h"
-#include "SceneManager.h"
+#include "../AliEngine/SceneManager.h"
 
 EnemyTractorBeamState::EnemyTractorBeamState(EnemyStateManager& enemyStateMngr)
 {

@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "BezierPathManager.h"
 #include <glm\vec2.hpp>
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "FormationManager.h"
 #include "BezierPath.h"
 

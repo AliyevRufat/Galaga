@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "LerpComponent.h"
-#include "TransformComponent.h"
-#include "EngineTime.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/EngineTime.h"
 
 LerpComponent::LerpComponent(const glm::vec2& endPos, int speed)
 	: m_EndPos{ endPos }

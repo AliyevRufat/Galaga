@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-#include "BaseComponent.h"
+#include "../AliEngine/BaseComponent.h"
 
 class GyaragaMovementComponent final : public BaseComponent
 {

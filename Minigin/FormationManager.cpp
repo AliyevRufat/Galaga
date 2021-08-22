@@ -1,6 +1,6 @@
 #include "MiniginPCH.h"
 #include "FormationManager.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "EnemyStateManager.h"
 #include <algorithm>
 #include <fstream>
@@ -18,21 +18,21 @@ void FormationManager::ParsePosOfEnemy(const std::string& oneLine, int level, ch
 			{
 				if (secondLetter == 'E')
 				{
-					if (m_BeePositions[level - 1].size() < row)
+					if (m_BeePositions[level - 1].size() < size_t(row))
 					{
 						m_BeePositions[level - 1].push_back(std::vector<glm::vec2>());
 					}
 				}
 				else if (secondLetter == 'U')
 				{
-					if (m_ButterflyPositions[level - 1].size() < row)
+					if (m_ButterflyPositions[level - 1].size() < size_t(row))
 					{
 						m_ButterflyPositions[level - 1].push_back(std::vector<glm::vec2>());
 					}
 				}
 				else if (secondLetter == 'O')
 				{
-					if (m_BossPositions[level - 1].size() < row)
+					if (m_BossPositions[level - 1].size() < size_t(row))
 					{
 						m_BossPositions[level - 1].push_back(std::vector<glm::vec2>());
 					}

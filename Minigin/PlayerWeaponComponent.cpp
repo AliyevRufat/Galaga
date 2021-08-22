@@ -1,12 +1,12 @@
 #include "MiniginPCH.h"
 #include "PlayerWeaponComponent.h"
-#include "TransformComponent.h"
-#include "Texture2DComponent.h"
-#include "GameObject.h"
-#include "SceneManager.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/SceneManager.h"
 #include "CollisionDetectionManager.h"
-#include "GameObject.h"
-#include "Scene.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/Scene.h"
 
 PlayerWeaponComponent::PlayerWeaponComponent()
 	:m_MaxBulletCountOnScreen{ 2 }

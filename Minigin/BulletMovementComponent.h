@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseComponent.h"
+#include "../AliEngine/BaseComponent.h"
 #include <glm\vec2.hpp>
 
 class BulletMovementComponent final : public BaseComponent

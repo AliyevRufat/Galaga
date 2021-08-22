@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseComponent.h"
+#include "../AliEngine/BaseComponent.h"
 #include "BulletMovementComponent.h"
 #include <SDL.h>
 

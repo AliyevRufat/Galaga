@@ -1,10 +1,10 @@
 #include "MiniginPCH.h"
 #include "BulletMovementComponent.h"
-#include "TransformComponent.h"
-#include "GameObject.h"
-#include "EngineTime.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/EngineTime.h"
 #include "LerpComponent.h"
-#include "Locator.h"
+#include "../AliEngine/Locator.h"
 
 BulletMovementComponent::BulletMovementComponent(const glm::vec2& target)
 	:m_Target{ target }

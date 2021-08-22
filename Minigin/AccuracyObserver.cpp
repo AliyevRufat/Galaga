@@ -1,12 +1,12 @@
 #include "MiniginPCH.h"
 #include "AccuracyObserver.h"
-#include "SceneManager.h"
-#include "Scene.h"
-#include "FPSTextComponent.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/FPSTextComponent.h"
 #include "PlayerWeaponComponent.h"
-#include "TextComponent.h"
-#include "Texture2DComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TextComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "StageManager.h"
 
 void AccuracyObserver::OnNotify(const GameObject* actor, const std::string& event)

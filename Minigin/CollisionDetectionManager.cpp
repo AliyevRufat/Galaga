@@ -9,7 +9,7 @@
 #include "EnemyStateManager.h"
 #include "EnemyDivingState.h"
 #include "AnimationComponent.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
 #include "TractorBeamComponent.h"
 #include "EnemyTractorBeamState.h"
 #include "ScoreComponent.h"

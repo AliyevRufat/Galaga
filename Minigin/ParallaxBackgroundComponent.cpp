@@ -1,8 +1,8 @@
 #include "MiniginPCH.h"
 #include "ParallaxBackgroundComponent.h"
-#include "TransformComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
 
 ParallaxBackgroundComponent::ParallaxBackgroundComponent(const std::string& pngPath, int speed)
 	:m_Background1{ nullptr }

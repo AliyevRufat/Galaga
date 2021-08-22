@@ -2,8 +2,8 @@
 #include "EnemyStateManager.h"
 #include "BezierPathManager.h"
 #include "EnemyWeaponComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
 #include "PlayerHealthComponent.h"
 
 class EnemyState

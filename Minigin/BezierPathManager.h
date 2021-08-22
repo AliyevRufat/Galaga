@@ -15,7 +15,7 @@ private:
 	std::vector<std::vector<glm::vec2>> m_Paths;
 	//
 	int m_CurrentPath;
-	int m_CurrentDest;
+	size_t m_CurrentDest;
 	const float m_Offset;
 	const int m_Speed;
 };

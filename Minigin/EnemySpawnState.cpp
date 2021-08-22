@@ -3,7 +3,7 @@
 #include "EnemyStateManager.h"
 #include "EnemyFormationState.h"
 #include "BezierPath.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "FormationManager.h"
 #include "StageManager.h"
 #include "EnemyManager.h"

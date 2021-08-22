@@ -1,15 +1,15 @@
 #include "MiniginPCH.h"
 #include "TractorBeamComponent.h"
-#include "TransformComponent.h"
-#include "GameObject.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/Texture2DComponent.h"
 #include "AnimationComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
 #include "CollisionDetectionManager.h"
 #include "EnemyWeaponComponent.h"
 #include "LerpComponent.h"
-#include "Locator.h"
+#include "../AliEngine/Locator.h"
 
 TractorBeamComponent::TractorBeamComponent()
 	:m_pTractorBeam{ nullptr }

@@ -37,7 +37,7 @@ public:
 
 	void Sample(std::vector<glm::vec2>& sampledPath)
 	{
-		for (int i = 0; i < m_BezierCurves.size(); i++)
+		for (size_t i = 0; i < m_BezierCurves.size(); i++)
 		{
 			for (float t = 0; t <= 1.0f; t += (1.0f / m_Samples[i]))
 			{
